@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """This creates a user class"""
-from storage import Storage
+from models.engine.storage import Storage
 
 
 class User(Storage):
@@ -14,8 +14,8 @@ class User(Storage):
         user = self.save('employees', self.dict)
         return user.inserted_id
 
-    def find_user(self):
-        data = self.find_item('employees', {'location': 'ghana'})
+    def find_user(self, **kwargs):
+        data = self.find_item('employees', kwargs)
         return data
 
 user = User(name='affum', phone=555555, location='ghana')
