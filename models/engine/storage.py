@@ -14,19 +14,5 @@ class Storage:
 
     def find_item(self, collection, search_item):
         collection = self.db[f"{collection}"]
-        user = collection.find_one(search_item)
-        return user
-
-
-
-employee = Storage()
-document = {"name": "Rosemary", "phone": "024566778", "email": "sammy@gmail.com"}
-employee.save("bank_details", document)
-print(employee.find_item("bank_details", {"name": "Rosemary"}))
-
-
-
-
-
-
-
+        data = collection.find_one(search_item)
+        return data
