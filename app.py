@@ -1,12 +1,59 @@
+<<<<<<< HEAD
 from flask import Flask, url_for, request, jsonify, session
 from flask.templating import render_template
 from models.engine.user import User
+=======
+from flask import Flask, url_for, request
+from flask.templating import render_template
+from flask_login import LoginManager, login_user
+import bcrypt
+from datetime import datetime
+from models.engine.user import User
+from models.engine.storage import Storage
+>>>>>>> 98b21c4 (add user login logic)
 
 app = Flask(__name__)
+
+# Instatiation of Login Manger with instance of our app
+login_manager = LoginManager(app)
+# Initializing the login manager
+login_manager.init_app(app)
+
+storage = Storage()
+user = User()
 
 @app.route('/')
 def index():
     return render_template('home.html')
+
+# Load user details base on id passed to load_user
+@login_manager.user_loader
+def load_user(user_id):
+    """
+    Load and return the user object based on the user_id
+    This function is required by Flask-Login to retrieve users from the ID
+    It should return the user object or None if the user doesn't exist
+     """
+    return storage.get(User, user_id)
+
+@app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        employee = storage.find_item('employees', {'email': email})
+        if employee and bcrypt.checkpw(password.encode('utf-8'), employee.password.encode('utf-8')):
+            login_user(employee)
+            log_event = {
+                'employee_id': employee.get('employee_id'),
+                'event_type': 'login',
+                'login_time': datetime.now()
+            }
+            employee.add(log_event)
+            return 'Logged in successfully'
+        return 'Invalid credentials'
+    return render_template('login.html')
+    
 
 
 @app.route('/admin', methods=['GET'], strict_slashes=False)
