@@ -1,16 +1,13 @@
-<<<<<<< HEAD
+#!/usr/bin/env python3
+"""Flask application"""
+
 from flask import Flask, url_for, request, jsonify, session
 from flask.templating import render_template
 from models.engine.user import User
-=======
-from flask import Flask, url_for, request
-from flask.templating import render_template
 from flask_login import LoginManager, login_user
 import bcrypt
 from datetime import datetime
-from models.engine.user import User
 from models.engine.storage import Storage
->>>>>>> 98b21c4 (add user login logic)
 
 app = Flask(__name__)
 
@@ -36,21 +33,27 @@ def load_user(user_id):
      """
     return storage.get(User, user_id)
 
+
 @app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+
         employee = storage.find_item('employees', {'email': email})
+        
         if employee and bcrypt.checkpw(password.encode('utf-8'), employee.password.encode('utf-8')):
             login_user(employee)
+
             log_event = {
                 'employee_id': employee.get('employee_id'),
                 'event_type': 'login',
                 'login_time': datetime.now()
             }
             employee.add(log_event)
-            return 'Logged in successfully'
+
+            # Logged in successfully
+            return render_template('user_dashboard.html')
         return 'Invalid credentials'
     return render_template('login.html')
     
