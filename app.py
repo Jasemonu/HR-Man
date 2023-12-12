@@ -44,13 +44,12 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        employee = storage.find_item('employees', {'email': email})
+        employee = User.find_user(email=email)
 
         if (
             employee
-            and bcrypt.checkpw(
-                password.encode('utf-8'),
-                employee.password.encode('utf-8')
+            and employee.check_password(
+                password, employee['hashed_password']
             )
         ):
             login_user(employee)
