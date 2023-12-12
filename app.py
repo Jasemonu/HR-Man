@@ -1,40 +1,35 @@
 #!/usr/bin/env python3
 """Flask application"""
 
-from flask import Flask, url_for, request, jsonify, session, redirect
-from flask.templating import render_template
-from models.engine.user import User
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_login import LoginManager, login_user
 from datetime import datetime
+from models.engine.user import User
 from models.engine.storage import Storage
 
 app = Flask(__name__)
 
-# Instatiation of Login Manger with instance of our app
+# Instantiation of Login Manager with an instance of our app
 login_manager = LoginManager(app)
 # Initializing the login manager
 login_manager.init_app(app)
 
 storage = Storage()
-user = User()
 
 
 @app.route('/')
 def index():
     return render_template('home.html')
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
 
-# Load user details base on id passed to load_user
+# Load user details based on id passed to load_user
 @login_manager.user_loader
 def load_user(user_id):
     """
     Load and return the user object based on the user_id
     This function is required by Flask-Login to retrieve users from the ID
     It should return the user object or None if the user doesn't exist
-     """
+    """
     return storage.get(User, user_id)
 
 
@@ -46,12 +41,7 @@ def login():
 
         employee = User.find_user(email=email)
 
-        if (
-            employee
-            and employee.check_password(
-                password, employee['hashed_password']
-            )
-        ):
+        if employee and employee.check_password(password, employee['hashed_password']):
             login_user(employee)
 
             log_event = {
@@ -63,7 +53,9 @@ def login():
 
             # Logged in successfully
             return render_template('user_dashboard.html')
+
         return 'Invalid credentials'
+
     return render_template('login.html')
 
 
@@ -77,14 +69,14 @@ def admin_login():
         user = User.find_user(name=username)
 
         if user and user.check_password(password, user['hashed_password']):
-            if user['Superuser'] == True:
+            if user['Superuser']:
                 # Login successful
                 session['user_id'] = str(user['_id'])
-                return render_template('admin_dashboard')
-        else:
-            return redirect(url_for('home.html'))
-            
-    return jsonify({'error': 'You are not an Admin'}), 401
+                return render_template('admin_dashboard.html')
+
+        return jsonify({'error': 'You are not an Admin'}), 401
+
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
