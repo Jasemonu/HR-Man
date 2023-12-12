@@ -5,7 +5,6 @@ from flask import Flask, url_for, request, jsonify, session, redirect
 from flask.templating import render_template
 from models.engine.user import User
 from flask_login import LoginManager, login_user
-import bcrypt
 from datetime import datetime
 from models.engine.storage import Storage
 
