@@ -2,30 +2,33 @@
 """Flask application"""
 
 from flask import Flask, url_for, request, jsonify, session, redirect
+from flask import send_file
 from flask.templating import render_template
-from models.engine.user import User
+from models.user import User
 from flask_login import LoginManager, login_user
 from datetime import datetime
-from models.engine.storage import Storage
+from models import storage
+import bcrypt
 
 app = Flask(__name__)
+
+app.config.update(
+        TESTING=True,
+        SECRET_KEY='SamDanRosJos2023'
+        )
 
 # Instatiation of Login Manger with instance of our app
 login_manager = LoginManager(app)
 # Initializing the login manager
 login_manager.init_app(app)
 
-storage = Storage()
-user = User()
+storage.connect()
 
 
 @app.route('/')
 def index():
     return render_template('home.html')
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
 
 # Load user details base on id passed to load_user
 @login_manager.user_loader
@@ -43,8 +46,7 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-
-        employee = storage.find_item('employees', {'email': email})
+        employee = storage.find_email(User, email)
 
         if (
             employee
@@ -56,14 +58,14 @@ def login():
             login_user(employee)
 
             log_event = {
-                'employee_id': employee.get('employee_id'),
+                'employee_id': employee.id,
                 'event_type': 'login',
                 'login_time': datetime.now()
             }
-            employee.add(log_event)
+            #employee.add(log_event)
 
             # Logged in successfully
-            return render_template('user_dashboard.html')
+            return render_template('userhome.html')
         return 'Invalid credentials'
     return render_template('login.html')
 
@@ -86,6 +88,18 @@ def admin_login():
             return redirect(url_for('home.html'))
             
     return jsonify({'error': 'You are not an Admin'}), 401
+
+@app.route('/loadpayslip', methods=['GET'], strict_slashes=False)
+def loadpyslip():
+    try:
+        return send_file('payslip_August23.pdf')
+    except Exception as e:
+        print(e)
+    return 'Error'
+
+@app.route('/payslips', methods=['GET'], strict_slashes=False)
+def payslip():
+    return render_template('userpayslip.html')
 
 
 if __name__ == '__main__':
