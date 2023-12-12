@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>HR-MAN</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="static/styles/user.css">
+    <link rel="stylesheet" href="static/styles/userhome.css">
+  </head>
+<body>
+  <div class="header">
+    <a href="#default" class="logo">CompanyLogo</a>
+    <div class="header-right">
+      <a href="#contact">profile pic</a>
+      <a href="#about">username</a>
+    </div>
+  </div>
+  <div class="sidebar">
+    <a href="#home"> Home</a>
+    <a href="#pfofile"> Profile</a>
+    <a href="#payslips"> Payslips</a>
+    <a href="#leave"> Leave</a>
+    <a href="#leave"> Attendance</a>
+  </div>
+  {% block content %}{% endblock %}
+</body>
