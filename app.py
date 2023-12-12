@@ -19,9 +19,11 @@ login_manager.init_app(app)
 storage = Storage()
 user = User()
 
+
 @app.route('/')
 def index():
     return render_template('home.html')
+
 
 # Load user details base on id passed to load_user
 @login_manager.user_loader
@@ -41,8 +43,14 @@ def login():
         password = request.form.get('password')
 
         employee = storage.find_item('employees', {'email': email})
-        
-        if employee and bcrypt.checkpw(password.encode('utf-8'), employee.password.encode('utf-8')):
+
+        if (
+            employee
+            and bcrypt.checkpw(
+                password.encode('utf-8'),
+                employee.password.encode('utf-8')
+            )
+        ):
             login_user(employee)
 
             log_event = {
@@ -56,7 +64,6 @@ def login():
             return render_template('user_dashboard.html')
         return 'Invalid credentials'
     return render_template('login.html')
-    
 
 
 @app.route('/admin', methods=['POST'], strict_slashes=False)
@@ -80,4 +87,4 @@ def admin_login():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug =True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
