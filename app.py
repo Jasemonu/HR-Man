@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Flask application"""
 
-from flask import Flask, url_for, request, jsonify, session
+from flask import Flask, url_for, request, jsonify, session, redirect
 from flask.templating import render_template
 from models.engine.user import User
 from flask_login import LoginManager, login_user
@@ -59,20 +59,24 @@ def login():
     
 
 
-@app.route('/admin', methods=['GET'], strict_slashes=False)
+@app.route('/admin', methods=['POST'], strict_slashes=False)
 def admin_login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
+    if request.method == 'POST':
+        data = request.form
+        username = data.get('username')
+        password = data.get('password')
 
-    user = User.find_user(name=username, password=password)
+        user = User.find_user(name=username)
 
-    if user and user['Superuser'] == True:
-        # Login successful
-        session['user_id'] = str(user['_id'])
-        return render_template('admin_dashboard')
-    else:
-        return jsonify({'error': 'You are not an Admin'}), 401
+        if user and user.check_password(password, user['hashed_password']):
+            if user['Superuser'] == True:
+                # Login successful
+                session['user_id'] = str(user['_id'])
+                return render_template('admin_dashboard')
+        else:
+            return redirect(url_for('home.html'))
+            
+    return jsonify({'error': 'You are not an Admin'}), 401
 
 
 if __name__ == '__main__':
