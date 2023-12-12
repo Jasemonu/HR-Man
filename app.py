@@ -64,27 +64,14 @@ def login():
             #employee.add(log_event)
 
             # Logged in successfully
+            if employee.Superuser:
+                session['user_id'] = str(employee.id)
+                return 'admin_dashboard'
+            session['user_id'] = str(employee.id)
             return render_template('userhome.html')
         return 'Invalid credentials'
-    return render_template('login.html')
+    return redirect(url_for('home.html')
 
-
-@app.route('/admin', methods=['POST'], strict_slashes=False)
-def admin_login():
-    if request.method == 'POST':
-        data = request.form
-        username = data.get('username')
-        password = data.get('password')
-
-        user = User.find_user(name=username)
-
-        if user and user.check_password(password, user['hashed_password']):
-            if user['Superuser'] == True:
-                # Login successful
-                session['user_id'] = str(user['_id'])
-                return render_template('admin_dashboard')
-        else:
-            return redirect(url_for('home.html'))
 
 @app.route('/loadpayslip', methods=['GET'], strict_slashes=False)
 def loadpyslip():
