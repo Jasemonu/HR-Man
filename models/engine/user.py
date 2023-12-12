@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """This creates a user class"""
+from flask_login import UserMixin
 from models.engine.storage import Storage
 
 
-class User(Storage):
+class User(Storage, UserMixin):
     def __init__(self, *args, **kwargs):
         self.dict = {}
         for key, value in kwargs.items():
