@@ -24,7 +24,6 @@ login_manager.init_app(app)
 
 storage.connect()
 
-
 @app.route('/')
 def index():
     return render_template('home.html')
@@ -86,8 +85,6 @@ def admin_login():
                 return render_template('admin_dashboard')
         else:
             return redirect(url_for('home.html'))
-            
-    return jsonify({'error': 'You are not an Admin'}), 401
 
 @app.route('/loadpayslip', methods=['GET'], strict_slashes=False)
 def loadpyslip():
