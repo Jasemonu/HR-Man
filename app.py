@@ -70,7 +70,7 @@ def login():
             session['user_id'] = str(employee.id)
             return render_template('userhome.html')
         return 'Invalid credentials'
-    return redirect(url_for('home.html')
+    return render_template('login.html')
 
 
 @app.route('/loadpayslip', methods=['GET'], strict_slashes=False)
