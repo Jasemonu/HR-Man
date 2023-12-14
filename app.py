@@ -9,6 +9,10 @@ from flask_login import LoginManager, login_user
 from datetime import datetime
 from models import storage
 import bcrypt
+<<<<<<< HEAD
+=======
+from models.user import random_password, gen_employee_id,send_email, valid_fields
+>>>>>>> 4648968 (user registration endpoint)
 
 app = Flask(__name__)
 
@@ -24,6 +28,10 @@ login_manager.init_app(app)
 
 storage.connect()
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4648968 (user registration endpoint)
 @app.route('/')
 def index():
     return render_template('home.html')
@@ -40,6 +48,65 @@ def load_user(user_id):
     return storage.get(User, user_id)
 
 
+<<<<<<< HEAD
+=======
+@app.route('/register', methods=['POST'])
+def register_user():
+    data = request.form
+
+    # Validate presence of all required fields
+    if not valid_fields(data):
+        return jsonify({'error': 'All fields are required'}), 400
+
+    # Extract data from the form
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+    email = data.get('email')
+    dob = data.get('date_of_birth')
+    contact_number = data.get('phone_number')
+    employment_date = data.get('employment_date')
+    NID = data.get('NID')
+    gender = data.get('gender')
+    department = data.get('department')
+    position = data.get('position')
+
+    user = storage.find_email(User, email)
+    if user:
+        return jsonify({'error': 'User already exists'}), 400
+
+    # Generate employee ID
+    employee_id = gen_employee_id(first_name, last_name)
+
+    # Generate a random password
+    password = random_password()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+    # Save user details in MongoDB
+    user_data = {
+        'staff_number': employee_id,
+        'first_name': first_name,
+        'last_name': last_name,
+        'email': email,
+        'password': hashed_password.decode('utf-8'),
+        'date_of_birth': dob,
+        'phone': contact_number,
+        'NID': NID,
+        'employment_date': employment_date,
+        'gender': gender,
+        'department': department,
+        'position': position,
+    }
+
+    user = User(**user_data)
+    user.save()
+
+    # Send the password to the user's email
+    send_email(email, password)
+
+    return jsonify({'message': 'success', 'employee_id': employee_id}), 201
+
+
+>>>>>>> 4648968 (user registration endpoint)
 @app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login():
     if request.method == 'POST':
