@@ -4,17 +4,20 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_login import LoginManager, login_user
 from datetime import datetime
-from models.engine.storage import Storage
+from models import storage
+from models.user import User
 
 app = Flask(__name__)
 
 # Instatiation of Login Manger with instance of our app
+
+app.config.update(TESTING=True, SECRET_KEY = 'samjoerosdan2023')
+
 login_manager = LoginManager(app)
 # Initializing the login manager
 login_manager.init_app(app)
 
-storage = Storage()
-user = User()
+storage.connect()
 
 
 @app.route('/')
@@ -95,11 +98,10 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        employee = storage.find_item('employees', {'email': email})
+        employee = storage.find_email(User, email)
 
-        if employee and employee.check_password(password, employee['hashed_password']):
+        if employee: #and check_password(password, employee.password):
             login_user(employee)
-
             log_event = {
                 'employee_id': employee.id,
                 'event_type': 'login',
@@ -109,32 +111,13 @@ def login():
             # employee.add(log_event)
 
             # Logged in successfully
-            return render_template('user_dashboard.html')
+            if employee.Superuser:
+                session['user_id'] = str(employee.id)
+                return 'admin_dashboard'
+            return render_template('userhome.html')
         return 'Invalid credentials'
 
     return render_template('login.html')
-
-
-@app.route('/admin', methods=['POST'], strict_slashes=False)
-def admin_login():
-    if request.method == 'POST':
-        data = request.form
-        username = data.get('username')
-        password = data.get('password')
-
-        user = User.find_user(name=username)
-
-        if user and user.check_password(password, user['hashed_password']):
-            if user['Superuser'] == True:
-                # Login successful
-                session['user_id'] = str(user['_id'])
-                return render_template('admin_dashboard')
-        else:
-            return redirect(url_for('home.html'))
-            
-    return jsonify({'error': 'You are not an Admin'}), 401
-
-    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
