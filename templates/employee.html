@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <title>Employee Information</title>
+    <link rel="stylesheet" href="/static/css/employee.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  </head>
+
+<body>
+  <h1>Employee information <i style="font-size: 13px; font-weight: normal">by HR-MAN</i></h1>
+  <hr /><br />
+  <form>
+    <table>
+      <tr>
+        <td valign="top">
+          <fieldset id="bg_table">
+            <table id="add_employee_table">
+              <tr>
+                <th colspan="2">Add Employees</th>
+              </tr>
+              <tr>
+                <td>First name</td>
+                <td>
+                  <input type="text" id="first_name" name="first_name"/>
+                </td>
+              <tr>
+                <td>First name</td>
+                <td>
+                  <input type="text" id="first_name" name="first_name"/>
+                </td>
+              </tr>
+              <tr>
+                <td>Last name</td>
+                <td>
+                  <input type="text" id="last_name" name="last_name" />
+                </td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>
+                  <input type="text" id="email" name="email" />
+                </td>
+              </tr>
+              <tr>
+                <td>Hired date</td>
+                <td>
+                  <input type="text" id="hire" name="hire" size="15" />
+                </td>
+              </tr>
+              <tr>
+                <td>Salary</td>
+                <td>
+                  <input type="text" id="salary" name="salary"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="button" id="submit" name="submit" value="Add employee" onclick="addRecord()" /> </td>
+                <td id="error_msg"></td>
+              </tr>
+
+            </table>
+          </fieldset>
+        </td>
+        <td valign="top" width="100%">
+          <fieldset>
+            <table id="employee_table" border="1" cellpadding="5px" style="border-collapse:collapse" width="100%">
+              <tr>
+                <th>
+                  First Name
+                </th>
+                <th>
+                  Last Name
+                </th>
+                <th>
+                  Email
+                </th>
+                <th>
+                  Hired date
+                </th>
+                <th>
+                  Salary
+                </th>
+
+              </tr>
+              <tr>
+                <td>
+                  Homer
+                </td>
+                <td>
+                  Simpson
+                </td>
+                <td>
+                  HSimpson@gmail.com
+                </td>
+                <td>
+                  01/01/2016
+                </td>
+                <td>
+                  $1,000,000
+                </td>
+                <td>
+                  <input type='button' value='Edit employee' onclick='editRecord(this)' />
+                </td>
+                <td>
+                  <input type='button' value='Delete user' onclick='deleteRecord(this)' style='background-color:red' />
+                </td>
+              </tr>
+            </table>
+          </fieldset>
+        </td>
+      </tr>
+    </table>
+  </form>
+  <script src="/static/js/employee.js"></script>
+</body>
+</html>
