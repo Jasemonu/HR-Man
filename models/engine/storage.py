@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from mongoengine import connect, disconnect
-from models.user import User
+#from models.user import User
 
 class Storage:
     def __init__(self):
@@ -29,4 +29,4 @@ class Storage:
     def all(self, cls=None):
         if cls:
             return cls.objects.as_pymongo()
-        return User.objects.as_pymongo()
+        return None
