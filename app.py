@@ -6,12 +6,10 @@ from flask_login import LoginManager, login_user, login_required, current_user
 from datetime import datetime
 from models import storage
 from models.user import User
-<<<<<<< HEAD
 import bcrypt
-from models.user import random_password, gen_employee_id,send_email, valid_fields
-=======
-from models.user import random_password, valid_fields, ge_employee_id, send_email
->>>>>>> f2543f0 (app.py)
+from models.user import random_password, gen_employee_id, send_email, valid_fields
+
+
 
 app = Flask(__name__)
 
@@ -67,19 +65,14 @@ def register_user():
         return jsonify({'error': 'User already exists'}), 400
 
     # Generate employee ID
-<<<<<<< HEAD
-
-    employee_id = gen_employee_id(first_name, last_name)
+    staff_number = gen_employee_id(first_name, last_name)
 
     # Generate a random password
     password = random_password()
 
-=======
-    staff_number = ge_employee_id(first_name, last_name)
 
     # Generate a random password
     password = random_password()
->>>>>>> f2543f0 (app.py)
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     # Save user details in MongoDB
@@ -159,6 +152,12 @@ def get_employees():
     except Exception:
         message = 'List of Employees is not available at the moment. Please try again!'
         return jsonify(message)
+
+
+    @app.route("/logout")
+    def logout():
+        logout_user()
+        return redirect(url_for('login'))
 
 
 if __name__ == '__main__':
