@@ -5,7 +5,6 @@ from datetime import date
 import random
 import string
 import smtplib
-import bcrypt
 from email.mime.text import MIMEText
 
 class User(Document, UserMixin):
