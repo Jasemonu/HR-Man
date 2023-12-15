@@ -70,9 +70,10 @@
                     </li>
                 
                 </div>
-
+              
 		{% if current_user.Superuser %}
-		<li class="dropdown">
+              
+                <li class="dropdown">
                     <a href="#homeSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="material-icons">aspect_ratio</i><span>Employees</span></a>
                     <ul class="collapse list-unstyled menu" id="homeSubmenu1">
@@ -107,6 +108,7 @@
                         </li>
                     </ul>
                 </li>
+
 
 		{% if current_user.Superuser %}
 		<li class="dropdown">
@@ -143,6 +145,22 @@
 			{% endif %}
                     </ul>
 		</li>
+                <li class="dropdown">
+                    <a href="#pageSubmenu3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="material-icons">equalizer</i>
+
+                        <span>Payslip</span></a>
+                    <ul class="collapse list-unstyled menu" id="pageSubmenu3">
+                        <li>
+                            <a href="#">Page 1</a>
+                        </li>
+                        <li>
+                            <a href="#">Page 2</a>
+                        </li>
+                        <li>
+                            <a href="#">Page 3</a>
+                        </li>
+                    </ul>
 
                 <li class="">
                     <a href="#"><i class="material-icons">date_range</i><span>Attendance</span></a>
@@ -466,5 +484,4 @@
         });
     </script>
 </body>
-
 </html>

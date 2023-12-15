@@ -23,6 +23,22 @@ objects = {
         'position': 'Tecnician',
         }
 
+# objects = {
+#         'staff_number': 'NCT1111',
+#         'first_name': 'Rosemary',
+#         'last_name': 'Efebe',
+#         'email': 'rozey247@gmail.com',
+#         'password': h_pwd,
+#         'date_of_birth': date(2020, 8, 25).isoformat(),
+#         'phone': '08077763334',
+#         'NID': '5565636526',
+#         'employment_date': date(2020, 8, 25).isoformat(),
+#         'gender': 'Female',
+#         'department': 'Project',
+#         'position': 'PMO',
+#         'Superuser': True
+#         }
+
 
 user = User(**objects)
 storage.connect()

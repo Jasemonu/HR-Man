@@ -2,10 +2,14 @@
 """Flask application"""
 
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, login_required, current_user
 from datetime import datetime
 from models import storage
 from models.user import User
+import bcrypt
+from models.user import random_password, gen_employee_id, send_email, valid_fields
+
+
 
 app = Flask(__name__)
 
@@ -36,12 +40,14 @@ def load_user(user_id):
     return storage.get(User, user_id)
 
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['POST', 'GET'])
 def register_user():
+    if request.method == 'GET':
+        return render_template('employee.html')
     data = request.form
 
     # Validate presence of all required fields
-    if not validate_fields(data):
+    if not valid_fields(data):
         return jsonify({'error': 'All fields are required'}), 400
 
     # Extract data from the form
@@ -61,15 +67,19 @@ def register_user():
         return jsonify({'error': 'User already exists'}), 400
 
     # Generate employee ID
-    employee_id = generate_employee_id(first_name, last_name)
+    staff_number = gen_employee_id(first_name, last_name)
 
     # Generate a random password
-    password = generate_random_password()
+    password = random_password()
+
+
+    # Generate a random password
+    password = random_password()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     # Save user details in MongoDB
     user_data = {
-        'staff_number': employee_id,
+        'staff_number':staff_number,
         'first_name': first_name,
         'last_name': last_name,
         'email': email,
@@ -89,7 +99,8 @@ def register_user():
     # Send the password to the user's email
     send_email(email, password)
 
-    return jsonify({'message': 'success', 'employee_id': employee_id}), 201
+    return jsonify({'message': 'success', 'employee_id': staff_number}), 201
+
 
 
 @app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
@@ -102,22 +113,55 @@ def login():
 
         if employee: #and check_password(password, employee.password):
             login_user(employee)
+            # employee.add(log_event)
             log_event = {
                 'employee_id': employee.id,
                 'event_type': 'login',
                 'login_time': datetime.now()
             }
 
-            # employee.add(log_event)
-
             # Logged in successfully
             if employee.Superuser:
                 session['user_id'] = str(employee.id)
-                return 'admin_dashboard'
-            return render_template('userhome.html')
+                return render_template('dashboard.html')
+            return render_template('dashboard.html')
         return 'Invalid credentials'
 
     return render_template('login.html')
+
+
+@app.route('/employees', methods=['GET'], strict_slashes=False)
+@login_required
+def get_employees():
+    try:
+        # Check if user is a Superuser
+        if not current_user.Superuser:
+            message = {'error': 'Access denied. Only superusers can view the employee list.'}
+            return jsonify(message), 403
+
+        # Return list of employees in the database
+        employee_list = User.objects()
+
+
+        # Employee count
+        #employee_count = len(employee_list)
+
+        #return_data = {
+        #   'List of Employees': employee_list,
+        #    'Total Employees': employee_count
+        #}
+        #return render_template('employees.html', employee_list=employee_list)
+        return [item.first_name for item in employee_list]
+    except Exception as e:
+        print(e)
+        message = 'List of Employees is not available at the moment. Please try again!'
+        return jsonify(message)
+
+
+    @app.route("/logout")
+    def logout():
+        logout_user()
+        return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
