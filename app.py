@@ -40,8 +40,10 @@ def load_user(user_id):
     return storage.get(User, user_id)
 
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['POST', 'GET'])
 def register_user():
+    if request.method == 'GET':
+        return render_template('employee.html')
     data = request.form
 
     # Validate presence of all required fields
@@ -121,8 +123,8 @@ def login():
             # Logged in successfully
             if employee.Superuser:
                 session['user_id'] = str(employee.id)
-                return 'admin_dashboard'
-            return render_template('userhome.html')
+                return render_template('dashboard.html')
+            return render_template('dashboard.html')
         return 'Invalid credentials'
 
     return render_template('login.html')
@@ -138,18 +140,20 @@ def get_employees():
             return jsonify(message), 403
 
         # Return list of employees in the database
-        employee_list = storage.all(User)
+        employee_list = User.objects()
+
 
         # Employee count
-        employee_count = len(employee_list)
+        #employee_count = len(employee_list)
 
-        return_data = {
-            'List of Employees': employee_list,
-            'Total Employees': employee_count
-        }
+        #return_data = {
+        #   'List of Employees': employee_list,
+        #    'Total Employees': employee_count
+        #}
         #return render_template('employees.html', employee_list=employee_list)
-        return jsonify(return_data)
-    except Exception:
+        return [item.first_name for item in employee_list]
+    except Exception as e:
+        print(e)
         message = 'List of Employees is not available at the moment. Please try again!'
         return jsonify(message)
 
@@ -157,7 +161,7 @@ def get_employees():
     @app.route("/logout")
     def logout():
         logout_user()
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
