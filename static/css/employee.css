@@ -1,0 +1,15 @@
+body {
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  h1 {
+    text-align: center;
+  }
+  .ui-datepicker-trigger {
+    width: 23px;
+  }    
+  #bg_table {
+    background: url("https://lidtop.files.wordpress.com/2015/01/05c.jpg");
+  }
+  
+  
