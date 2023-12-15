@@ -4,7 +4,7 @@ from flask_login import UserMixin
 from datetime import date
 
 class User(Document, UserMixin):
-    staff_number = StringField(required=True, max_length=70)
+    staff_number = StringField(required=True, unique=True, max_length=70)
     first_name = StringField(required=True, max_length=70)
     last_name = StringField(required=True, max_length=70)
     email = EmailField(required=True, max_length=70, unique=True)
