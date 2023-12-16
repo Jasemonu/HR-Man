@@ -170,7 +170,7 @@ def get_employees():
         storage.delete(staff_number)
 
 
-    @app.route('/update', methods=['POST'], strict_slashes=False)
+    @app.route('/update', methods=['POST', 'GET'], strict_slashes=False)
     def update()
         if request.form == 'GET':
             render_template('listemployees.html')
