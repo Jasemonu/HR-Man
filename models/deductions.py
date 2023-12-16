@@ -1,11 +1,12 @@
-from mongoengine import Document, Decimal128Field, DateTimeField, ObjectIdField
+from mongoengine import Document, IntField, DateTimeField, ObjectIdField
 from datetime import date
 
-class Deductions(Document):
+class Deduction(Document):
     user_id = ObjectIdField(unique=True, required=True)
-    SSNIT = Decimal128Field(precision=2,)
-    tax = Decimal128Field(precision=2)
-    tier_two = Decimal128Field(precision=2)
-    tier_three = Decimal128Field(precision=2)
+    SSNIT = IntField(default=0, required=True)
+    tax = IntField(default=0, required=True)
+    tier_two = IntField(required=True, default=0,)
+    tier_three = IntField(default=0)
+    total = IntField(default=0)
     created_at = DateTimeField(default=date.today().isoformat())
     updated_at = DateTimeField(default=date.today().isoformat())
