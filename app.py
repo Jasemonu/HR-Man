@@ -171,7 +171,9 @@ def get_employees():
 
 
     @app.route('/update', methods=['POST'], strict_slashes=False)
-    def update():
+    def update()
+        if request.form == 'GET':
+            render_template('listemployees.html')
         staff_number = request.form.get('staff_number')
         updated_data = request.form.get('updated_data')
         storage.update(staff_number, updated_data)
