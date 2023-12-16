@@ -9,18 +9,19 @@ password = '5555555555'
 h_pwd = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
 objects = {
-        'staff_number': 'NCT3333',
-        'first_name': 'Samuel',
-        'last_name': 'Affum',
-        'email': 'sam2@mail.com',
+        'staff_number': 'NCT78649',
+        'first_name': 'Joseph',
+        'last_name': 'Asemonu',
+        'email': 'jose@mail.com',
         'password': h_pwd,
         'date_of_birth': date(2020, 8, 25).isoformat(),
-        'phone': '0215122552',
-        'NID': '5565636525',
+        'phone': '0215122652',
+        'NID': '5565636524',
         'employment_date': date(2020, 8, 25).isoformat(),
-        'gender': 'Female',
-        'department': 'Maintenace',
-        'position': 'Tecnician',
+        'gender': 'Male',
+        'department': 'IT',
+        'position': 'Software engineer',
+        'Superuser': True
         }
 
 # objects = {
