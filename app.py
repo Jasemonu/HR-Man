@@ -164,8 +164,8 @@ def get_employees():
         return redirect(url_for('index'))
 
 
-    @app.route('/delete/<string:staff_number>', methods=['DELETE'], strict_slashes=False)
-    def delete(staff_number):
+    @app.route('/delete', methods=['POST'], strict_slashes=False)
+    def delete():
         staff_number = str(request.form.get('staff_number'))
         storage.delete(staff_number)
 
