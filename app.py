@@ -140,22 +140,13 @@ def get_employees():
             return jsonify(message), 403
 
         # Return list of employees in the database
-        employee_list = User.objects()
+        employee_list = storage.all(User)
+        print(employee_list)
 
-
-        # Employee count
-        #employee_count = len(employee_list)
-
-        #return_data = {
-        #   'List of Employees': employee_list,
-        #    'Total Employees': employee_count
-        #}
-        #return render_template('employees.html', employee_list=employee_list)
-        return [item.first_name for item in employee_list]
+        return render_template('listemployees.html', rows=employee_list)
     except Exception as e:
         print(e)
-        message = 'List of Employees is not available at the moment. Please try again!'
-        return jsonify(message)
+        return str(e), 500
 
 
 @app.route('/logout')
@@ -164,19 +155,19 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<id_value>', methods=['GET'])
-def delete(id_value):
+@app.route('/delete/<staff_number>', methods=['GET'])
+def delete(staff_number):
     if request.method == 'GET':
         render_template('listemployees.html')
     try:
-        result = storage.delete_staff(User, id_value)
+        result = storage.delete_staff(User, staff_number)
         if result:
-            return f"Successfully deleted object with ID {id_value}"
+            return f"Successfully deleted object with ID {staff_number}"
         else:
-            return f"Object with ID {id_value} not found or deletion failed", 404
+            return f"Object with ID {staff_number} not found or deletion failed", 404
     except Exception as e:
-        print(f"Deletion failed for ID {id_value}: {e}")
-        return f"Deletion failed for ID {id_value}. Please check logs for details", 500
+        print(e)
+        return f"Deletion failed for ID {staff_number}. Please check logs for details", 500
     return jsonify({'error': 'Invalid request method'}), 405
 
 
