@@ -28,19 +28,20 @@ class Storage:
 
     def all(self, cls=None):
         if cls:
-            return cls.objects.as_pymongo()
+            data = cls.objects()
+            return list(data) 
         return None
 
-    def delete_staff(self, cls, id_value):
+    def delete_staff(self, cls, staff_number):
         try:
-            obj = cls.objects(staff_number=id_value).first()
+            obj = cls.objects(staff_number=staff_number).first()
             if obj:
                 obj.delete()
                 return True  # Successfully deleted
             else:
                 return False  # Object not found
         except Exception as e:
-            print(f"Error deleting object with ID {id_value}: {e}")
+            print(f"Error deleting object with ID {staff_number}: {e}")
             return False
 
 

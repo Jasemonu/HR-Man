@@ -7,47 +7,46 @@
     <link rel="stylesheet" href="/static/css/employee.css".css">
   </head>
   <body>
-    <form class="addEmployee">
+    <form method="POST" action="/register" class="addEmployee">
       <h4 class="addEmployeeHeader">Employee Information</h4>
-      <label>Employee ID</label>
-      
-      <input type="text" name="employeeID" />
-      <br/>
+      <!-- <label>Employee ID</label> -->
+      <!-- <input type=text name=employeeID /> -->
+     <!-- <br/> -->
       <label>First Name</label>
-      <input type="text" name="firstName" />
+      <input type="text" name="first_name" />
       <br />
       <label>Last Name</label>
-      <input type="text" name="lastName" />
+      <input type="text" name="last_name" />
       <br />
       <label>Email</label>
-      <input type="text" name="lastName" />
+      <input type="text" name="email" />
       <br />
-      <label>Password</label>
-      <input type="text" name="password" />
-      <br />
+      <!-- <label>Password</label> -->
+      <!-- <input type=text name=password /> -->
+      <!-- <br /<> -->
       <label>Phone Number</label>
-      <input type="text" name="phone" />
+      <input type="text" name="phone_number" />
       <br />
       <label>Date of Birth</label>
-      <input type="date" name="hireDate" />
+      <input type="date" name="date_of_birth" />
       <br />
       <label>NID</label>
-      <input type="text" name="employeeID" />
+      <input type="text" name="NID" />
       <br />
       <label>Date of Employment </label>
-      <input type="date" name="hireDate" />
+      <input type="date" name="employment_date" />
       <br />
       <label>Gender</label>
-      <select required name="Gender">
+      <select required name="gender">
         <option>Male</option>
         <option>Female</option>
       </select>
       <br />
       <label>Department</label>
-      <input type="text" name="streetName" />
+      <input type="text" name="department" />
       <br />
       <label>Position</label>
-      <input type="text" name="streetName" />
+      <input type="text" name="position" />
       <br />
       <a href="/templates/home.html"><input class="button blueButton" type="submit" value="Add" /></a>  
       <br />
