@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from mongoengine import connect, disconnect
-from models.user import User
+#from models.user import User
 
 class Storage:
     def __init__(self):
@@ -29,4 +29,33 @@ class Storage:
     def all(self, cls=None):
         if cls:
             return cls.objects.as_pymongo()
-        return User.objects.as_pymongo()
+        return None
+
+    def delete(self, id_value):
+        try:
+            obj = self.objects(id=id_value).first()
+            if obj:
+                obj.delete()
+                return True  # Successfully deleted
+            else:
+                return False  # Object not found
+        except Exception as e:
+            print(f"Error deleting object with ID {id_value}: {e}")
+            return False
+
+
+    def update(self, id_value, updated_data):
+        try:
+            obj = self.objects(id=id_value).first()
+
+            if obj:
+                for key, value in updated_data.items():
+                    setattr(obj, key, value)
+
+                # Save the updated object
+                obj.save()
+                return True  # Successfully updated
+            else:
+                return False  # Object not found
+        except Exception as e:
+            return False
