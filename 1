@@ -29,7 +29,8 @@ class Storage:
     def all(self, cls=None):
         if cls:
             data = cls.objects()
-            return list(data)
+            items = data.all()
+            return list(items)
         return None
 
     def delete(self, id_value):

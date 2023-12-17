@@ -71,10 +71,6 @@ def register_user():
 
     # Generate a random password
     password = random_password()
-
-
-    # Generate a random password
-    password = random_password()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     # Save user details in MongoDB
@@ -140,22 +136,12 @@ def get_employees():
             return jsonify(message), 403
 
         # Return list of employees in the database
-        employee_list = User.objects()
+        employee_list = storage.all(User)
 
-
-        # Employee count
-        #employee_count = len(employee_list)
-
-        #return_data = {
-        #   'List of Employees': employee_list,
-        #    'Total Employees': employee_count
-        #}
-        #return render_template('employees.html', employee_list=employee_list)
-        return [item.first_name for item in employee_list]
+        return render_template('listemployees.html', rows=employee_list)
     except Exception as e:
         print(e)
-        message = 'List of Employees is not available at the moment. Please try again!'
-        return jsonify(message)
+        return str(e), 500
 
 
     @app.route('/logout')

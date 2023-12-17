@@ -43,9 +43,10 @@ objects = {
 
 user = User(**objects)
 storage.connect()
-try:
+storage.all(User)
+'''try:
     id = storage.save(user)
     print(user.password, user.Superuser)
 except NotUniqueError:
     print("user exsit")
-    print(User.objects.as_pymongo())
+    print(User.objects.as_pymongo())'''
