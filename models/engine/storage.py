@@ -31,9 +31,9 @@ class Storage:
             return cls.objects.as_pymongo()
         return None
 
-    def delete(self, id_value):
+    def delete_staff(self, cls, id_value):
         try:
-            obj = self.objects(id=id_value).first()
+            obj = cls.objects(staff_number=id_value).first()
             if obj:
                 obj.delete()
                 return True  # Successfully deleted
