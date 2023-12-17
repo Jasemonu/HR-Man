@@ -158,27 +158,35 @@ def get_employees():
         return jsonify(message)
 
 
-    @app.route('/logout')
-    def logout():
-        logout_user()
-        return redirect(url_for('index'))
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
-    @app.route('/delete', methods=['POST', 'GET'], strict_slashes=False)
-    def delete():
-        if request.form == 'GET':
-            render_template('listemployees.html')
-        staff_number = str(request.form.get('staff_number'))
-        storage.delete(staff_number)
+@app.route('/delete/<id_value>', methods=['GET'])
+def delete(id_value):
+    if request.method == 'GET':
+        render_template('listemployees.html')
+    try:
+        result = storage.delete_staff(User, id_value)
+        if result:
+            return f"Successfully deleted object with ID {id_value}"
+        else:
+            return f"Object with ID {id_value} not found or deletion failed", 404
+    except Exception as e:
+        print(f"Deletion failed for ID {id_value}: {e}")
+        return f"Deletion failed for ID {id_value}. Please check logs for details", 500
+    return jsonify({'error': 'Invalid request method'}), 405
 
 
-    @app.route('/update', methods=['POST', 'GET'], strict_slashes=False)
-    def update():
-        if request.form == 'GET':
-            render_template('listemployees.html')
-        staff_number = request.form.get('staff_number')
-        updated_data = request.form.get('updated_data')
-        storage.update(staff_number, updated_data)
+@app.route('/update', methods=['POST', 'GET'], strict_slashes=False)
+def update():
+    if request.form == 'GET':
+        render_template('listemployees.html')
+    staff_number = request.form.get('staff_number')
+    updated_data = request.form.get('updated_data')
+    storage.update(staff_number, updated_data)
 
 
 if __name__ == '__main__':
