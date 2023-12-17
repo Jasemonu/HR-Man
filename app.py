@@ -150,14 +150,18 @@ def get_employees():
         return redirect(url_for('index'))
 
 
-    @app.route('/delete', methods=['POST'], strict_slashes=False)
+    @app.route('/delete', methods=['POST', 'GET'], strict_slashes=False)
     def delete():
+        if request.form == 'GET':
+            render_template('listemployees.html')
         staff_number = str(request.form.get('staff_number'))
         storage.delete(staff_number)
 
 
-    @app.route('/update', methods=['POST'], strict_slashes=False)
+    @app.route('/update', methods=['POST', 'GET'], strict_slashes=False)
     def update():
+        if request.form == 'GET':
+            render_template('listemployees.html')
         staff_number = request.form.get('staff_number')
         updated_data = request.form.get('updated_data')
         storage.update(staff_number, updated_data)
