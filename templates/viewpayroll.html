@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title> employee deductions </title>
+  <title>View Payroll</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -55,7 +55,7 @@
         </ul>
       </nav><!-- .nav-menu -->
 
-      <a href="#about" class="get-started-btn scrollto">Log Out</a>        
+      <a href="#about" class="get-started-btn scrollto">Log Out</a>        <!--change to login page-->
 
     </div>
   </header><!-- End Header -->
@@ -67,10 +67,10 @@
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>deductions</h2>
+          <h2>View Payroll</h2>
           <ol>
-            <li><a href="">Home</a></li>
-            <li>deductions</li>
+	    <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li>View Payroll</li>
           </ol>
         </div>
 
@@ -85,7 +85,7 @@
               <div class="table-title">
                 <div class="row">
                   <div class="col-sm-6">
-                    <h2><b>deductions</b></h2>
+                    <h2><b>Salary</b></h2>
                   </div>
                   
                 </div>
@@ -94,22 +94,22 @@
                 <thead>
                   <tr>
                     
-                    <th>SSNIT</th>
-                    <th>Tax</th>
-                    <th>Tier two</th>
-                    <th>Tier Three</th>
-                    
+                    <th style="text-align:center">Staff Number</th>
+                    <th style="text-align:center">Name</th>
+                    <th style="text-align:center">Gross</th>
+                    <th style="text-align:center">Deductions</th>
+                    <th style="text-align:center">Net</th>
                     
                   </tr>
                 </thead>
                 <tbody>
-                  {% for row in rows %}
+                  {% for payroll in list %}
                     <tr>
-                      <td>{{row["SSNIT"]}}</td>
-                      <td>{{row["Tax"]}}</td>
-                      <td> {{row["Tier two"]}}</td>
-                      <td>{{row["Tier Three"]}}</td>
-    
+		      <td style="text-align:center">{{ payroll.get('staff_number') }}</td>
+                      <td style="text-align:center">{{ payroll.get('full_name') }}</td>
+                      <td style="text-align:center"> {{ payroll.get('gross') }}</td>
+                      <td style="text-align:center">{{ payroll.get('deductions') }}</td>
+                      <td style="text-align:center"> {{ payroll.get('net') }}</td>
 
                     </tr>
                   {% endfor %}   

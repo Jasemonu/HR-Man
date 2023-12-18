@@ -1,8 +1,8 @@
-from mongoengine import Document, IntField, DateTimeField, ObjectIdField
+from mongoengine import Document, IntField, DateTimeField, StringField
 from datetime import date
 
 class Deduction(Document):
-    user_id = ObjectIdField(unique=True, required=True)
+    staff_number = StringField(required=True)
     SSNIT = IntField(default=0, required=True)
     tax = IntField(default=0, required=True)
     tier_two = IntField(required=True, default=0,)
