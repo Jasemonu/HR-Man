@@ -6,6 +6,7 @@ from flask_login import LoginManager, login_user, login_required, current_user, 
 from datetime import datetime
 from models import storage
 from models.user import User
+from models.payroll import Payroll
 import bcrypt
 from models.user import random_password, gen_employee_id, send_email, valid_fields
 
@@ -123,12 +124,16 @@ def login():
             # Logged in successfully
             if employee.Superuser:
                 session['user_id'] = str(employee.id)
-                return render_template('dashboard.html')
-            return render_template('dashboard.html')
+                return redirect(url_for('home'))
+            return redirect(url_for('home'))
         return 'Invalid credentials'
 
     return render_template('login.html')
 
+
+@app.route('/home', strict_slashes=False)
+def home():
+    return render_template('dashboard.html')
 
 @app.route('/employees', methods=['GET'], strict_slashes=False)
 @login_required
@@ -178,6 +183,19 @@ def update():
     staff_number = request.form.get('staff_number')
     updated_data = request.form.get('updated_data')
     storage.update(staff_number, updated_data)
+
+@app.route('/payroll', methods=['GET', 'POST'], strict_slashes=False)
+def payroll():
+    payroll = Payroll.objects(name='NCT78649_August_23').first()
+    return render_template('viewpayroll.html', list=payroll.items)
+
+@app.route('/earning', methods=['GET', 'POST'], strict_slashes=False)
+def createpayroll():
+    return render_template('salary.html')
+
+@app.route('/deduction', methods=['GET', 'POST'], strict_slashes=False)
+def deduction():
+    return render_template('deductions.html')
 
 
 if __name__ == '__main__':
