@@ -160,10 +160,10 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<staff_number>', methods=['GET'])
+@app.route('/delete/<staff_number>', methods=['GET', 'POST'], strict_slashes=False)
 def delete(staff_number):
     if request.method == 'GET':
-        render_template('listemployees.html')
+        return redirect(url_for('get_employees'))
     try:
         result = storage.delete_staff(User, staff_number)
         if result:
