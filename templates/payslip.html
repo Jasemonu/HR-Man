@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>employee Salary Details</title>
+  <title>Employee Payslip</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -69,10 +69,10 @@
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Salary</h2>
+          <h2>Payslip</h2>
           <ol>
 	    <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li>Salary</li>
+            <li>Payslip</li>
           </ol>
         </div>
 
@@ -91,31 +91,18 @@
               <div class="table-title">
                 <div class="row">
                   <div class="col-sm-6">
-                    <h2><b>Salary</b></h2>
+                    <h2><b>Payslip</b></h2>
                   </div>
                   
                 </div>
               </div>
-              <form class="addEmployee" method='POST' action='/createpayroll'>
-                <label>Staff Number</label>
-                
+              <form class="addEmployee" method='POST' action='/createpayslip'>
+                <label>Staff Number</label>    
                 <input type="text" name="staff_number" required />
                 <br/>
-                <label>Basic</label>
-                <input type="number" name="basic" required />
-                <br />
-                <label>Overtime</label>
-                <input type="number" name="overtime" value=0 />
-                <br />
-                <label>Allowances</label>
-                <input type="number" name="allawance" value=0 />
-                <br />
-		<label>Bonus</label>
-		<input type="number" name="bonus" value=0 />
+                <label>Period</label>
+                <input type="date" name="period" required />
 		<br />
-                <label>Gross</label>
-                <input type="number" name="gross" required />
-                <br />
                 <a href=""><input class="button blueButton" type="submit" value="submit" /></a>  
       <br />
             </div>

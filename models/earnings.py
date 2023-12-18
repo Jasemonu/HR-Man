@@ -4,6 +4,7 @@ from datetime import date
 
 class Earning(Document):
     staff_number = StringField(required=True)
+    #period = StringField(required=True, unique=True)
     pay_hour = IntField(default=0)
     total_hours = IntField(default=0)
     basic = IntField(default=0.00)

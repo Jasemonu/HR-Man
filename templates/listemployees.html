@@ -46,7 +46,7 @@
       
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li><a href="/employee">Home</a></li>
+	  <li><a href="{{ url_for('home') }}">Home</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#counts">Staistics</a></li>
           <li><a href="#testimonials">Testimonials</a></li>
@@ -69,7 +69,7 @@
         <div class="d-flex justify-content-between align-items-center">
           <h2>List employees</h2>
           <ol>
-            <li><a href="">Home</a></li>
+	    <li><a href="{{ url_for('home') }}">Home</a></li>
             <li>List employees</li>
           </ol>
         </div>
@@ -119,7 +119,7 @@
                       <td>{{row["last_name"]}}</td>
                       <td>{{row["email"]}}</td>	
                       <td>{{row["phone"]}}</td>
-                      <td> {{row["date_of_birth"]}}</td>
+                      <td>{{row["date_of_birth"]}}</td>
                       <td>{{row["NID"]}}</td>	
                       <td>{{row["employment_date"]}}</td>
                       <td>{{row["gender"]}}</td>              
