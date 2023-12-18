@@ -33,6 +33,7 @@
 
   <!-- Template Main CSS File -->
   <link href="/static/assets/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/salary.css">
 
 </head>
 
@@ -41,8 +42,9 @@
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center justify-content-between">
+     
 
-      <h1 class="logo"><a href="/static/assets/img/HR_logo.png">HR-MAN<span>.</span></a></h1>
+      <h1 class="logo"><a href="">HR-MAN<span>.</span></a></h1>
       
       <nav class="nav-menu d-none d-lg-block">
         <ul>
@@ -90,33 +92,26 @@
                   
                 </div>
               </div>
-              <table class="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    
-                    <th>Staff ID</th>
-                    <th style="text-align:center">Earnings</th>
-                    <th>Hours Worked</th>
-                    <th>Overtime Hours Worked</th>
-                    <th>Allowance</th>
-                    <th>Bonus</th>
-                    
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for row in rows %}
-                    <tr>
-                      <td>{{row["emp_id"]}}</td>
-                      <td style="text-align:center">{{row["Earnings"]}}</td>
-                      <td> {{row["Hours Worked"]}}</td>
-                      <td style="text-align:center">{{row["Overtime"]}}</td>
-                      <td> {{row["Allowance"]}}</td>
-                      <td> {{row["Bonus"]}}</td>
-
-                    </tr>
-                  {% endfor %}   
-                </tbody>
-              </table>
+              <form class="addEmployee">
+                <label>Staff Number</label>
+                
+                <input type="text" name="employeeID" />
+                <br/>
+                <label>Basic</label>
+                <input type="text" name="Basic" />
+                <br />
+                <label>Overtime</label>
+                <input type="text" name="Overtime" />
+                <br />
+                <label>Allowances</label>
+                <input type="text" name="Allowances" />
+                <br />
+                <label>Gross</label>
+                <input type="text" name="Gross" />
+                <br />
+                <a href=""><input class="button blueButton" type="submit" value="submit" /></a>  
+      <br />
+            
             </div>
           </div>        
         </div>
