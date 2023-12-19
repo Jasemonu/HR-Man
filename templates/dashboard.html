@@ -78,16 +78,16 @@
                         <i class="material-icons">aspect_ratio</i><span>Employees</span></a>
                     <ul class="collapse list-unstyled menu" id="homeSubmenu1">
                         <li>
-                            <a href="#">Add employees</a>
+                            <a href="/register">Add employees</a>
                         </li>
                         <li>
-                            <a href="#">List employees</a>
+                            <a href="/employees">List employees</a>
                         </li>
                         <li>
                             <a href="#">Update employees</a>
                         </li>
                         <li>
-                            <a href="#">Delete employees</a>
+				<a href="/delete/<staff_number>">Delete employees</a>
                         </li>
                     </ul>
                 </li>
@@ -116,30 +116,30 @@
                     <ul class="collapse list-unstyled menu" id="pageSubmenu3">
 			{% if current_user.Superuser %}
                         <li>
-                            <a href="#">Create</a>
+                            <a href="/createpayslip">Create</a>
                         </li>
 			{% endif %}
                         <li>
-                            <a href="#">View</a>
+                            <a href="/viewpayslip">View</a>
                         </li>
 			{% if current_user.Superuser %}
                         <li>
-                            <a href="#">Delete</a>
+                            <a href="/payslips">Delete</a>
                         </li>
 			{% endif %}
                     </ul>
 		</li>
                 <li class="dropdown">
-                    <a href="#pageSubmenu3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="material-icons">equalizer</i>
+                    <a href="#pageSubmenu4" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="material-icons">money</i>
 
                         <span>PayRoll</span></a>
-                    <ul class="collapse list-unstyled menu" id="pageSubmenu3">
+                    <ul class="collapse list-unstyled menu" id="pageSubmenu4">
                         <li>
-                            <a href="#">View Payroll</a>
+                            <a href="/viewpayroll">View Payroll</a>
                         </li>
                         <li>
-                            <a href="#">Create Payroll</a>
+                            <a href="/createpayroll">Create Payroll</a>
                         </li>
         
                     </ul>
@@ -151,6 +151,9 @@
                 <li class="">
                     <a href="#"><i class="material-icons">library_books</i><span>Profile</span></a>
                 </li>
+		<li class="">
+		    <a href="/logout"><i class="material-icons">logout</i><span>Log out</span></a>
+	        </li>
             </ul>
         </nav>
 

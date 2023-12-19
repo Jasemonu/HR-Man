@@ -46,7 +46,7 @@
       
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li><a href="{{ url_for('sepm') }}">Home</a></li>
+	  <li><a href="{{ url_for('home') }}">Home</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#counts">Staistics</a></li>
           <li><a href="#testimonials">Testimonials</a></li>
@@ -55,7 +55,7 @@
         </ul>
       </nav><!-- .nav-menu -->
 
-      <a href="#about" class="get-started-btn scrollto">Log Out</a>        <!--change to login page-->
+      <a href="/logout" class="get-started-btn scrollto">Log Out</a>        <!--change to login page-->
 
     </div>
   </header><!-- End Header -->
@@ -69,7 +69,7 @@
         <div class="d-flex justify-content-between align-items-center">
           <h2>List employees</h2>
           <ol>
-            <li><a href="">Home</a></li>
+	    <li><a href="{{ url_for('home') }}">Home</a></li>
             <li>List employees</li>
           </ol>
         </div>
@@ -102,7 +102,6 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
-                    <th>Password</th>
                     <th>Phone Number</th>
                     <th>Date of Birth</th>
                     <th>NID</th>
@@ -115,18 +114,17 @@
                 <tbody>
                   {% for row in rows %}
                     <tr>
-                      <td>{{row["Employee ID"]}}</td>
-                      <td>{{row["First Name"]}}</td>
-                      <td>{{row["Last Name"]}}</td>
-                      <td>{{row["Email"]}}</td>	
-                      <td>{{row["Password"]}}</td>
-                      <td>{{row["Phone Number"]}}</td>
-                      <td> {{row["Date of Birth"]}}</td>
+                      <td>{{row["staff_number"]}}</td>
+                      <td>{{row["first_name"]}}</td>
+                      <td>{{row["last_name"]}}</td>
+                      <td>{{row["email"]}}</td>	
+                      <td>{{row["phone"]}}</td>
+                      <td>{{row["date_of_birth"]}}</td>
                       <td>{{row["NID"]}}</td>	
-                      <td>{{row["Date of Employment"]}}</td>
-                      <td>{{row["Gender"]}}</td>              
-                      <td>{{row["Department"]}}</td>
-                      <td> {{row["Position"]}}</td>
+                      <td>{{row["employment_date"]}}</td>
+                      <td>{{row["gender"]}}</td>              
+                      <td>{{row["department"]}}</td>
+                      <td> {{row["position"]}}</td>
                     </tr>
                   {% endfor %}    
                 </tbody>

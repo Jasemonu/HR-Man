@@ -67,14 +67,53 @@
 	text-align: left;
 }
 
+.addEmployee input[type=number] {
+        width: 95%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        resize: none;
+        text-align: left;
+}
+
+.addEmployee input[type=date] {
+        width: 95%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        resize: none;
+        text-align: left;
+}
+
 .addEmployee input[type=text]:focus {
-	border: 1px solid #a8a8a8;
+	border: 1px solid #a8a8a8i;
+}
+
+.addEmployee input[type=number]:focus {
+        border: 1px solid #a8a8a8;
+}
+.addEmployee input[type=date]:focus {
+        border: 1px solid #a8a8a8;
 }
 
 .addEmployee input[type=submit],
 .addEmployee input[type=button] {
 	float: right;
 	margin: -20px 20px 10px 0px;
+}
+
+.addEmployee input:invalid {
+  border: 2px solid black;
+}
+
+.addEmployee input:valid {
+  border: 2px solid green;
 }
 
 .addEmployee {

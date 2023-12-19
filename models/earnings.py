@@ -1,9 +1,10 @@
-from mongoengine import Document, DecimalField, DateTimeField, ObjectIdField
+from mongoengine import Document, DecimalField, DateTimeField, StringField
 from mongoengine import IntField
 from datetime import date
 
 class Earning(Document):
-    user_id = ObjectIdField(unique=True, required=True)
+    staff_number = StringField(required=True)
+    #period = StringField(required=True, unique=True)
     pay_hour = IntField(default=0)
     total_hours = IntField(default=0)
     basic = IntField(default=0.00)
