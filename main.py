@@ -43,8 +43,9 @@ objects = {
 
 user = User(**objects)
 storage.connect()
+storage.delete_staff(User, "JJ226")
 try:
-    id = storage.save(user)
+   # id = storage.save(user)
     print(user.password, user.Superuser)
 except NotUniqueError:
     print("user exsit")
