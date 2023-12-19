@@ -54,7 +54,8 @@ def register_user():
 
     # Validate presence of all required fields
     if not valid_fields(data):
-        return jsonify({'error': 'All fields are required'}), 400
+        flash('All fields required', 'error')
+        return render_template('employee.html')
 
     # Extract data from the form
     first_name = data.get('first_name')
@@ -70,7 +71,8 @@ def register_user():
 
     user = storage.find_email(User, email)
     if user:
-        return jsonify({'error': 'User already exists'}), 400
+        flash('User already exists', 'error')
+        return render_template('employee.html')
 
     # Generate employee ID
     staff_number = gen_employee_id(first_name, last_name)
@@ -105,7 +107,8 @@ def register_user():
     # Send the password to the user's email
     send_email(email, password)
 
-    return jsonify({'message': 'success', 'employee_id': staff_number}), 201
+    flash('Created successful!', 'success')
+    return render_template('employee.html')
 
 
 
@@ -117,7 +120,7 @@ def login():
 
         employee = storage.find_email(User, email)
 
-        if employee: #and check_password(password, employee.password):
+        if bcrypt.checkpw(password.encode('utf-8'), employee.password.encode('utf-8')):
             login_user(employee)
             # employee.add(log_event)
             log_event = {
@@ -128,10 +131,12 @@ def login():
 
             # Logged in successfully
             if employee.Superuser:
+                flash('Login successful!', 'success')
                 session['user_id'] = str(employee.id)
                 return redirect(url_for('home'))
             return redirect(url_for('home'))
-        return 'Invalid credentials'
+        flash('Invalid username or password', 'error')
+        return render_template('login.html')
 
     return render_template('login.html')
 
