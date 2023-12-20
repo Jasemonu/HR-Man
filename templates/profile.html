@@ -9,8 +9,12 @@
 <body>
     <div class="container">
 	{% if current_user.is_authenticated %}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <h1 class="title">{{ messages[0] }}</h1><span><a href="{{ url_for('home') }}"><button class="button">Home</button></a></span>
+    {% endif %}
+  {% endwith %}
         <h1 class="title">Personal Details</h1>
-    
         <div class="grid">
             <div class="form-group a">
                 <label for="name">First Name</label>

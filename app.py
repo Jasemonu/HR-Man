@@ -139,6 +139,7 @@ def login():
 
 
 @app.route('/home', strict_slashes=False)
+@login_required
 def home():
     return render_template('dashboard.html')
 
@@ -162,8 +163,11 @@ def get_employees():
 
 
 @app.route('/logout')
+@login_required
 def logout():
+    name = current_user.first_name
     logout_user()
+    flash(f'GOODBYE {name}!')
     return redirect(url_for('index'))
 
 
@@ -243,6 +247,7 @@ def viewpayslip(name):
 
 
 @app.route('/createpayslip', methods=["GET", "POST"], strict_slashes=False)
+@login_required
 def createpayslip():
     if request.method == 'POST':
         staff_number = request.form.get('staff_number')
@@ -263,6 +268,7 @@ def createpayslip():
 
 @app.route('/payslips', defaults={'name': None}, strict_slashes=False)
 @app.route('/payslips/<name>', methods=['GET', 'DELETE'])
+@login_required
 def delete_payslip(name):
     list = []
     if name:
@@ -303,7 +309,6 @@ def update_profile(staff):
         setBank = False
         user = User.objects(staff_number=staff).first()
         bank = Bank.objects(staff_number=staff).first()
-        #return jsonify(request.form)
         for key, value in request.form.items():
             if hasattr(user, key):
                 setattr(user, key, value)
@@ -327,6 +332,7 @@ def update_profile(staff):
             bank.save()
         else:
             bank.save()
+        flash('Profile Update Successfull')
         return redirect(url_for('profile'))
     bank = Bank.objects(staff_number=current_user.staff_number).first()
     return render_template('updateprofile.html', bank=bank)
@@ -376,6 +382,25 @@ def attendance(period):
     return render_template('attendance.html', date=today.isoformat(), rows=obj)
 
 
+@app.route('/resetpwd', methods=['GET', 'POST'], strict_slashes=False)
+def resetpwd():
+    if request.method == 'POST':
+        user = User.objects(email=request.form.get('email')).first()
+        if user:
+            pwd = request.form.get('password')
+            confirm = request.form.get('confirmpwd')
+            if pwd == confirm:
+                user.update(__raw__={'$set':{'password': pwd}})
+                user.save()
+                flash('Password updated Please login')
+                return redirect(url_for('login'))
+            flash('Password not matching')
+            return redirect(url_for('resetpwd'))
+        flash(f"Staff doesn't exist")
+        return redirect(url_for('resetpwd'))
+    return render_template('resetpwd.html')
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     
@@ -387,11 +412,7 @@ def page_not_found(e):
 
 @app.errorhandler(401)
 def notallowed(e):
-    return jsonify(
-            {
-                'Error': 401,
-                'message': 'UNAUTHORIZED ACCESS consult admin'
-                }), 401
+    return render_template('error.html'), 401
 
 
 
