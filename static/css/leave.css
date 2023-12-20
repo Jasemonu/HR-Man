@@ -1,38 +1,3 @@
-header{
-    text-align:center;
-    background-color:#FF7F50;
-    padding:1em 
-  }
-  
-  
-  form{
-    background-color:#F0F8FF
-    }
-  #formLogin{  
-    text-align:center;
-  }
-  .text{
-    padding:0.5em;  
-    text-align:5em;
-    width:200px;
-    height:10px;
-  }
-  label{
-    padding:0.5em;
-    align-left:5em;
-  }
-  
-  .btnSubmit{
-    
-  }
-  
-  .logout{ 
-    float:right;
-  background-color:yellow;
-  }
-  #Details{
-    background-color:#F0F8FF
-    }
   
   table tr th{
     border:1px solid black; 
