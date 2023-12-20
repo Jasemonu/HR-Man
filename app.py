@@ -7,7 +7,9 @@ from flask import send_file, url_for, flash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from datetime import datetime, date
 from models import storage
+from models.attendance import Attendance
 from models.user import User
+from models.bank import Bank
 from models.payroll import Payroll
 from models.payslip import Payslip
 from payroll import create_payroll
@@ -283,6 +285,114 @@ def delete_payslip(name):
     if payslips:
         list = payslips
     return render_template('deletepayslip.html', payslips=list)
+
+
+@app.route('/profile', methods=['GET'], strict_slashes=False)
+@login_required
+def profile():
+    bank = Bank.objects(staff_number=current_user.staff_number).first()
+    return render_template('profile.html', bank=bank)
+
+
+@app.route('/update_profile', defaults={'staff': None})
+@app.route('/update_profile/<staff>', methods=["GET", "POST"], strict_slashes=False)
+@login_required
+def update_profile(staff):
+    if staff and request.method == 'POST':
+        setUser = False
+        setBank = False
+        user = User.objects(staff_number=staff).first()
+        bank = Bank.objects(staff_number=staff).first()
+        #return jsonify(request.form)
+        for key, value in request.form.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+                setUser = True
+            if bank:
+                if hasattr(bank, key):
+                    setattr(bank, key, value)
+                    setBank = True
+        if setUser:
+            user.save()
+        if not setBank:
+            obj = {
+                    'staff_number': staff,
+                    'name': request.form.get('name'),
+                    'branch': request.form.get('branch'),
+                    'code': request.form.get('code'),
+                    'account_name': request.form.get('account_name'),
+                    'account_number': request.form.get('account_number')
+                    }
+            bank = Bank(**obj)
+            bank.save()
+        else:
+            bank.save()
+        return redirect(url_for('profile'))
+    bank = Bank.objects(staff_number=current_user.staff_number).first()
+    return render_template('updateprofile.html', bank=bank)
+
+
+@app.route('/attendance', defaults={'period': None})
+@app.route('/attendance/<period>', methods=['GET', 'POST'], strict_slashes=False)
+@login_required
+def attendance(period):
+    today = date.today()
+    obj = Attendance.objects()
+    staff_name = current_user.first_name + ' ' + current_user.last_name
+    if not current_user.Superuser:
+        name = current_user.staff_number + today.strftime('%a')
+        obj = Attendance.objects(name=name)
+    if request.method == 'POST':
+        name = name=request.form.get('ID') + today.strftime('%a')
+        if period == 'entry':
+            att = Attendance.objects(name=name).first()
+            if att:
+                flash('Signed in already')
+                return redirect(url_for('attendance'))
+            obj = {
+                'staff_number': request.form.get('ID'),
+                'name': name,
+                'staff_name': staff_name,
+                'date': request.form.get('date'),
+                'entry_time': request.form.get('entry_time')
+                }
+            n_att = Attendance(**obj)
+            n_att.save()
+            flash('signed in Successfull')
+            return redirect(url_for('attendance'))
+        if period == 'exit':
+            att = Attendance.objects(name=name).first()
+            if not att:
+                flash('Must signed in first')
+                return redirect(url_for('attendance'))
+            if att.exit_time:
+                flash('Singed out already please logout')
+                return redirect(url_for('attendance'))
+            exit = request.form.get('exit_time')
+            att.update(__raw__={'$set': {'exit_time': exit}})
+            att.save()
+            flash('Signed out Succesfull please logout')
+        return redirect(url_for('attendance'))
+    return render_template('attendance.html', date=today.isoformat(), rows=obj)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    
+    return jsonify(
+            {
+                'Error': 404,
+                'message': 'NOT FOUND return and try agian'
+                }), 404
+
+@app.errorhandler(401)
+def notallowed(e):
+    return jsonify(
+            {
+                'Error': 401,
+                'message': 'UNAUTHORIZED ACCESS consult admin'
+                }), 401
+
 
 
 if __name__ == '__main__':
