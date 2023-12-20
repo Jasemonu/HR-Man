@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/static/css/profile.css">
+</head>
+<body>
+  <form action='/update_profile/{{ current_user.staff_number }}' method='POST'>
+    <div class="container">
+	{% if current_user.is_authenticated %}
+        <h1 class="title">Personal Details</h1>
+    
+        <div class="grid">
+            <div class="form-group a">
+                <label for="name">First Name</label>
+		<input id="name" type="text" name='first_name' placeholder='{{ current_user.first_name }}' value={{ current_user.first_name }}>
+            </div>
+    
+            <div class="form-group b">
+                <label for="last-name">Last Name</label>
+                <input id="first-name" type="text" name='last_name' placeholder='{{ current_user.last_name }}' value={{ current_user.last_name }}>
+            </div>
+    
+            <div class="form-group email-group">
+                <label for="email">Email</label>
+                <input id="email" type="text" name='email' placeholder='{{ current_user.email }}' value={{ current_user.email }}>
+            </div>
+       
+            <div class="form-group phone-group">
+                <label for="phone">Telephone (mobile)</label>
+                <input id="phone" type="text" name='phone' placeholder='{{ current_user.phone }}' value={{ current_user.phone }}>
+            </div>
+    
+            <div class="form-group">
+                <label for="address">National ID</label>
+                <input id="address" type="text" name='NID' placeholder='{{ current_user.NID }}' value={{ current_user.NID }}>
+            </div>
+
+            <div class="form-group">
+                <label for="Gender">Gender</label>
+		<input id="address" type="text" name='gender' placeholder='{{ current_user.gender }}' value={{ current_user.gender }}>
+		<!---
+                <select name="gender" readonly>
+                    <option value="">Please select one</option>
+                    <option value="female">Female</option>
+                    <option value="male">male</option>
+                </select>
+		--!>
+            </div>
+
+            <div class="form-group">
+                <label for="city">Date of Birth</label>
+                <input id="date" type="text" name='date_of_birth' placeholder='{{ current_user.date_of_birth }}' value={{ current_user.date_of_birth }}>
+            </div>
+    
+            <div class="form-group">
+                <label for="zip">SSNIT Number</label>
+                <input id="zip" type="text" name='SSNIT' placeholder='{{ current_user.SSNIT }}' value={{ current_user.SSNIT }}> <br/>
+            </div>
+        </div>
+
+        <h1 class="title">Employment Details</h1>
+        <div class="grid">
+            <div class="form-group a">
+                <label for="name">Staff Number</label>
+                <input id="name" type="text"  readonly placeholder='{{ current_user.staff_number }}'>
+            </div>
+            <div class="form-group b">
+                <label for="last-name">Employment Date</label>
+                <input id="date" type="text" readonly placeholder='{{ current_user.employment_date }}'>
+            </div>
+    
+       
+            <div class="form-group ">
+                <label for="phone">Department </label>
+                <input id="phone" type="text" readonly placeholder='{{ current_user.department }}'>
+            </div>
+            <div class="form-group ">
+                <label for="last-name">Position</label>
+                <input id="first-name" type="text" readonly placeholder='{{ current_user.position }}'>
+            </div>
+        </div>
+	{% endif %}
+        <h1 class="title">Bank Details</h1>
+        <div class="grid">
+	{% if bank %}
+            <div class="form-group a">
+                <label for="name">Bank Name</label>
+                <input id="name" type="text" name='name'  placeholder='{{ bank.name }}' value={{ bank.name }}>
+            </div>
+
+	    <div class="form-group a">
+                <label for="name">Branch</label>
+                <input id="name" type="text" name='branch' placeholder='{{ bank.branch }}' value={{ bank.branch }}>
+            </div>
+
+            <div class="form-group b">
+                <label for="last-name">Branch code</label>
+                <input id="first-name" type="text" name='code' placeholder='{{ bank.code }}' value={{ bank.code }}>
+            </div>
+
+	    <div class="form-group a">
+                <label for="name">Account Name</label>
+                <input id="name" type="text" name='account_name' placeholder='{{ bank.account_name }}' value={{ bank.account_name }} >
+            </div>
+
+            <div class="form-group ">
+                <label for="phone">Account Number</label>
+                <input id="phone" type="text" name='account_number' placeholder='{{ bank.account_number }}' value={{ bank.account_number }}>
+            </div>
+            <div class="form-group ">
+	    <!---
+                <label for="phone">Account Name</label>
+                <input id="phone" type="text" readonly>
+	    --!>
+            </div>
+
+	    {% else %}
+
+            <div class="form-group a">
+                <label for="name">Bank Name</label>
+                <input id="name" type="string" name='name'>
+            </div>
+
+            <div class="form-group a">
+                <label for="name">Branch</label>
+                <input id="name" type="string" name='branch'>
+            </div>
+
+            <div class="form-group b">
+                <label for="last-name">Branch code</label>
+                <input id="first-name" type="string" name='code'>
+            </div>
+
+            <div class="form-group a">
+                <label for="name">Account Name</label>
+                <input id="name" type="string" name='account_name'>
+            </div>
+
+            <div class="form-group ">
+                <label for="phone">Account Number</label>
+                <input id="phone" type="string" name='account_number'>
+            </div>
+            <div class="form-group ">
+            <!---
+                <label for="phone">Account Name</label>
+                <input id="phone" type="text" readonly>
+            --!>
+            </div>
+
+	    {% endif %}
+
+            <div class="button-container">
+		<button class="button">Save</button>
+            </div>
+	    <div class="button-container">
+	      <a href='/home'>Home</a>
+	    </div>
+	</div>
+    </div>
+  </form>
+</body>
+</html>
