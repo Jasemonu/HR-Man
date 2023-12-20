@@ -127,8 +127,8 @@
                       <td>{{row["gender"]}}</td>              
                       <td>{{row["department"]}}</td>
                       <td> {{row["position"]}}</td>
-                      <td> <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate">Update</button>
-                      <td> <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate">Delete</button>
+		      <td><a href="{{ url_for('update_profile') }}"> <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate">Update</button></a>
+			      <td><a href="/delete/<staff_number>"> <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate">Delete</button></a>
                     </tr>
                   {% endfor %}    
                 </tbody>
