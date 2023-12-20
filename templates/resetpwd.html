@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>PASSWORD RESET</title>
     <link rel="stylesheet" href="static/css/login.css">
     <script src="static/js/login.js" defer ></script>
     <!-- Favicons -->
@@ -12,20 +12,22 @@
 <body>
   <div class="login-page">
     <div class="form">
-      <form class="login-form" method="POST" action="/login">
 {% with messages = get_flashed_messages() %}
   {% if messages %}
-        <h2>{{ messages[0] }}</h2>
-  {% else %}
-        <h2>SIGN IN TO YOUR ACCOUNT</h2>
+    <div>
+      <h4>{{ messages[0] }}</h4>
+    </div>
   {% endif %}
 {% endwith %}
-        <input type="text" required placeholder="Email" id="user" name="email" autocomplete="off" />
+      <form class="login-form" method="POST" action="/resetpwd">
+        <h2>PASSWORD RESET</h2>
+        <input type="email" required placeholder="Email" id="user" name="email" autocomplete="off" />
         <input oninput="return formvalid()" type="password" name="password" required placeholder="Password" id="pass" autocomplete="off" />
+	<input oninput="return formvalid()" type="password" name="confirmpwd" required placeholder="confirm Password" id="pass" autocomplete="off" />
         <img src="https://cdn2.iconfinder.com/data/icons/basic-ui-interface-v-2/32/hide-512.png" onclick="show()" id="showimg">
         <span id="vaild-pass"></span>
-        <button type="submit">SIGN IN</button>
-	<p class="message"><a href="{{ url_for('resetpwd') }}">Forgot your password?</a></p>
+        <button type="submit">REQUEST PASSWORD RESET</button>
+	<!--<p class="message"><a href="{{ url_for('resetpwd') }}">Forgot your password?</a></p>--!>
       </form>
     </div>
   </div>

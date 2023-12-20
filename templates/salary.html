@@ -79,10 +79,6 @@
       </div>
     </section><!-- End Breadcrumbs -->
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <h3>{{ messages[0] }}</h3>
-      {% endif %}
-    {% endwith %}
     <section class="inner-page">
       <div class="container">
         <div class="container-xl">
@@ -91,7 +87,12 @@
               <div class="table-title">
                 <div class="row">
                   <div class="col-sm-6">
+		  {% if messages %}
+		    <h2><b>{{ messages[0] }}</b></h2>
+		  {% else %}
                     <h2><b>Salary</b></h2>
+		  {% endif %}
+    {% endwith %}
                   </div>
                   
                 </div>
