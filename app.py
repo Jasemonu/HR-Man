@@ -118,36 +118,42 @@ def register_user():
 def login():
     if request.method == 'POST':
         email = request.form.get('email')
-        password = request.form.get('password')
+        pwd = request.form.get('password')
 
         employee = storage.find_email(User, email)
 
-        if bcrypt.checkpw(password.encode('utf-8'), employee.password.encode('utf-8')):
-            login_user(employee)
-            # employee.add(log_event)
-            log_event = {
-                'employee_id': employee.id,
-                'event_type': 'login',
-                'login_time': datetime.now()
-            }
+        try:
+            if bcrypt.checkpw(pwd.encode('utf-8'),
+                    employee.password.encode('utf-8')):
+                login_user(employee)
+                # employee.add(log_event)
+                log_event = {
+                    'employee_id': employee.id,
+                    'event_type': 'login',
+                    'login_time': datetime.now()
+                    }
 
-            # Logged in successfully
-            if employee.Superuser:
+                # Logged in successfully
+                if employee.Superuser:
+                    flash('Login successful!', 'success')
+                    session['user_id'] = str(employee.id)
+                    return redirect(url_for('home'))
                 flash('Login successful!', 'success')
-                session['user_id'] = str(employee.id)
                 return redirect(url_for('home'))
-            flash('Login successful!', 'success')
-            return redirect(url_for('home'))
-        flash('Invalid username or password', 'error')
-        return render_template('login.html')
-
+            flash('Invalid username or password', 'error')
+            return render_template('login.html')
+        except Exception:
+            flash('Oops Somthing went wrong')
+            return redirect(url_for('login'))
     return render_template('login.html')
 
 
 @app.route('/home', strict_slashes=False)
 @login_required
 def home():
-    return render_template('dashboard.html')
+    users = User.objects.count()
+    payslips = Payslip.objects.count()
+    return render_template('dashboard.html', users=users, payslips=payslips)
 
 @app.route('/employees', methods=['GET'], strict_slashes=False)
 @login_required
@@ -263,6 +269,9 @@ def createpayslip():
             if res == 'exists':
                 flash(f'Staff {staff_number} slip exists')
                 return render_template('payslip.html')
+            if res == 'Null':
+                flash("Can't create Null payslip add earnings first")
+                return redirect(url_for('createpayslip'))
             if res is None:
                 flash('Oops Someting went wrong')
                 return render_template('payslip.html')
