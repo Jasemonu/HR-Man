@@ -123,28 +123,25 @@ def login():
         employee = storage.find_email(User, email)
 
         try:
-            if bcrypt.checkpw(pwd.encode('utf-8'),
-                    employee.password.encode('utf-8')):
+            if bcrypt.checkpw(password.encode('utf-8'), employee.password.encode('utf-8')):
                 login_user(employee)
                 # employee.add(log_event)
                 log_event = {
                     'employee_id': employee.id,
                     'event_type': 'login',
                     'login_time': datetime.now()
-                    }
+                }
 
                 # Logged in successfully
                 if employee.Superuser:
                     flash('Login successful!', 'success')
                     session['user_id'] = str(employee.id)
                     return redirect(url_for('home'))
-                flash('Login successful!', 'success')
                 return redirect(url_for('home'))
             flash('Invalid username or password', 'error')
             return render_template('login.html')
-        except Exception:
-            flash('Oops Somthing went wrong')
-            return redirect(url_for('login'))
+        except Exception as e:
+            return str(e), 500
     return render_template('login.html')
 
 
