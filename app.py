@@ -81,10 +81,6 @@ def register_user():
 
     # Generate a random password
     password = random_password()
-
-
-    # Generate a random password
-    password = random_password()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     # Save user details in MongoDB
@@ -166,7 +162,7 @@ def get_employees():
 
         # Return list of employees in the database
         employee_list = storage.all(User)
-        print(employee_list)
+        print(employee
 
         return render_template('listemployees.html', rows=employee_list)
     except Exception as e:

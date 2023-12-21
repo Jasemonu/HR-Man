@@ -42,8 +42,6 @@ objects2 = {
         'Superuser': True
         }
 
-
-
 storage.connect()
 user1 = User(**objects1)
 user2 = User(**objects2)
@@ -51,6 +49,10 @@ try:
     id1 = storage.save(user1)
     id2 = storage.save(user2)
     print(id1, id2)
+storage.all(User)
+'''try:
+    id = storage.save(user)
+    print(user.password, user.Superuser)
 except NotUniqueError:
     print("user exsit")
-    print(User.objects.as_pymongo())
+    print(User.objects.as_pymongo())'''
