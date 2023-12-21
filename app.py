@@ -136,6 +136,7 @@ def login():
                 flash('Login successful!', 'success')
                 session['user_id'] = str(employee.id)
                 return redirect(url_for('home'))
+            flash('Login successful!', 'success')
             return redirect(url_for('home'))
         flash('Invalid username or password', 'error')
         return render_template('login.html')
@@ -395,7 +396,8 @@ def resetpwd():
             pwd = request.form.get('password')
             confirm = request.form.get('confirmpwd')
             if pwd == confirm:
-                user.update(__raw__={'$set':{'password': pwd}})
+                hashpwd = bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt())
+                user.update(__raw__={'$set':{'password': hashpwd}})
                 user.save()
                 flash('Password updated Please login')
                 return redirect(url_for('login'))
