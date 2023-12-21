@@ -33,7 +33,7 @@ folder = 'static/assets/pdf'
 def create_payslip(data, staff):
     earn = check_earning(data.get('staff_number'))
     if earn is None:
-        return None
+        return "Null"
 
     try:
         deduct = Deduction.objects(staff_number=staff.staff_number).first()

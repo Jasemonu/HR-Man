@@ -76,7 +76,7 @@
 
       </div>
     </section><!-- End Breadcrumbs -->
-
+   
     <section class="inner-page">
       <div class="container">
         <div class="container-xl">
@@ -109,6 +109,8 @@
                     <th>Gender</th>
                     <th>Department</th>
                     <th>Position</th>
+                    <th>status</th>
+                    <th>status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -125,6 +127,8 @@
                       <td>{{row["gender"]}}</td>              
                       <td>{{row["department"]}}</td>
                       <td> {{row["position"]}}</td>
+                      <td> <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                      <td> <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate">Delete</button>
                     </tr>
                   {% endfor %}    
                 </tbody>
