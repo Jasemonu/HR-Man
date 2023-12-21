@@ -47,7 +47,7 @@
         </ul>
       </nav><!-- .nav-menu -->
 
-      <a href="" class="get-started-btn scrollto">Log Out</a>        <!--add log out functionality-->
+      <!-- <a href="" class="get-started-btn scrollto">Log Out</a>  --!>      <!--add log out functionality-->
 
     </div>
   </header><!-- End Header -->
@@ -58,7 +58,13 @@
 
       <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="150">
         <div class="col-xl-6 col-lg-8">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <h1>{{ messages[0] }}</h1>
+        {% else %}
           <h1>Welcome!</h1>
+        {% endif %}
+      {% endwith %}
         </div>
       </div>
 

@@ -13,13 +13,19 @@
   <div class="login-page">
     <div class="form">
       <form class="login-form" method="POST" action="/login">
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+        <h2>{{ messages[0] }}</h2>
+  {% else %}
         <h2>SIGN IN TO YOUR ACCOUNT</h2>
+  {% endif %}
+{% endwith %}
         <input type="text" required placeholder="Email" id="user" name="email" autocomplete="off" />
         <input oninput="return formvalid()" type="password" name="password" required placeholder="Password" id="pass" autocomplete="off" />
         <img src="https://cdn2.iconfinder.com/data/icons/basic-ui-interface-v-2/32/hide-512.png" onclick="show()" id="showimg">
         <span id="vaild-pass"></span>
         <button type="submit">SIGN IN</button>
-        <p class="message"><a href="#">Forgot your password?</a></p>
+	<p class="message"><a href="{{ url_for('resetpwd') }}">Forgot your password?</a></p>
       </form>
     </div>
   </div>
