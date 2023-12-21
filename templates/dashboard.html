@@ -40,7 +40,6 @@
                 <li class="active">
                     <a href="#" class="dashboard"><i class="material-icons">dashboard</i><span>Dashboard</span></a>
                 </li>
-
                 <div class="small-screen navbar-display">
 		    {% if current_user.Superuser %}
                     <li class="dropdown d-lg-none d-md-block d-xl-none d-sm-block">
@@ -172,6 +171,12 @@
                             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="material-icons">more_vert</span>
                         </button>
+
+			{% with messages = get_flashed_messages() %}
+			  {% if messages %}
+			    <h3>{{ messages[0] }}</h3>
+			  {% endif %}
+			{% endwith %}
 
                         <div class="collapse navbar-collapse d-lg-block d-xl-block d-sm-none d-md-none d-none"
                             id="navbarSupportedContent">
