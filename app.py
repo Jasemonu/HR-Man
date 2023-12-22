@@ -134,9 +134,9 @@ def login():
                 if employee.Superuser:
                     flash('Login successful!', 'success')
                     session['user_id'] = str(employee.id)
-                    return redirect(url_for('home'))
+                    return render_template('dashboard.html')
                 flash('Login successful!', 'success')
-                return redirect(url_for('home'))
+                return render_template('dashboard.html')
             flash('Invalid username or password', 'error')
             return render_template('login.html')
         except Exception:
@@ -179,29 +179,32 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<staff_number>', methods=['GET', 'POST'], strict_slashes=False)
+@app.route('/delete/<string:staff_number>', methods=['GET', 'POST'], strict_slashes=False)
 def delete(staff_number):
     if request.method == 'GET':
-        return redirect(url_for('get_employees'))
+        return render_template('delete.html')
     try:
         result = storage.delete_staff(User, staff_number)
         if result:
-            return f"Successfully deleted object with ID {staff_number}"
-        else:
-            return f"Object with ID {staff_number} not found or deletion failed", 404
+            flash('Deleted successful!', 'success')
+            return redirect(url_for('get_employees'))
     except Exception as e:
-        print(e)
-        return f"Deletion failed for ID {staff_number}. Please check logs for details", 500
-    return jsonify({'error': 'Invalid request method'}), 405
+        return str(e), 500
 
 
-@app.route('/update', methods=['POST', 'GET'], strict_slashes=False)
-def update():
-    if request.form == 'GET':
-        render_template('listemployees.html')
-    staff_number = request.form.get('staff_number')
-    updated_data = request.form.get('updated_data')
-    storage.update(staff_number, updated_data)
+@app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
+def update(staff_number):
+    try:
+        employee = storage.get(User, staff_number)
+        print(employee)
+        return render_template('updateemployee.html', employee=employee)
+        if request.method == 'POST':
+            updated_data = request.form.get('updated_data')
+            storage.update(staff_number, updated_data)
+            return render_template('listployees.html')
+    except Exception as e:
+       print(e)
+
 
 @app.route('/viewpayroll', methods=['GET', 'POST'], strict_slashes=False)
 def payroll():
@@ -472,7 +475,7 @@ def page_not_found(e):
     return jsonify(
             {
                 'Error': 404,
-                'message': 'NOT FOUND return and try agian'
+                'message': 'NOT FOUND return and try again'
                 }), 404
 
 @app.errorhandler(401)

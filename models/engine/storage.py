@@ -3,7 +3,7 @@
 from mongoengine import connect, disconnect
 #from models.user import User
 
-class Storage:
+class Storage:      
 	def __init__(self):
 		self.db = None
 
