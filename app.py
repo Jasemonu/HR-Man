@@ -10,6 +10,7 @@ from models import storage
 from models.attendance import Attendance
 from models.user import User
 from models.bank import Bank
+from models.leave import Leave
 from models.payroll import Payroll
 from models.payslip import Payslip
 from payroll import create_payroll
@@ -424,6 +425,59 @@ def resetpwd():
         flash(f"Staff doesn't exist")
         return redirect(url_for('resetpwd'))
     return render_template('resetpwd.html')
+
+
+@app.route('/leave', methods=['POST', 'GET'], strict_slashes=False)
+def leave():
+	if request.method == 'POST':
+		data = request.form
+
+		# Extract data from the form
+		staffNumber = data.get('staff_number')
+		startDate = datetime.strptime(data.get('start_date'), '%Y-%m-%d')
+		endDate = datetime.strptime(data.get('end_date'), '%Y-%m-%d')
+		leaveType = data.get('leave_type')
+
+		if startDate < datetime.now():
+			flash(f"Start date cannot be lower than current date ")
+			return render_template('leavereq.html')
+		if endDate <= startDate:
+			flash("End date should be higher than start date")
+			return render_template('leavereq.html')
+		leave_days = (endDate - startDate).days + 1
+		user = storage.find_staff(Leave, staffNumber)
+		if not user:
+			leave_data = {
+				'staff_number': staffNumber,
+				'start_date': startDate,
+				'end_date': endDate,
+				'leave_type': leaveType
+			}
+			leave_data.remaining -= leave_days
+			if leave_data.remaining < 0:
+				flash(f"You have only {user.remaining} days left")
+				return render_template('leavereq.html')
+			leave_req = Leave(**leave_data)
+			leave_req.save()
+
+		if user:
+			if user.remaining >= leave_days:
+				user.remaining -= leave_days
+			else:
+				flash(f"You have only {user.remaining} days left")
+				return render_template('leavereq.html')
+			leave_data = {
+				'start_date': startDate,
+        		'end_date': endDate,
+        		'leave_type': leaveType,
+				}
+			for key, value in leave_data.items():
+				setattr(user, key, value)
+			user.save()
+			flash("Leave application successful and pending approval")
+			return redirect(url_for('home'))
+
+	return render_template('leavereq.html')
 
 
 @app.errorhandler(404)

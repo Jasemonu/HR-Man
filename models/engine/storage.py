@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from mongoengine import connect, disconnect
-#from models.user import User
+
 
 class Storage:
     def __init__(self):
