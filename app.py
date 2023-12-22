@@ -10,6 +10,7 @@ from models import storage
 from models.attendance import Attendance
 from models.user import User
 from models.bank import Bank
+from models.leave import Leave
 from models.payroll import Payroll
 from models.payslip import Payslip
 from payroll import create_payroll
@@ -162,7 +163,6 @@ def get_employees():
 
         # Return list of employees in the database
         employee_list = storage.all(User)
-        print(employee
 
         return render_template('listemployees.html', rows=employee_list)
     except Exception as e:
@@ -411,6 +411,40 @@ def resetpwd():
         flash(f"Staff doesn't exist")
         return redirect(url_for('resetpwd'))
     return render_template('resetpwd.html')
+
+
+@app.route('/leave', methods=['POST', 'GET'], strict_slashes=False)
+def leave():
+	if request.method == 'POST':
+		data = request.form
+
+		# Extract data from the form
+		employeeId = data.get('employee_id')
+		startDate = datetime.strptime(data.get('start_date'), '%Y-%m-%d')
+		endDate = datetime.strptime(data.get('end_date'), '%Y-%m-%d')
+		leaveType = data.get('leave_type')
+		leaveStatus = data.get('leave_status')
+
+		leave_days = (endDate - startDate).days + 1
+		user = current_user.staff_number
+		if user == employeeId:
+			if user.remaining >= leave_days:
+				user.remaining -= leave_days
+				# Save user details in MongoDB
+				leave_data = {
+					'employee_id':employeeId,
+					'start_date': startDate,
+        			'end_date': endDate,
+        			'leave_type': leaveType,
+        			'leave_status': leaveStatus
+					}
+				leave_req = Leave(**leave_data)
+				leave_req.save()
+
+				return jsonify("Leave application successful and pending approval")
+			else:
+				return jsonify(f"You can only apply for {user.remaining} days")
+	return render_template('leavereq.html')
 
 
 @app.errorhandler(404)

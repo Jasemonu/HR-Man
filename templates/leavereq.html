@@ -11,24 +11,24 @@
     <div class="container">
         <div class="title">Employee Leave Application</div>
 
-        <form action="#">
+        <form action="/leave" method="POST">
           <div class="user__details">
            
             <div class="input__box">
               <span class="details">Employee ID</span>
-              <input type="text" placeholder="E.g: JHG1245" required>
+              <input type="text" name="employee_id" placeholder="E.g: JHG1245" required>
             </div>
               <div class="input__box">
                 <span class="details">Start Date</span>
-                <input type="date" placeholder="" required>
+                <input type="date" name="start_date" placeholder="" required>
               </div>
               <div class="input__box">
-                <span class="details">To Date</span>
-                <input type="date" placeholder="" required>
+                <span class="details">End Date</span>
+                <input type="date" name="end_date" placeholder="" required>
               </div>
               <div class="input__box ">
                 <span class="details">Leave Type</span>
-                <select>
+                <select name="leave_type">
                   <option value="">Please select leave type</option>
                   <option value="Maternity">Maternity</option>
                   <option value="Bereavement">Bereavement</option>
@@ -40,7 +40,7 @@
               </div>
               <div class="input__box">
                 <span class="details">Leave Status</span>
-                <select>
+                <select name="status">
                   <option value="Pending">Pending</option>
                   <option value="Accept">Accepted</option>
                   <option value="Reject">Rejected</option>
