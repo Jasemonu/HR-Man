@@ -9,15 +9,15 @@ password = '5555555555'
 h_pwd = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
 objects1 = {
-        'staff_number': 'NCT88649',
+        'staff_number': 'NCT8649',
         'first_name': 'Joseph',
         'last_name': 'Asemonu',
         'email': 'jos@mail.com',
         'password': h_pwd,
         'date_of_birth': date(2020, 8, 25).isoformat(),
         'phone': '0215122652',
-        'SSNIT': 'HFT55555',
-        'NID': '5565636524',
+        'SSNIT': 'HFT554555',
+        'NID': '5565236524',
         'employment_date': date(2020, 8, 25).isoformat(),
         'gender': 'Male',
         'department': 'IT',
@@ -29,12 +29,12 @@ objects2 = {
         'staff_number': 'NCT2111',
         'first_name': 'Rosemary',
         'last_name': 'Efebe',
-        'email': 'roze247@gmail.com',
+        'email': 'roz247@gmail.com',
         'password': h_pwd,
         'date_of_birth': date(2020, 8, 25).isoformat(),
         'phone': '08077763334',
         'SSNIT': 'HFT56324',
-        'NID': '5565636526',
+        'NID': '5565632656',
         'employment_date': date(2020, 8, 25).isoformat(),
         'gender': 'Female',
         'department': 'Project',
@@ -45,16 +45,15 @@ objects2 = {
 
 
 storage.connect()
-<<<<<<< HEAD
 user1 = User(**objects1)
 user2 = User(**objects2)
 try:
-    id1 = storage.save(user1)
-    id2 = storage.save(user2)
-    print(id1, id))
-try:
+    #id1 = storage.save(user1)
+    #id2 = storage.save(user2)
+   # print(id1, id)
    # id = storage.save(user)
-    print(user.password, user.Superuser)
+    storage.delete_staff(User,"NCT2111")
+    print(user1.password, user1.Superuser)
 
 except NotUniqueError:
     print("user exsit")

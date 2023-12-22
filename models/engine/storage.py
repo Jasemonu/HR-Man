@@ -23,7 +23,7 @@ class Storage:
         return data
 
     def get(self, cls, id):
-        data = cls.objects(id=id).first()
+        data = cls.objects(staff_number=id).first()
         return data
 
     def all(self, cls=None):
