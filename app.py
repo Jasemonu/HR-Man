@@ -419,31 +419,50 @@ def leave():
 		data = request.form
 
 		# Extract data from the form
-		employeeId = data.get('employee_id')
+		staffNumber = data.get('staff_number')
 		startDate = datetime.strptime(data.get('start_date'), '%Y-%m-%d')
 		endDate = datetime.strptime(data.get('end_date'), '%Y-%m-%d')
 		leaveType = data.get('leave_type')
-		leaveStatus = data.get('leave_status')
 
+		if startDate < datetime.now():
+			flash(f"Start date cannot be lower than current date ")
+			return render_template('leavereq.html')
+		if endDate <= startDate:
+			flash("End date should be higher than start date")
+			return render_template('leavereq.html')
 		leave_days = (endDate - startDate).days + 1
-		user = current_user.staff_number
-		if user == employeeId:
+		user = storage.find_staff(Leave, staffNumber)
+		if not user:
+			leave_data = {
+				'staff_number': staffNumber,
+				'start_date': startDate,
+				'end_date': endDate,
+				'leave_type': leaveType
+			}
+			leave_data.remaining -= leave_days
+			if leave_data.remaining < 0:
+				flash(f"You have only {user.remaining} days left")
+				return render_template('leavereq.html')
+			leave_req = Leave(**leave_data)
+			leave_req.save()
+
+		if user:
 			if user.remaining >= leave_days:
 				user.remaining -= leave_days
-				# Save user details in MongoDB
-				leave_data = {
-					'employee_id':employeeId,
-					'start_date': startDate,
-        			'end_date': endDate,
-        			'leave_type': leaveType,
-        			'leave_status': leaveStatus
-					}
-				leave_req = Leave(**leave_data)
-				leave_req.save()
-
-				return jsonify("Leave application successful and pending approval")
 			else:
-				return jsonify(f"You can only apply for {user.remaining} days")
+				flash(f"You have only {user.remaining} days left")
+				return render_template('leavereq.html')
+			leave_data = {
+				'start_date': startDate,
+        		'end_date': endDate,
+        		'leave_type': leaveType,
+				}
+			for key, value in leave_data.items():
+				setattr(user, key, value)
+			user.save()
+			flash("Leave application successful and pending approval")
+			return redirect(url_for('home'))
+
 	return render_template('leavereq.html')
 
 
