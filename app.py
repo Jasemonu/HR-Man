@@ -175,7 +175,7 @@ def get_employees():
 def logout():
     name = current_user.first_name
     logout_user()
-    flash(f'GOODBYE {name}!')
+    flash(f'Goodbye {name}!')
     return redirect(url_for('index'))
 
 
@@ -386,7 +386,7 @@ def attendance(period):
                 flash('Must signed in first')
                 return redirect(url_for('attendance'))
             if att.exit_time:
-                flash('Singed out already please logout')
+                flash('Signed out already please logout')
                 return redirect(url_for('attendance'))
             exit = request.form.get('exit_time')
             att.update(__raw__={'$set': {'exit_time': exit}})
@@ -423,12 +423,13 @@ def leave():
 
 		# Extract data from the form
 		staffNumber = data.get('staff_number')
+		staffName = data.get('staff_name')
 		startDate = datetime.strptime(data.get('start_date'), '%Y-%m-%d')
 		endDate = datetime.strptime(data.get('end_date'), '%Y-%m-%d')
 		leaveType = data.get('leave_type')
 
 		if startDate < datetime.now():
-			flash(f"Start date cannot be lower than current date ")
+			flash("Start date cannot be lower than current date")
 			return render_template('leavereq.html')
 		if endDate <= startDate:
 			flash("End date should be higher than start date")
@@ -438,6 +439,7 @@ def leave():
 		if not user:
 			leave_data = {
 				'staff_number': staffNumber,
+				'staff_name': staffName,
 				'start_date': startDate,
 				'end_date': endDate,
 				'leave_type': leaveType
