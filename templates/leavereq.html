@@ -16,8 +16,12 @@
            
             <div class="input__box">
               <span class="details">Staff Number</span>
-              <input type="text" name="staff_number" placeholder="E.g: JHG1245" required>
+              <input type="text" name="staff_number" value="{{ current_user.staff_number }}" readonly>
             </div>
+			<div class="input__box">
+			  <span class="details">Staff Name</span>
+			  <input type="text" name="staff_name" value="{{ current_user.first_name + ' ' + current_user.last_name }}" readonly>
+			  </div>
               <div class="input__box">
                 <span class="details">Start Date</span>
                 <input type="date" name="start_date" placeholder="" required>
