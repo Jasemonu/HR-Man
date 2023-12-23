@@ -4,6 +4,7 @@ from datetime import date
 
 class Leave(Document):
 	staff_number = StringField(required=True)
+	staff_name = StringField(max_length=255)
 	remaining = IntField(required=True, default=30)
 	start_date = DateTimeField(null=True)
 	end_date = DateTimeField(null=True)
