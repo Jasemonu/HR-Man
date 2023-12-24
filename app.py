@@ -195,15 +195,22 @@ def delete(staff_number):
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
 def update(staff_number):
     try:
-        employee = storage.get(User, staff_number)
-        print(employee)
-        return render_template('updateemployee.html', employee=employee)
+        employee = User.objects(staff_number=staff_number).first()
+
         if request.method == 'POST':
-            updated_data = request.form.get('updated_data')
-            storage.update(staff_number, updated_data)
-            return render_template('listployees.html')
+
+            updated_data = request.form
+            for key, value in updated_data.items():
+                if hasattr(employee, key):
+                    setattr(employee, key, value)
+            employee.save()
+            flash('Employee details updated successfully')
+            return redirect(url_for('get_employees'))
+
+        return render_template('updateemployee.html', employee=employee)
+
     except Exception as e:
-       print(e)
+        print(e)
 
 
 @app.route('/viewpayroll', methods=['GET', 'POST'], strict_slashes=False)
