@@ -29,8 +29,8 @@ class Storage:
 	def find_staff(staff, cls, number):
 	    data = cls.objects(staff_number=number).first()
 	    return data
-
-	def all(self, cls=None):
+   
+  	def all(self, cls=None):
 		if cls:
 			data = cls.objects()
 			return list(data)
@@ -48,16 +48,3 @@ class Storage:
 			print(f"Error deleting object with ID {staff_number}: {e}")
 			return False
 
-	def update(self, id_value, updated_data):
-		try:
-			obj = self.objects(id=id_value).first()
-			if obj:
-				for key, value in updated_data.items():
-					setattr(obj, key, value)
-				# Save the updated object
-				obj.save()
-				return True  # Successfully updated
-			else:
-				return False  # Object not found
-		except Exception as e:
-			return False
