@@ -30,7 +30,7 @@ class Storage:
 	    data = cls.objects(staff_number=number).first()
 	    return data
    
-  	def all(self, cls=None):
+	def all(self, cls=None):
 		if cls:
 			data = cls.objects()
 			return list(data)
@@ -43,7 +43,7 @@ class Storage:
 				obj.delete()
 				return True  # Successfully deleted
 			else:
-			 return False  # Object not found
+				return False  # Object not found
 		except Exception as e:
 			print(f"Error deleting object with ID {staff_number}: {e}")
 			return False
