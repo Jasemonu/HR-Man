@@ -12,6 +12,7 @@ def reset_remaining():
     print("Resetting remaining values...")
     leave_docs = Leave.objects()
     for leave_doc in leave_docs:
+        print(f"Updating remaining for {leave_doc.staff_number}")
         leave_doc.remaining = 30
         leave_doc.save()
     print("Reset completed.")

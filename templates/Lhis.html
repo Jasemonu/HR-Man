@@ -46,7 +46,7 @@
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li><a href="{{ url_for('') }}">Home</a></li>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#counts">Staistics</a></li>
           <li><a href="#testimonials">Testimonials</a></li>
@@ -69,8 +69,8 @@
         <div class="d-flex justify-content-between align-items-center">
           <h2>Leaves Status</h2>
           <ol>
-            <li><a href="{{ url_for() }}">Home</a></li>
-            <li>Leaves Status</li>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+			<li>Leaves Status</li>
           </ol>
         </div>
 
@@ -78,26 +78,28 @@
     </section><!-- End Breadcrumbs -->
 
     <div id="Details">
-        <h3>Leave Approval</h3>
+        <h3>Leave Status</h3>
         <table style="width:100%">
           <tr>
-            <th>S/N</th>
-            <th>Employee Name</th>
-            <th>From Date</th>
-            <th>To Date</th> 
+            <th>Staff Name</th>
+            <th>Start Date</th>
+            <th>End Date</th> 
             <th>Leave Type</th> 
             <th>Requested Days</th>
+			<th>Remaining Leave Days</th>
+			<th>Admin Comments</th>
             <th>Current Status</th>
           </tr>
           {% for row in rows %}
           <tr>
-          <td>{{row["S/N"]}}</td>
-          <td>{{row["Leave Type"]}}</td>
-          <td>{{row["From Date"]}}</td>
-          <td>{{row["To Date"]}}</td>
-          <td>{{row["Leave Type"]}}</td>
-          <td>{{row["Requested Days"]}}</td>
-          <td>{{row["Current Status"]}}</td>
+          <td>{{row["staff_name"]}}</td>
+          <td>{{row["start_date"]}}</td>
+          <td>{{row["end_date"]}}</td>
+          <td>{{row["leave_type"]}}</td>
+          <td>{{row["requested_days"]}}</td>
+		  <td>{{row["remaining"]}}</td>
+		  <td>{{row["comment"]}}</td>
+          <td>{{row["leave_status"]}}</td>
           
           {% endfor %} 
            
