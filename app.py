@@ -444,38 +444,63 @@ def leave():
 		leave_days = (endDate - startDate).days + 1
 		user = storage.find_staff(Leave, staffNumber)
 		if not user:
-			leave_data = {
-				'staff_number': staffNumber,
-				'staff_name': staffName,
-				'start_date': startDate,
-				'end_date': endDate,
-				'leave_type': leaveType
-			}
-			leave_data.remaining -= leave_days
-			if leave_data.remaining < 0:
-				flash(f"You have only {user.remaining} days left")
+			if leave_days != 0:
+				leave_data = {
+					'staff_number': staffNumber,
+					'staff_name': staffName,
+					'start_date': startDate,
+					'end_date': endDate,
+					'leave_type': leaveType,
+					'requested_days': leave_days
+
+				}
+				leave_req = Leave(**leave_data)
+				leave_req.save()
+			else:
+				flash(f"You have 30 days leave limit")
 				return render_template('leavereq.html')
-			leave_req = Leave(**leave_data)
-			leave_req.save()
 
 		if user:
-			if user.remaining >= leave_days:
-				user.remaining -= leave_days
-			else:
+			if user.remaining < leave_days:
 				flash(f"You have only {user.remaining} days left")
 				return render_template('leavereq.html')
 			leave_data = {
 				'start_date': startDate,
         		'end_date': endDate,
         		'leave_type': leaveType,
+				'requested_days': leave_days
 				}
 			for key, value in leave_data.items():
 				setattr(user, key, value)
 			user.save()
-			flash("Leave application successful and pending approval")
-			return redirect(url_for('home'))
+		flash("Leave application successful and pending approval")
+		return redirect(url_for('leave_status'))
 
 	return render_template('leavereq.html')
+
+@app.route('/pending_leave', methods=['POST', 'GET'], strict_slashes=False)
+def leave_approval():
+	if request.method == 'POST':
+		staffNumber = request.form.get('staff_number')
+		comments = request.form.get('commentsInput')
+		value = request.form.get('new_status')
+		user = storage.find_staff(Leave, staffNumber)
+		if value == 'accept':
+			user.leave_status = 'Accepted'
+			user.remaining -= user.requested_days
+		else:
+			user.leave_status = 'Rejected'
+		setattr(user, 'comment', comments)
+		user.save()
+			
+	leave_list = storage.all(Leave)
+	return render_template('leave.html', rows=leave_list)
+
+
+@app.route('/leave_history', methods=['GET'], strict_slashes=False)
+def leave_status():
+	leave_list = storage.all(Leave)
+	return render_template('Lhis.html', rows=leave_list)
 
 
 @app.errorhandler(404)
