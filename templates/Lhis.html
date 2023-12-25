@@ -5,12 +5,12 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>List employee Details</title>
+  <title>Leaves Status</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="/static/assets/img/favicon-16x16.png" rel="icon">
+  <link href="/static/assets/img/favicon-32x32.png" rel="icon">
   <link href="/static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -29,10 +29,10 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  
 
   <!-- Template Main CSS File -->
   <link href="/static/assets/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/leave.css">
 
 </head>
 
@@ -42,11 +42,11 @@
   <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center justify-content-between">
 
-      <h1 class="logo"><a href="/static/assets/img/HR_logo.png">HR-MAN<span>.</span></a></h1>
-      
+      <h1 class="logo"><a href="">HR-MAN<span>.</span></a></h1>
+
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-	  <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#counts">Staistics</a></li>
           <li><a href="#testimonials">Testimonials</a></li>
@@ -55,7 +55,7 @@
         </ul>
       </nav><!-- .nav-menu -->
 
-      <a href="/logout" class="get-started-btn scrollto">Log Out</a>        <!--change to login page-->
+      <a href="#about" class="get-started-btn scrollto">Log Out</a>        
 
     </div>
   </header><!-- End Header -->
@@ -67,75 +67,52 @@
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>List employees</h2>
+          <h2>Leaves Status</h2>
           <ol>
-	    <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li>List employees</li>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+			<li>Leaves Status</li>
           </ol>
         </div>
 
       </div>
     </section><!-- End Breadcrumbs -->
-   
-    <section class="inner-page">
-      <div class="container">
-        <div class="container-xl">
-          <div class="table-responsive">
-            <div class="table-wrapper">
-              <div class="table-title">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <h2><b>List employees</b></h2>
-                  </div>
-                  <!-- <div class="col-sm-6">
-                    <a href="#editname" class="btn btn-sucess" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Edit name</span></a>
-                    <a href="#editemail" class="btn btn-sucess" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Edit email</span></a>
-                    <a href="#editphone" class="btn btn-sucess" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Edit phone no.</span></a>						
-                  </div> -->
-                </div>
-              </div>
-              <table class="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    
-                    <th>Employee ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Date of Birth</th>
-                    <th>NID</th>
-                    <th>Date of Employment</th>
-                    <th>Gender</th>
-                    <th>Department</th>
-                    <th>Position</th>
-                    <th>status</th>
-                    <th>status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for row in rows %}
-                    <tr>
-                      <td>{{row["staff_number"]}}</td>
-                      <td>{{row["first_name"]}}</td>
-                      <td>{{row["last_name"]}}</td>
-                      <td>{{row["email"]}}</td>	
-                      <td>{{row["phone"]}}</td>
-                      <td>{{row["date_of_birth"]}}</td>
-                      <td>{{row["NID"]}}</td>	
-                      <td>{{row["employment_date"]}}</td>
-                      <td>{{row["gender"]}}</td>              
-                      <td>{{row["department"]}}</td>
-                      <td> {{row["position"]}}</td>
-		      <td><a href="/update/{{ row.staff_number }}"> <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate">Update</button></a>
-			      <td><a href="/delete/{{ row.staff_number }}"> <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate">Delete</button></a>
-                    </tr>
-                  {% endfor %}    
-                </tbody>
-              </table>
-            
-  
 
+    <div id="Details">
+        <h3>Leave Status</h3>
+        <table style="width:100%">
+          <tr>
+            <th>Staff Name</th>
+            <th>Start Date</th>
+            <th>End Date</th> 
+            <th>Leave Type</th> 
+            <th>Requested Days</th>
+			<th>Remaining Leave Days</th>
+			<th>Admin Comments</th>
+            <th>Current Status</th>
+          </tr>
+          {% for row in rows %}
+          <tr>
+          <td>{{row["staff_name"]}}</td>
+          <td>{{row["start_date"]}}</td>
+          <td>{{row["end_date"]}}</td>
+          <td>{{row["leave_type"]}}</td>
+          <td>{{row["requested_days"]}}</td>
+		  <td>{{row["remaining"]}}</td>
+		  <td>{{row["comment"]}}</td>
+          <td>{{row["leave_status"]}}</td>
+          
+          {% endfor %} 
+           
+            
+        </table>
+      </div>
+        
+                 
+                 
+
+  </main><!-- End #main -->
+
+ 
   <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
   <div id="preloader"></div>
 
@@ -151,12 +128,12 @@
   <script src="/static/assets/vendor/counterup/counterup.min.js"></script>
   <script src="/static/assets/vendor/aos/aos.js"></script>
 
+  <!-- Template Main JS File -->
+  <script src="/static/assets/js/main.js"></script>
+
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-
-  <!-- Template Main JS File -->
-  <script src="/static/assets/js/main.js"></script>
 
 </body>
 

@@ -60,3 +60,18 @@ class Storage:
                 return False  # Object not found
         except Exception as e:
             return False
+    def find_staff(staff, cls, number):
+        data = cls.objects(staff_number=number).first()
+        return data
+
+    def delete_staff(self, cls, staff_number):
+        try:
+            obj = cls.objects(staff_number=staff_number).first()
+            if obj:
+                obj.delete()
+                return True  # Successfully deleted
+            else:
+                return False  # Object not found
+        except Exception as e:
+            print(f"Error deleting object with ID {staff_number}: {e}")
+            return False

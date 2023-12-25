@@ -180,7 +180,7 @@ def get_employees():
 def logout():
     name = current_user.first_name
     logout_user()
-    flash(f'GOODBYE {name}!')
+    flash(f'Goodbye {name}!')
     return redirect(url_for('index'))
 
 
@@ -201,13 +201,20 @@ def delete(staff_number):
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
 def update(staff_number):
     try:
-        employee = storage.get(User, staff_number)
-        print(employee)
-        return render_template('updateemployee.html', employee=employee)
+        employee = User.objects(staff_number=staff_number).first()
+
         if request.method == 'POST':
-            updated_data = request.form.get('updated_data')
-            storage.update(staff_number, updated_data)
-            return render_template('listployees.html')
+
+            updated_data = request.form
+            for key, value in updated_data.items():
+                if hasattr(employee, key):
+                    setattr(employee, key, value)
+            employee.save()
+            flash('Employee details updated successfully')
+            return redirect(url_for('get_employees'))
+
+        return render_template('updateemployee.html', employee=employee)
+
     except Exception as e:
         print(e)
         return
@@ -397,7 +404,7 @@ def attendance(period):
                 flash('Must signed in first')
                 return redirect(url_for('attendance'))
             if att.exit_time:
-                flash('Singed out already please logout')
+                flash('Signed out already please logout')
                 return redirect(url_for('attendance'))
             exit = request.form.get('exit_time')
             att.update(__raw__={'$set': {'exit_time': exit}})
@@ -434,12 +441,13 @@ def leave():
 
 		# Extract data from the form
 		staffNumber = data.get('staff_number')
+		staffName = data.get('staff_name')
 		startDate = datetime.strptime(data.get('start_date'), '%Y-%m-%d')
 		endDate = datetime.strptime(data.get('end_date'), '%Y-%m-%d')
 		leaveType = data.get('leave_type')
 
 		if startDate < datetime.now():
-			flash(f"Start date cannot be lower than current date ")
+			flash("Start date cannot be lower than current date")
 			return render_template('leavereq.html')
 		if endDate <= startDate:
 			flash("End date should be higher than start date")
@@ -447,37 +455,63 @@ def leave():
 		leave_days = (endDate - startDate).days + 1
 		user = storage.find_staff(Leave, staffNumber)
 		if not user:
-			leave_data = {
-				'staff_number': staffNumber,
-				'start_date': startDate,
-				'end_date': endDate,
-				'leave_type': leaveType
-			}
-			leave_data.remaining -= leave_days
-			if leave_data.remaining < 0:
-				flash(f"You have only {user.remaining} days left")
+			if leave_days != 0:
+				leave_data = {
+					'staff_number': staffNumber,
+					'staff_name': staffName,
+					'start_date': startDate,
+					'end_date': endDate,
+					'leave_type': leaveType,
+					'requested_days': leave_days
+
+				}
+				leave_req = Leave(**leave_data)
+				leave_req.save()
+			else:
+				flash(f"You have 30 days leave limit")
 				return render_template('leavereq.html')
-			leave_req = Leave(**leave_data)
-			leave_req.save()
 
 		if user:
-			if user.remaining >= leave_days:
-				user.remaining -= leave_days
-			else:
+			if user.remaining < leave_days:
 				flash(f"You have only {user.remaining} days left")
 				return render_template('leavereq.html')
 			leave_data = {
 				'start_date': startDate,
         		'end_date': endDate,
         		'leave_type': leaveType,
+				'requested_days': leave_days
 				}
 			for key, value in leave_data.items():
 				setattr(user, key, value)
 			user.save()
-			flash("Leave application successful and pending approval")
-			return redirect(url_for('home'))
+		flash("Leave application successful and pending approval")
+		return redirect(url_for('leave_status'))
 
 	return render_template('leavereq.html')
+
+@app.route('/pending_leave', methods=['POST', 'GET'], strict_slashes=False)
+def leave_approval():
+	if request.method == 'POST':
+		staffNumber = request.form.get('staff_number')
+		comments = request.form.get('commentsInput')
+		value = request.form.get('new_status')
+		user = storage.find_staff(Leave, staffNumber)
+		if value == 'accept':
+			user.leave_status = 'Accepted'
+			user.remaining -= user.requested_days
+		else:
+			user.leave_status = 'Rejected'
+		setattr(user, 'comment', comments)
+		user.save()
+			
+	leave_list = storage.all(Leave)
+	return render_template('leave.html', rows=leave_list)
+
+
+@app.route('/leave_history', methods=['GET'], strict_slashes=False)
+def leave_status():
+	leave_list = storage.all(Leave)
+	return render_template('Lhis.html', rows=leave_list)
 
 
 @app.errorhandler(404)
