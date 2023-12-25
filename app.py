@@ -3,7 +3,7 @@
 
 import os
 from flask import Flask, render_template, request, jsonify, session, redirect
-from flask import send_file, url_for, flash
+from flask import send_file, url_for, flash, abort
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from datetime import datetime, date
 from models import storage
@@ -444,7 +444,7 @@ def leave():
 		leave_days = (endDate - startDate).days + 1
 		user = storage.find_staff(Leave, staffNumber)
 		if not user:
-			if leave_days != 0:
+			if leave_days >= 0:
 				leave_data = {
 					'staff_number': staffNumber,
 					'staff_name': staffName,
@@ -474,33 +474,44 @@ def leave():
 				setattr(user, key, value)
 			user.save()
 		flash("Leave application successful and pending approval")
-		return redirect(url_for('leave_status'))
+		return redirect(url_for('leave_history'))
 
 	return render_template('leavereq.html')
 
 @app.route('/pending_leave', methods=['POST', 'GET'], strict_slashes=False)
 def leave_approval():
-	if request.method == 'POST':
-		staffNumber = request.form.get('staff_number')
-		comments = request.form.get('commentsInput')
-		value = request.form.get('new_status')
-		user = storage.find_staff(Leave, staffNumber)
-		if value == 'accept':
-			user.leave_status = 'Accepted'
-			user.remaining -= user.requested_days
-		else:
-			user.leave_status = 'Rejected'
-		setattr(user, 'comment', comments)
-		user.save()
-			
 	leave_list = storage.all(Leave)
 	return render_template('leave.html', rows=leave_list)
 
+@app.route('/process_form', methods=['POST'], strict_slashes=False)
+def accept_reject():
+	decision = request.form.get('decision')
+	comment = request.form.get('comment')
+	staffNumber = current_user.staff_number
+	user = storage.find_staff(Leave, staffNumber)
+	if user is None:
+		abort(404)
+	if len(comment) == 0:
+	 	user.comment = 'No comments'
+	else:
+		user.comment = comment
+	if decision == 'accept':
+		user.leave_status = 'Accepted'
+		user.remaining -= user.requested_days
+		flash(f"You have successfully approved {current_user.first_name}'s leave")
+	elif decision == 'reject':
+		user.leave_status = 'Declined'
+		flash(f"You declined {current_user.first_name}'s leave")
+	else:
+		flash("You can either approve or decline")
+	user.save()
+	return redirect(url_for('leave_approval'))
 
 @app.route('/leave_history', methods=['GET'], strict_slashes=False)
-def leave_status():
-	leave_list = storage.all(Leave)
-	return render_template('Lhis.html', rows=leave_list)
+def leave_history():
+	staffNumber = current_user.staff_number
+	user = storage.find_staff(Leave, staffNumber)
+	return render_template('Lhis.html', row=user)
 
 
 @app.errorhandler(404)
