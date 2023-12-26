@@ -21,15 +21,14 @@ objects1 = {
         'employment_date': date(2020, 8, 25).isoformat(),
         'gender': 'Male',
         'department': 'IT',
-        'position': 'Software engineer',
-        'Superuser': True
+        'position': 'Software engineer'
         }
 
 objects2 = {
         'staff_number': 'NCT2111',
-        'first_name': 'Rosemary',
-        'last_name': 'Efebe',
-        'email': 'rozey47@gmail.com',
+        'first_name': 'Roy',
+        'last_name': 'Efe',
+        'email': 'roy@gmail.com',
         'password': h_pwd,
         'date_of_birth': date(2020, 8, 25).isoformat(),
         'phone': '08077763334',
@@ -42,26 +41,30 @@ objects2 = {
         'Superuser': True
         }
 
+objects3 = {
+        'staff_number': 'NCT5311',
+        'first_name': 'mary',
+        'last_name': 'Ebe',
+        'email': 'roz@gmail.com',
+        'password': h_pwd,
+        'date_of_birth': date(2020, 8, 25).isoformat(),
+        'phone': '08077763334',
+        'SSNIT': 'HFT56324',
+        'NID': '5565632656',
+        'employment_date': date(2020, 8, 25).isoformat(),
+        'gender': 'Female',
+        'department': 'Project',
+        'position': 'PMO',
+        }
+
 storage.connect()
 user = User(**objects1)
 user2 = User(**objects2)
+user3 = User(**objects3)
 try:
-    id1 = storage.save(user1)
+    id1 = storage.save(user)
     id2 = storage.save(user2)
-    print(id1, id2)
-storage.all(User)
-'''try:
-    id = storage.save(user)
-    print(user.password, user.Superuser)
-
-    #id1 = storage.save(user1)
-    #id2 = storage.save(user2)
-   # print(id1, id)
-    storage.save(user2)
-    storage.save(user)
-    #storage.delete_staff(User,"NCT2111")
-    #print(user.password, user.Superuser)
-
-except NotUniqueError:
-    print("user exsit")
-    print(User.objects.as_pymongo())'''
+    id3 = storage.save(user3)
+    print(id1, id2, id3)
+except Exception as e:
+	print(e)

@@ -26,9 +26,9 @@ class Storage:
 		data = cls.objects(id=id).first()
 		return data
 
-	def find_staff(staff, cls, number):
-	    data = cls.objects(staff_number=number).first()
-	    return data
+	def find_staff(self, cls, number):
+		data = cls.objects(staff_number=number).first()
+		return data
    
 	def all(self, cls=None):
 		if cls:
