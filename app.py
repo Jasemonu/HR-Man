@@ -219,14 +219,19 @@ def update(staff_number):
         print(e)
         return
 
-
-@app.route('/viewpayroll', methods=['GET', 'POST'], strict_slashes=False)
-def payroll():
+@app.route('/viewpayroll', defaults={'name': None}, strict_slashes=False)
+@app.route('/viewpayroll/<string:name>', methods=['GET', 'POST'])
+def payroll(name):
     list = []
-    payroll = Payroll.objects.first()
-    if payroll is not None:
-        list = payroll.items
-    return render_template('viewpayroll.html', list=list)
+    if name:
+        payroll = Payroll.objects(name=name).first()
+        if payroll:
+            list = payroll.items
+        return render_template('viewpayroll.html', list=list)
+    payrolls = Payroll.objects()
+    if payrolls:
+        list = payrolls
+    return render_template('listpayroll.html', list=list)
 
 @app.route('/createpayroll', methods=['GET', 'POST'], strict_slashes=False)
 def createpayroll():
@@ -251,6 +256,7 @@ def createpayroll():
         flash('Successfully added payroll')
         return render_template('salary.html')
     return render_template('salary.html')
+
 
 @app.route('/viewpayslip', defaults={'name': None}, strict_slashes=False)
 @app.route('/viewpayslip/<name>', strict_slashes=False)

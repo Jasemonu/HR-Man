@@ -44,8 +44,7 @@ def deduction(earn):
     return deduct
 
 def create_payroll(salary, user):
-    period = date.today().strftime('%B_%y')
-    name = salary.get('staff_number') + '_' + period
+    name = date.today().strftime('%B_%y')
     earn = earning(salary)
     if earn is None:
         return None
