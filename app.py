@@ -481,6 +481,10 @@ def leave():
 @app.route('/pending_leave', methods=['POST', 'GET'], strict_slashes=False)
 def leave_approval():
 	leave_list = storage.all(Leave)
+	for dictionary in leave_list:
+		staff_number = dictionary['staff_number']
+		if staff_number == current_user.staff_number:
+			leave_list.remove(dictionary) 
 	return render_template('leave.html', rows=leave_list)
 
 @app.route('/process_form', methods=['POST'], strict_slashes=False)
@@ -493,15 +497,17 @@ def accept_reject():
 		abort(404)
 	if len(comment) == 0:
 	 	user.comment = 'No comments'
+	 	print(comment)
 	else:
 		user.comment = comment
+		print(comment)
 	if decision == 'accept':
 		user.leave_status = 'Accepted'
 		user.remaining -= user.requested_days
-		flash(f"You have successfully approved {current_user.first_name}'s leave")
+		flash(f"You have successfully approved {user.staff_name}'s leave")
 	elif decision == 'reject':
 		user.leave_status = 'Declined'
-		flash(f"You declined {current_user.first_name}'s leave")
+		flash(f"You declined {user.staff_name}'s leave")
 	else:
 		flash("You can either approve or decline")
 	user.save()
