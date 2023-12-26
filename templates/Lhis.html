@@ -90,7 +90,7 @@
 			<th>Admin Comments</th>
             <th>Current Status</th>
           </tr>
-          {% for row in rows %}
+          {% if row %}
           <tr>
           <td>{{row["staff_name"]}}</td>
           <td>{{row["start_date"]}}</td>
@@ -100,8 +100,8 @@
 		  <td>{{row["remaining"]}}</td>
 		  <td>{{row["comment"]}}</td>
           <td>{{row["leave_status"]}}</td>
-          
-          {% endfor %} 
+          </tr>
+          {% endif %} 
            
             
         </table>

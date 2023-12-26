@@ -95,15 +95,20 @@
                     <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="material-icons">apps</i><span>Leave Application</span></a>
                     <ul class="collapse list-unstyled menu" id="pageSubmenu2">
+				{% if not current_user.Superuser %}
                         <li>
                             <a href="/leave">Leave Request</a>
                         </li>
+						<li>
+						<a href="/leave_history">Leave History</a>
+						</li>
+				{% endif %}
+				{% if current_user.Superuser %}
                         <li>
                             <a href="/pending_leave">Pending Leave</a>
                         </li>
-                        <li>
-                            <a href="/leave_history">Leave History</a>
-                        </li>
+				{% endif %}
+
                     </ul>
                 </li>
 
