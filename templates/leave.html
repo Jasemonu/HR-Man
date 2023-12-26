@@ -55,7 +55,7 @@
         </ul>
       </nav><!-- .nav-menu -->
 
-      <a href="#about" class="get-started-btn scrollto">Log Out</a>        
+      <a href="/logout" class="get-started-btn scrollto">Log Out</a>        
 
     </div>
   </header><!-- End Header -->
@@ -97,8 +97,8 @@
           <tr>
           <td>{{row["S/N"]}}</td>
 		  <td>{{row["staff_name"]}}</td>
-		  <td>{{row["start_date"]}}</td>
-		  <td>{{row["end_date"]}}</td>
+		  <td>{{row.start_date.strftime('%Y-%m-%d') }}</td>
+		  <td>{{row.end_date.strftime('%Y-%m-%d') }}</td>
           <td>{{row["leave_type"]}}</td>
           <td>{{row["requested_days"]}}</td>
 		  <td>{{row["remaining"]}}</td>
