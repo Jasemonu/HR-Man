@@ -487,8 +487,8 @@ def leave_approval():
 def accept_reject():
 	decision = request.form.get('decision')
 	comment = request.form.get('comment')
-	staffNumber = current_user.staff_number
-	user = storage.find_staff(Leave, staffNumber)
+	staff_number = request.form.get('staff_number')
+	user =  storage.find_staff(Leave, staff_number)
 	if user is None:
 		abort(404)
 	if len(comment) == 0:
