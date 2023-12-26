@@ -1,6 +1,7 @@
-from mongoengine import Document, StringField, DateTimeField
+from mongoengine import Document, StringField, DateTimeField, ReferenceField
 from mongoengine import ObjectIdField, IntField
 from datetime import date
+from models.user import User
 
 class Leave(Document):
 	staff_number = StringField(required=True)
@@ -14,3 +15,4 @@ class Leave(Document):
 	comment = StringField(max_length=255, default='No comments')
 	created_at = DateTimeField(default=date.today().isoformat())
 	updated_at = DateTimeField(default=date.today().isoformat())
+	user = ReferenceField(User)
