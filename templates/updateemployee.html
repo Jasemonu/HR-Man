@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update|Employee|Records</title>
+    <title>Update | Employee | Records</title>
     <link rel="stylesheet" href="/static/css/profile.css">
 </head>
 <body>
-  <form action='/update_employee/{{ employee.staff_number }}' method='POST'>
+  <form action='/update/{{ employee.staff_number }}' method='POST'>
     <div class="container">
         {% if employee %}
         <h1 class="title">Employee Personal Details</h1>
@@ -40,7 +40,7 @@
 
             <div class="form-group">
                 <label for="Gender">Gender</label>
-                <input id="address" type="text" name='gender' placeholder='{{ employee.gender }}' value={{ employee.gender }}>
+                <input id="address" type="text" name='gender' value={{ employee.gender }}>
                 <!---
                 <select name="gender" readonly>
                     <option value="">Please select one</option>
@@ -52,12 +52,12 @@
 
             <div class="form-group">
                 <label for="city">Date of Birth</label>
-                <input id="date" type="text" name='date_of_birth' placeholder='{{ employee.date_of_birth }}' value={{ employee.date_of_birth }}>
+                <input id="date" type="text" name='date_of_birth' value={{ employee.date_of_birth }}>
             </div>
     
             <div class="form-group">
                 <label for="zip">SSNIT Number</label>
-                <input id="zip" type="text" name='SSNIT' placeholder='{{ employee.SSNIT }}' value={{ employee.SSNIT }}> <br/>
+                <input id="zip" type="text" name='SSNIT' value={{ employee.SSNIT }}> <br/>
             </div>
         </div>
 
@@ -82,6 +82,8 @@
                 <input id="first-name" type="text" readonly placeholder='{{ employee.position }}'>
             </div>
         </div>
+
+
         {% endif %}
         <h1 class="title">Bank Details</h1>
         <div class="grid">
@@ -111,10 +113,10 @@
                 <input id="phone" type="text" name='account_number' placeholder='{{ bank.account_number }}' value={{ bank.account_number }}>
             </div>
             <div class="form-group ">
-            <!---
+           
                 <label for="phone">Account Name</label>
                 <input id="phone" type="text" readonly>
-            --!>
+           
             </div>
 
             {% else %}
@@ -144,10 +146,9 @@
                 <input id="phone" type="string" name='account_number'>
             </div>
             <div class="form-group ">
-            <!---
+           
                 <label for="phone">Account Name</label>
                 <input id="phone" type="text" readonly>
-            --!>
             </div>
 
             {% endif %}

@@ -3,7 +3,7 @@
 
 import os
 from flask import Flask, render_template, request, jsonify, session, redirect
-from flask import send_file, url_for, flash
+from flask import send_file, url_for, flash, abort
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from datetime import datetime, date
 from models import storage
@@ -175,7 +175,7 @@ def get_employees():
 def logout():
     name = current_user.first_name
     logout_user()
-    flash(f'GOODBYE {name}!')
+    flash(f'Goodbye {name}!')
     return redirect(url_for('index'))
 
 
@@ -195,15 +195,22 @@ def delete(staff_number):
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
 def update(staff_number):
     try:
-        employee = storage.get(User, staff_number)
-        print(employee)
-        return render_template('updateemployee.html', employee=employee)
+        employee = User.objects(staff_number=staff_number).first()
+
         if request.method == 'POST':
-            updated_data = request.form.get('updated_data')
-            storage.update(staff_number, updated_data)
-            return render_template('listployees.html')
+
+            updated_data = request.form
+            for key, value in updated_data.items():
+                if hasattr(employee, key):
+                    setattr(employee, key, value)
+            employee.save()
+            flash('Employee details updated successfully')
+            return redirect(url_for('get_employees'))
+
+        return render_template('updateemployee.html', employee=employee)
+
     except Exception as e:
-       print(e)
+        print(e)
 
 
 @app.route('/viewpayroll', methods=['GET', 'POST'], strict_slashes=False)
@@ -386,7 +393,7 @@ def attendance(period):
                 flash('Must signed in first')
                 return redirect(url_for('attendance'))
             if att.exit_time:
-                flash('Singed out already please logout')
+                flash('Signed out already please logout')
                 return redirect(url_for('attendance'))
             exit = request.form.get('exit_time')
             att.update(__raw__={'$set': {'exit_time': exit}})
@@ -423,12 +430,13 @@ def leave():
 
 		# Extract data from the form
 		staffNumber = data.get('staff_number')
+		staffName = data.get('staff_name')
 		startDate = datetime.strptime(data.get('start_date'), '%Y-%m-%d')
 		endDate = datetime.strptime(data.get('end_date'), '%Y-%m-%d')
 		leaveType = data.get('leave_type')
 
 		if startDate < datetime.now():
-			flash(f"Start date cannot be lower than current date ")
+			flash("Start date cannot be lower than current date")
 			return render_template('leavereq.html')
 		if endDate <= startDate:
 			flash("End date should be higher than start date")
@@ -436,37 +444,80 @@ def leave():
 		leave_days = (endDate - startDate).days + 1
 		user = storage.find_staff(Leave, staffNumber)
 		if not user:
-			leave_data = {
-				'staff_number': staffNumber,
-				'start_date': startDate,
-				'end_date': endDate,
-				'leave_type': leaveType
-			}
-			leave_data.remaining -= leave_days
-			if leave_data.remaining < 0:
-				flash(f"You have only {user.remaining} days left")
+			if leave_days >= 0:
+				leave_data = {
+					'staff_number': staffNumber,
+					'staff_name': staffName,
+					'start_date': startDate,
+					'end_date': endDate,
+					'leave_type': leaveType,
+					'requested_days': leave_days
+
+				}
+				leave_req = Leave(**leave_data)
+				leave_req.save()
+			else:
+				flash(f"You have 30 days leave limit")
 				return render_template('leavereq.html')
-			leave_req = Leave(**leave_data)
-			leave_req.save()
 
 		if user:
-			if user.remaining >= leave_days:
-				user.remaining -= leave_days
-			else:
+			if user.remaining < leave_days:
 				flash(f"You have only {user.remaining} days left")
 				return render_template('leavereq.html')
 			leave_data = {
 				'start_date': startDate,
         		'end_date': endDate,
         		'leave_type': leaveType,
+				'requested_days': leave_days
 				}
 			for key, value in leave_data.items():
 				setattr(user, key, value)
 			user.save()
-			flash("Leave application successful and pending approval")
-			return redirect(url_for('home'))
+		flash("Leave application successful and pending approval")
+		return redirect(url_for('leave_history'))
 
 	return render_template('leavereq.html')
+
+@app.route('/pending_leave', methods=['POST', 'GET'], strict_slashes=False)
+def leave_approval():
+	leave_list = storage.all(Leave)
+	for dictionary in leave_list:
+		staff_number = dictionary['staff_number']
+		if staff_number == current_user.staff_number:
+			leave_list.remove(dictionary) 
+	return render_template('leave.html', rows=leave_list)
+
+@app.route('/process_form', methods=['POST'], strict_slashes=False)
+def accept_reject():
+	decision = request.form.get('decision')
+	comment = request.form.get('comment')
+	staff_number = request.form.get('staff_number')
+	user =  storage.find_staff(Leave, staff_number)
+	if user is None:
+		abort(404)
+	if len(comment) == 0:
+	 	user.comment = 'No comments'
+	 	print(comment)
+	else:
+		user.comment = comment
+		print(comment)
+	if decision == 'accept':
+		user.leave_status = 'Accepted'
+		user.remaining -= user.requested_days
+		flash(f"You have successfully approved {user.staff_name}'s leave")
+	elif decision == 'reject':
+		user.leave_status = 'Declined'
+		flash(f"You declined {user.staff_name}'s leave")
+	else:
+		flash("You can either approve or decline")
+	user.save()
+	return redirect(url_for('leave_approval'))
+
+@app.route('/leave_history', methods=['GET'], strict_slashes=False)
+def leave_history():
+	staffNumber = current_user.staff_number
+	user = storage.find_staff(Leave, staffNumber)
+	return render_template('Lhis.html', row=user)
 
 
 @app.errorhandler(404)
