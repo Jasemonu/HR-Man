@@ -16,6 +16,7 @@ from models.payslip import Payslip
 from payroll import create_payroll
 from payslip import create_payslip
 import bcrypt
+from mongoengine.errors import NotUniqueError
 from models.user import random_password, gen_employee_id, send_email, valid_fields
 
 
@@ -118,6 +119,9 @@ def login():
         pwd = request.form.get('password')
 
         employee = storage.find_email(User, email)
+        if not employee:
+            flash("Email doesn't exists")
+            return redirect(url_for('login'))
 
         try:
             if bcrypt.checkpw(pwd.encode('utf-8'),
@@ -139,7 +143,8 @@ def login():
                 return render_template('dashboard.html')
             flash('Invalid username or password', 'error')
             return render_template('login.html')
-        except Exception:
+        except Exception as e:
+            print(e)
             flash('Oops Somthing went wrong')
             return redirect(url_for('login'))
     return render_template('login.html')
@@ -181,15 +186,16 @@ def logout():
 
 @app.route('/delete/<string:staff_number>', methods=['GET', 'POST'], strict_slashes=False)
 def delete(staff_number):
-    if request.method == 'GET':
-        return render_template('delete.html')
-    try:
+    if request.method == 'POST':
+    #    return render_template('delete.html')
+        staff_number = request.form.get('staff_number')
         result = storage.delete_staff(User, staff_number)
         if result:
             flash('Deleted successful!', 'success')
             return redirect(url_for('get_employees'))
-    except Exception as e:
-        return str(e), 500
+
+        flash('Delete unsuccessful!, check Staff Number')
+        return redirect(url_for('get_employees'))
 
 
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
@@ -211,6 +217,7 @@ def update(staff_number):
 
     except Exception as e:
         print(e)
+        return
 
 
 @app.route('/viewpayroll', methods=['GET', 'POST'], strict_slashes=False)
@@ -350,7 +357,11 @@ def update_profile(staff):
                     'account_number': request.form.get('account_number')
                     }
             bank = Bank(**obj)
-            bank.save()
+            try:
+                bank.save()
+            except NotUniqueError:
+                flash('Coulld not update bank')
+                return redirect(url_for('profile'))
         else:
             bank.save()
         flash('Profile Update Successfull')
@@ -481,27 +492,33 @@ def leave():
 @app.route('/pending_leave', methods=['POST', 'GET'], strict_slashes=False)
 def leave_approval():
 	leave_list = storage.all(Leave)
+	for dictionary in leave_list:
+		staff_number = dictionary['staff_number']
+		if staff_number == current_user.staff_number:
+			leave_list.remove(dictionary) 
 	return render_template('leave.html', rows=leave_list)
 
 @app.route('/process_form', methods=['POST'], strict_slashes=False)
 def accept_reject():
 	decision = request.form.get('decision')
 	comment = request.form.get('comment')
-	staffNumber = current_user.staff_number
-	user = storage.find_staff(Leave, staffNumber)
+	staff_number = request.form.get('staff_number')
+	user =  storage.find_staff(Leave, staff_number)
 	if user is None:
 		abort(404)
 	if len(comment) == 0:
 	 	user.comment = 'No comments'
+	 	print(comment)
 	else:
 		user.comment = comment
+		print(comment)
 	if decision == 'accept':
 		user.leave_status = 'Accepted'
 		user.remaining -= user.requested_days
-		flash(f"You have successfully approved {current_user.first_name}'s leave")
+		flash(f"You have successfully approved {user.staff_name}'s leave")
 	elif decision == 'reject':
 		user.leave_status = 'Declined'
-		flash(f"You declined {current_user.first_name}'s leave")
+		flash(f"You declined {user.staff_name}'s leave")
 	else:
 		flash("You can either approve or decline")
 	user.save()
