@@ -1,4 +1,5 @@
 from models.user import User
+from models.leave import Leave
 from datetime import date
 from mongoengine.errors import NotUniqueError
 from models import storage
@@ -58,6 +59,8 @@ objects3 = {
         }
 
 storage.connect()
+#User.drop_collection()
+Leave.drop_collection()
 user = User(**objects1)
 user2 = User(**objects2)
 user3 = User(**objects3)
