@@ -1,6 +1,7 @@
 from models import storage
 from datetime import date
 from models.deductions import Deduction
+from mongoengine.errors import NotUniqueError
 from models.earnings import Earning
 from models.payroll import Payroll
 from models.user import User
@@ -16,7 +17,6 @@ def earning(data):
     try:
         earn.save()
     except Exception as e:
-        print(e)
         return None
     return earn
 
@@ -61,9 +61,15 @@ def create_payroll(salary, user):
     payroll = Payroll.objects(name=name).first()
     if payroll:
         items = payroll.items
+        for item in items:
+            if user.staff_number in item.values():
+                return 'exists'
         items.append(obj)
-        payroll.update(items=items)
-        payroll.save()
+        try:
+            payroll.update(items=items)
+            payroll.save()
+        except NotUniqueError:
+            return 'exists'
     else:
         payroll = Payroll(name=name, items=[obj])
         payroll.save()

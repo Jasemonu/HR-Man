@@ -94,8 +94,8 @@
                   </div>
 		  {% if not current_user.Superuser %}
                   <div class="col-sm-6">
-                    <a href="#editentry" class="btn btn-sucess" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Update entry time</span></a>
                     <a href="#editexit" class="btn btn-sucess" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Update exit time</span></a>
+                    <a href="#editentry" class="btn btn-sucess" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Update entry time</span></a>
                   </div>
 		  {% endif %}
                 </div>
@@ -145,7 +145,7 @@
                   </div>
                   <div class="form-group">
                     <label>Entry time</label>
-                    <input type="time" class="form-control" required name="entry_time" id="exit">
+                    <input type="time" class="form-control" readonly placeholder='{{ time }}' name="entry_time" id="exit" value='{{ time }}' >
                   </div>
                 </div>
                 <div class="modal-footer">
