@@ -134,7 +134,7 @@ def create_payslip(data, staff):
 
     for path in os.listdir(folder):
         if path == name:
-            payslip = Payslip(staff_number=staff.staff_number, name=name)
+            payslip = Payslip(period=period, staff_number=staff.staff_number, name=name)
             payslip.save()
             return payslip
     return None

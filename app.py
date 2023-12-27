@@ -238,15 +238,19 @@ def createpayroll():
         if not user:
             flash('Staff does not exists')
             return render_template('salary.html')
-        gross = 0
-        for key, value in request.form.items():
-            if key == 'staff_number' or key == 'gross':
-                continue
-            gross += int(value)
-        if str(gross) != request.form.get('gross'):
-            flash('Invalid gross input')
-            return render_template('salary.html')
+        if not request.form.get('gross'):
+            gross = 0
+            for key, value in request.form.items():
+                if key == 'staff_number' or key == 'gross':
+                    continue
+                gross += int(value)
+            obj = request.form
+            flash('Confirm Gross')
+            return render_template('gross.html', gross=gross, obj=obj)
         res = create_payroll(request.form, user)
+        if res == 'exists':
+            flash(f'Payroll for {staff_number} exists')
+            return redirect(url_for('createpayroll'))
         if not res:
             flash('Payroll unsuccessfull')
             return render_template('salary.html')
@@ -255,11 +259,19 @@ def createpayroll():
     return render_template('salary.html')
 
 
-@app.route('/viewpayslip', defaults={'name': None}, strict_slashes=False)
+@app.route('/viewpayslip', defaults={'name': None})
 @app.route('/viewpayslip/<name>', strict_slashes=False)
+@login_required
 def viewpayslip(name):
-    if name:
-        payslip = Payslip.objects(name=name).first()
+    if current_user.Superuser:
+        list = []
+        payslips = Payslip.objects()
+        if payslips:
+            list = payslips
+        return render_template('listpayslip.html', list=list)
+    if name and not current_user.Superuser:
+        staff_number = current_user.staff_number
+        payslip = Payslip.objects(staff_number=staff_number).first()
         if payslip:
             folder = 'static/assets/pdf/'
             for path in os.listdir(folder):
@@ -271,6 +283,11 @@ def viewpayslip(name):
     payslips = Payslip.objects()
     if payslips is not None:
         list = payslips
+    if not current_user.Superuser:
+        staff_number = current_user.staff_number
+        payslips = Payslip.objects(staff_number=staff_number)
+        if payslips:
+            list = payslips
     return render_template('viewpayslip.html', payslips=list)
 
 
@@ -378,6 +395,7 @@ def update_profile(staff):
 @login_required
 def attendance(period):
     today = date.today()
+    time = datetime.now().strftime('%H:%M')
     obj = Attendance.objects()
     staff_name = current_user.first_name + ' ' + current_user.last_name
     if not current_user.Superuser:
@@ -414,7 +432,8 @@ def attendance(period):
             att.save()
             flash('Signed out Succesfull please logout')
         return redirect(url_for('attendance'))
-    return render_template('attendance.html', date=today.isoformat(), rows=obj)
+    return render_template('attendance.html',
+                           date=today.isoformat(), time=time, rows=obj)
 
 
 @app.route('/resetpwd', methods=['GET', 'POST'], strict_slashes=False)
