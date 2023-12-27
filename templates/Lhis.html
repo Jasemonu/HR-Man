@@ -93,8 +93,8 @@
           {% if row %}
           <tr>
           <td>{{row["staff_name"]}}</td>
-          <td>{{row["start_date"]}}</td>
-          <td>{{row["end_date"]}}</td>
+          <td>{{row.start_date.strftime('%Y-%m-%d') }}</td>
+          <td>{{row.end_date.strftime('%Y-%m-%d') }}</td>
           <td>{{row["leave_type"]}}</td>
           <td>{{row["requested_days"]}}</td>
 		  <td>{{row["remaining"]}}</td>
