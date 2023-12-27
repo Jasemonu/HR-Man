@@ -16,7 +16,11 @@ class User(Document, UserMixin):
     phone = StringField(required=True, max_length=70)
     date_of_birth = DateTimeField(default=date(1670, 12,20).isoformat())
     NID = StringField(required=True, max_length=70)
+<<<<<<< HEAD
     SSNIT = StringField(required=True, default='1234')
+=======
+    SSNIT = StringField(required=True, default='GH55LOM')
+>>>>>>> aa47fbfc80a982dfae9e26b1bbba802011ca490c
     employment_date = DateTimeField(default=date(200, 12,20).isoformat())
     gender = StringField(required=True, max_length=20)
     department = StringField(required=True, max_length=70)

@@ -86,8 +86,8 @@
             <th>Start Date</th>
             <th>End Date</th>
 			<th>Leave Type</th>
-            <th>Requested Days</th>
-			<th>Remaining Leave Days</th>
+            <th>Requested</th>
+			<th>Outstanding</th>
             <th>Current Status</th>
 			<th>Comments</th>
 			<th>Decision</th>
@@ -95,10 +95,10 @@
           </tr>
           {% for row in rows %}
           <tr>
-          <td>{{row["S/N"]}}</td>
-		  <td>{{row["staff_name"]}}</td>
-		  <td>{{row.start_date.strftime('%Y-%m-%d') }}</td>
-		  <td>{{row.end_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{row["id"]}}</td>
+	    <td>{{row["staff_name"]}}</td>
+	    <td>{{ row.start_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ row.end_date.strftime('%Y-%m-%d') }}</td>
           <td>{{row["leave_type"]}}</td>
           <td>{{row["requested_days"]}}</td>
 		  <td>{{row["remaining"]}}</td>

@@ -92,12 +92,7 @@
                   <div class="col-sm-6">
                     <h2><b>Attendance</b></h2>
                   </div>
-		  {% if not current_user.Superuser %}
-                  <div class="col-sm-6">
-                    <a href="#editentry" class="btn btn-sucess" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Update entry time</span></a>
-                    <a href="#editexit" class="btn btn-sucess" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Update exit time</span></a>
-                  </div>
-		  {% endif %}
+		  
                 </div>
               </div>
               <table class="table table-striped table-hover">
@@ -184,6 +179,12 @@
         </div>   
       </div>
     </section>
+    {% if not current_user.Superuser %}
+                  <div class="col-sm-6">
+                    <a href="#editentry" class="btn btn-sucess" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Update entry time</span></a>
+                    <a href="#editexit" class="btn btn-sucess" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Update exit time</span></a>
+                  </div>
+		  {% endif %}
 
   </main><!-- End #main -->
 
