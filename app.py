@@ -196,6 +196,9 @@ def delete(staff_number):
         return redirect(url_for('get_employees'))
     return render_template('delete.html')
 
+    return render_template('delete.html')
+
+
 
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
 def update(staff_number):
@@ -215,6 +218,7 @@ def update(staff_number):
         return render_template('updateemployee.html', employee=employee)
 
     except Exception as e:
+        print(e)
         return
 
 @app.route('/viewpayroll', defaults={'name': None}, strict_slashes=False)
