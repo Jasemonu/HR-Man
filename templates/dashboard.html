@@ -76,9 +76,11 @@
                     <a href="#homeSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="material-icons">aspect_ratio</i><span>Employees</span></a>
                     <ul class="collapse list-unstyled menu" id="homeSubmenu1">
+				{% if current_user.Superuser %}
                         <li>
                             <a href="/register">Add employees</a>
                         </li>
+				 {% endif %}
                         <li>
                             <a href="/employees">List employees</a>
                         </li>
@@ -138,9 +140,11 @@
                         <li>
                             <a href="/viewpayroll">View Payroll</a>
                         </li>
+			{% if current_user.Superuser %}
                         <li>
                             <a href="/createpayroll">Create Payroll</a>
                         </li>
+			{% endif %}
         
                     </ul>
 
