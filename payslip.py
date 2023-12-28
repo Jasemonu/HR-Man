@@ -13,8 +13,8 @@ from reportlab.pdfbase.ttfonts import TTFont
 
 
 storage.connect()
-def check_earning(staff_number):
-    earn = Earning.objects(staff_number=staff_number).first()
+def check_earning(staff):
+    earn = Earning.objects(staff=staff).first()
     if earn:
         return earn
     return None
@@ -25,18 +25,18 @@ def getperiod(data):
     year = int(period_list[0])
     month = int(period_list[1])
     day = int(period_list[1])
-    return date(year, month, day).strftime("%B_%y")
+    return date(year, month, day).strftime("%B_%Y")
 
 company = 'Niche Cocoa Industry'
 info = 'Salary for '
 folder = 'static/assets/pdf'
 def create_payslip(data, staff):
-    earn = check_earning(data.get('staff_number'))
+    earn = check_earning(staff)
     if earn is None:
         return "Null"
 
     try:
-        deduct = Deduction.objects(staff_number=staff.staff_number).first()
+        deduct = Deduction.objects(staff=staff).first()
     except Exception as e:
         print(e)
         return None
@@ -134,7 +134,7 @@ def create_payslip(data, staff):
 
     for path in os.listdir(folder):
         if path == name:
-            payslip = Payslip(period=period, staff_number=staff.staff_number, name=name)
+            payslip = Payslip(period=period, staff=staff, name=name)
             payslip.save()
             return payslip
     return None
