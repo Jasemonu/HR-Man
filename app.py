@@ -270,8 +270,7 @@ def viewpayslip(name):
             list = payslips
         return render_template('listpayslip.html', list=list)
     if name and not current_user.Superuser:
-        staff_number = current_user.staff_number
-        payslip = Payslip.objects(staff_number=staff_number).first()
+        payslip = Payslip.objects(staff=current_user).first()
         if payslip:
             folder = 'static/assets/pdf/'
             for path in os.listdir(folder):
@@ -284,8 +283,7 @@ def viewpayslip(name):
     if payslips is not None:
         list = payslips
     if not current_user.Superuser:
-        staff_number = current_user.staff_number
-        payslips = Payslip.objects(staff_number=staff_number)
+        payslips = Payslip.objects(staff=current_user)
         if payslips:
             list = payslips
     return render_template('viewpayslip.html', payslips=list)
@@ -308,7 +306,7 @@ def createpayslip():
             if res is None:
                 flash('Oops Someting went wrong')
                 return render_template('payslip.html')
-            flash(f'Staff {res.staff_number} payslip created')
+            flash(f'Staff {res.staff.staff_number} payslip created')
             return render_template('payslip.html')
         flash(f"Staff {request.form.get('staff_number')} doesn't Exist")
         return render_template('payslip.html')
@@ -344,7 +342,7 @@ def delete_payslip(name):
 @app.route('/profile', methods=['GET'], strict_slashes=False)
 @login_required
 def profile():
-    bank = Bank.objects(staff_number=current_user.staff_number).first()
+    bank = Bank.objects(staff=current_user).first()
     return render_template('profile.html', bank=bank)
 
 
@@ -356,7 +354,7 @@ def update_profile(staff):
         setUser = False
         setBank = False
         user = User.objects(staff_number=staff).first()
-        bank = Bank.objects(staff_number=staff).first()
+        bank = Bank.objects(staff=user).first()
         for key, value in request.form.items():
             if hasattr(user, key):
                 setattr(user, key, value)
@@ -369,7 +367,7 @@ def update_profile(staff):
             user.save()
         if not setBank:
             obj = {
-                    'staff_number': staff,
+                    'staff': user,
                     'name': request.form.get('name'),
                     'branch': request.form.get('branch'),
                     'code': request.form.get('code'),
@@ -386,7 +384,7 @@ def update_profile(staff):
             bank.save()
         flash('Profile Update Successfull')
         return redirect(url_for('profile'))
-    bank = Bank.objects(staff_number=current_user.staff_number).first()
+    bank = Bank.objects(staff=current_user).first()
     return render_template('updateprofile.html', bank=bank)
 
 
@@ -397,7 +395,6 @@ def attendance(period):
     today = date.today()
     time = datetime.now().strftime('%H:%M')
     obj = Attendance.objects()
-    staff_name = current_user.first_name + ' ' + current_user.last_name
     if not current_user.Superuser:
         name = current_user.staff_number + today.strftime('%a')
         obj = Attendance.objects(name=name)
@@ -409,9 +406,8 @@ def attendance(period):
                 flash('Signed in already')
                 return redirect(url_for('attendance'))
             obj = {
-                'staff_number': request.form.get('ID'),
+                'staff': current_user,
                 'name': name,
-                'staff_name': staff_name,
                 'date': request.form.get('date'),
                 'entry_time': request.form.get('entry_time')
                 }
