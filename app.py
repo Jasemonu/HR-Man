@@ -163,15 +163,13 @@ def get_employees():
     try:
         # Check if user is a Superuser
         if not current_user.Superuser:
-            message = {'error': 'Access denied. Only superusers can view the employee list.'}
-            return jsonify(message), 403
+            abort(403)
 
         # Return list of employees in the database
         employee_list = storage.all(User)
 
         return render_template('listemployees.html', rows=employee_list)
     except Exception as e:
-        print(e)
         return str(e), 500
 
 
@@ -216,7 +214,6 @@ def update(staff_number):
         return render_template('updateemployee.html', employee=employee)
 
     except Exception as e:
-        print(e)
         return
 
 @app.route('/viewpayroll', defaults={'name': None}, strict_slashes=False)
@@ -241,15 +238,19 @@ def createpayroll():
         if not user:
             flash('Staff does not exists')
             return render_template('salary.html')
-        gross = 0
-        for key, value in request.form.items():
-            if key == 'staff_number' or key == 'gross':
-                continue
-            gross += int(value)
-        if str(gross) != request.form.get('gross'):
-            flash('Invalid gross input')
-            return render_template('salary.html')
+        if not request.form.get('gross'):
+            gross = 0
+            for key, value in request.form.items():
+                if key == 'staff_number' or key == 'gross':
+                    continue
+                gross += int(value)
+            obj = request.form
+            flash('Confirm Gross')
+            return render_template('gross.html', gross=gross, obj=obj)
         res = create_payroll(request.form, user)
+        if res == 'exists':
+            flash(f'Payroll for {staff_number} exists')
+            return redirect(url_for('createpayroll'))
         if not res:
             flash('Payroll unsuccessfull')
             return render_template('salary.html')
@@ -258,11 +259,19 @@ def createpayroll():
     return render_template('salary.html')
 
 
-@app.route('/viewpayslip', defaults={'name': None}, strict_slashes=False)
+@app.route('/viewpayslip', defaults={'name': None})
 @app.route('/viewpayslip/<name>', strict_slashes=False)
+@login_required
 def viewpayslip(name):
-    if name:
-        payslip = Payslip.objects(name=name).first()
+    if current_user.Superuser:
+        list = []
+        payslips = Payslip.objects()
+        if payslips:
+            list = payslips
+        return render_template('listpayslip.html', list=list)
+    if name and not current_user.Superuser:
+        staff_number = current_user.staff_number
+        payslip = Payslip.objects(staff_number=staff_number).first()
         if payslip:
             folder = 'static/assets/pdf/'
             for path in os.listdir(folder):
@@ -274,6 +283,11 @@ def viewpayslip(name):
     payslips = Payslip.objects()
     if payslips is not None:
         list = payslips
+    if not current_user.Superuser:
+        staff_number = current_user.staff_number
+        payslips = Payslip.objects(staff_number=staff_number)
+        if payslips:
+            list = payslips
     return render_template('viewpayslip.html', payslips=list)
 
 
@@ -381,6 +395,7 @@ def update_profile(staff):
 @login_required
 def attendance(period):
     today = date.today()
+    time = datetime.now().strftime('%H:%M')
     obj = Attendance.objects()
     staff_name = current_user.first_name + ' ' + current_user.last_name
     if not current_user.Superuser:
@@ -417,7 +432,8 @@ def attendance(period):
             att.save()
             flash('Signed out Succesfull please logout')
         return redirect(url_for('attendance'))
-    return render_template('attendance.html', date=today.isoformat(), rows=obj)
+    return render_template('attendance.html',
+                           date=today.isoformat(), time=time, rows=obj)
 
 
 @app.route('/resetpwd', methods=['GET', 'POST'], strict_slashes=False)
@@ -485,7 +501,9 @@ def leave():
 				'start_date': startDate,
         		'end_date': endDate,
         		'leave_type': leaveType,
-				'requested_days': leave_days
+				'requested_days': leave_days,
+				'leave_status': 'pending',
+				'comment': 'No comments'
 				}
 			for key, value in leave_data.items():
 				setattr(user, key, value)
@@ -500,7 +518,12 @@ def leave_approval():
 	leave_list = storage.all(Leave)
 	for dictionary in leave_list:
 		staff_number = dictionary['staff_number']
+		leave_status = dictionary['leave_status']
 		if staff_number == current_user.staff_number:
+			leave_list.remove(dictionary)
+		if leave_status == 'Accepted':
+			leave_list.remove(dictionary)
+		if leave_status == 'Declined':
 			leave_list.remove(dictionary) 
 	return render_template('leave.html', rows=leave_list)
 
@@ -514,10 +537,8 @@ def accept_reject():
 		abort(404)
 	if len(comment) == 0:
 	 	user.comment = 'No comments'
-	 	print(comment)
 	else:
 		user.comment = comment
-		print(comment)
 	if decision == 'accept':
 		user.leave_status = 'Accepted'
 		user.remaining -= user.requested_days
@@ -539,16 +560,20 @@ def leave_history():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    
-    return jsonify(
-            {
-                'Error': 404,
-                'message': 'NOT FOUND return and try again'
-                }), 404
+	message ={
+		'Error': 404,
+        'message': 'NOT FOUND return and try again'
+         } 
+	return jsonify(message), 404
 
 @app.errorhandler(401)
 def notallowed(e):
     return render_template('error.html'), 401
+
+
+@app.errorhandler(403)
+def forbidden_error(error):
+	return render_template('403.html'), 403
 
 
 

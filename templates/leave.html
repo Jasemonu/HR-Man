@@ -55,7 +55,7 @@
         </ul>
       </nav><!-- .nav-menu -->
 
-      <a href="/logout" class="get-started-btn scrollto">Log Out</a>        
+      <a href="#about" class="get-started-btn scrollto">Log Out</a>        
 
     </div>
   </header><!-- End Header -->
@@ -86,31 +86,30 @@
             <th>Start Date</th>
             <th>End Date</th>
 			<th>Leave Type</th>
-            <th>Requested</th>
-			<th>Outstanding</th>
+            <th>Requested Days</th>
+			<th>Remaining Leave Days</th>
             <th>Current Status</th>
-			<th>Comments</th>
 			<th>Decision</th>
+			<th>Comments</th>
 
           </tr>
           {% for row in rows %}
           <tr>
-            <td>{{row["id"]}}</td>
-	    <td>{{row["staff_name"]}}</td>
-	    <td>{{ row.start_date.strftime('%Y-%m-%d') }}</td>
-            <td>{{ row.end_date.strftime('%Y-%m-%d') }}</td>
+          <td>{{row["S/N"]}}</td>
+		  <td>{{row["staff_name"]}}</td>
+		  <td>{{row["start_date"]}}</td>
+		  <td>{{row["end_date"]}}</td>
           <td>{{row["leave_type"]}}</td>
           <td>{{row["requested_days"]}}</td>
 		  <td>{{row["remaining"]}}</td>
 		  <td>{{row["leave_status"]}}</td>
  
-         <form id="myForm" action="/process_form" method="POST">
-
+         <form id="myForm" action="/process_form" method="POST"> 
+        <td><button type="button" onclick="submitForm('accept')">Accept</button>
+        <button type="button" onclick="submitForm('reject')">Decline</button></td>
+	
 		<td><label for="comment"</label>
-		<textarea id="comment" name="comment" placeholder="write your comments and update" rows="1" cols="30"></textarea></td>
-
-        <td><button type="button" onclick="submitForm('accept', '{{ row["staff_number"] }}')">Accept</button>
-        <button type="button" onclick="submitForm('reject', '{{ row["staff_number"] }}')">Decline</button></td>
+		<textarea id="comment" name="comment" placeholder="write your comments and update" rows="1" cols="50"></textarea></td>
     </form>    
            <!-- <td><select>
               <option value="Pending">Pending</option>
@@ -132,8 +131,7 @@
 		{% endwith %}
       
 	<script>
-        function submitForm(decision, staffNumber) {
-			 var form = document.getElementById('myForm');
+        function submitForm(decision) {
 			 var existingDecisionInput = document.getElementById('decisionInput');
     		 if (existingDecisionInput) {
 				existingDecisionInput.remove();
@@ -145,21 +143,11 @@
             hiddenInput.name = 'decision';
             hiddenInput.value = decision;
 
-		    var hiddenStaffNumberInput = document.createElement('input');
-        	hiddenStaffNumberInput.type = 'hidden';
-        	hiddenStaffNumberInput.name = 'staff_number';
-        	hiddenStaffNumberInput.value = staffNumber;
+            // Append the hidden input to the form
+            document.getElementById('myForm').appendChild(hiddenInput);
 
-			var commentInput = document.createElement('input');
-    		commentInput.type = 'hidden';
-    		commentInput.name = 'comment';
-    		commentInput.value = document.getElementById('comment').value;
-
-			//form.appendChild(decisionInput);
-			form.appendChild(hiddenInput);
-			form.appendChild(hiddenStaffNumberInput);
-    		form.appendChild(commentInput);
-            form.submit();
+            // Submit the form
+            document.getElementById('myForm').submit();
         }
     </script>
 	

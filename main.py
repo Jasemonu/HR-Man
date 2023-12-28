@@ -50,7 +50,7 @@ objects3 = {
         'password': h_pwd,
         'date_of_birth': date(2020, 8, 25).isoformat(),
         'phone': '08077763334',
-        'SSNIT': 'HFT56324',
+        'SSNIT': 'HFT729324',
         'NID': '5565632656',
         'employment_date': date(2020, 8, 25).isoformat(),
         'gender': 'Female',
@@ -59,8 +59,10 @@ objects3 = {
         }
 
 storage.connect()
-#User.drop_collection()
+
 Leave.drop_collection()
+User.drop_collection()
+
 user = User(**objects1)
 user2 = User(**objects2)
 user3 = User(**objects3)
