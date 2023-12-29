@@ -163,15 +163,13 @@ def get_employees():
     try:
         # Check if user is a Superuser
         if not current_user.Superuser:
-            message = {'error': 'Access denied. Only superusers can view the employee list.'}
-            return jsonify(message), 403
+            abort(403)
 
         # Return list of employees in the database
         employee_list = storage.all(User)
 
         return render_template('listemployees.html', rows=employee_list)
     except Exception as e:
-        print(e)
         return str(e), 500
 
 
@@ -216,7 +214,6 @@ def update(staff_number):
         return render_template('updateemployee.html', employee=employee)
 
     except Exception as e:
-        print(e)
         return
 
 @app.route('/viewpayroll', defaults={'name': None}, strict_slashes=False)
@@ -505,7 +502,9 @@ def leave_approval():
 		leave_status = dictionary['leave_status']
 		if staff_number == current_user.staff_number:
 			leave_list.remove(dictionary)
-		if leave_status == 'Accepted' or leave_status == 'Declined':
+		if leave_status == 'Accepted':
+			leave_list.remove(dictionary)
+		if leave_status == 'Declined':
 			leave_list.remove(dictionary) 
 	return render_template('leave.html', rows=leave_list)
 
@@ -542,16 +541,20 @@ def leave_history():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    
-    return jsonify(
-            {
-                'Error': 404,
-                'message': 'NOT FOUND return and try again'
-                }), 404
+	message ={
+		'Error': 404,
+        'message': 'NOT FOUND return and try again'
+         } 
+	return jsonify(message), 404
 
 @app.errorhandler(401)
 def notallowed(e):
     return render_template('error.html'), 401
+
+
+@app.errorhandler(403)
+def forbidden_error(error):
+	return render_template('403.html'), 403
 
 
 
