@@ -194,6 +194,7 @@ def delete(staff_number):
 
         flash('Delete unsuccessful!, check Staff Number')
         return redirect(url_for('get_employees'))
+    return render_template('delete.html')
 
 
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
@@ -396,7 +397,7 @@ def attendance(period):
     time = datetime.now().strftime('%H:%M')
     obj = Attendance.objects()
     if not current_user.Superuser:
-        name = current_user.staff_number + today.strftime('%a')
+        name = current_user.staff + today.strftime('%a')
         obj = Attendance.objects(name=name)
     if request.method == 'POST':
         name = name=request.form.get('ID') + today.strftime('%a')
