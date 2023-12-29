@@ -485,7 +485,9 @@ def leave():
 				'start_date': startDate,
         		'end_date': endDate,
         		'leave_type': leaveType,
-				'requested_days': leave_days
+				'requested_days': leave_days,
+				'leave_status': 'pending',
+				'comment': 'No comments'
 				}
 			for key, value in leave_data.items():
 				setattr(user, key, value)
@@ -500,7 +502,10 @@ def leave_approval():
 	leave_list = storage.all(Leave)
 	for dictionary in leave_list:
 		staff_number = dictionary['staff_number']
+		leave_status = dictionary['leave_status']
 		if staff_number == current_user.staff_number:
+			leave_list.remove(dictionary)
+		if leave_status == 'Accepted' or leave_status == 'Declined':
 			leave_list.remove(dictionary) 
 	return render_template('leave.html', rows=leave_list)
 
@@ -514,10 +519,8 @@ def accept_reject():
 		abort(404)
 	if len(comment) == 0:
 	 	user.comment = 'No comments'
-	 	print(comment)
 	else:
 		user.comment = comment
-		print(comment)
 	if decision == 'accept':
 		user.leave_status = 'Accepted'
 		user.remaining -= user.requested_days

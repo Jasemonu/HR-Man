@@ -136,14 +136,14 @@
 			 var form = document.getElementById('myForm');
 			 var existingDecisionInput = document.getElementById('decisionInput');
     		 if (existingDecisionInput) {
-				existingDecisionInput.remove();
+				 existingDecisionInput.remove();
     }
             // Set the selected decision in the hidden input field
             var hiddenInput = document.createElement('input');
             hiddenInput.type = 'hidden';
 			hiddenInput.id = 'decisionInput';
             hiddenInput.name = 'decision';
-            hiddenInput.value = decision;
+            hiddenInput.value = decision || 'pending';
 
 		    var hiddenStaffNumberInput = document.createElement('input');
         	hiddenStaffNumberInput.type = 'hidden';
