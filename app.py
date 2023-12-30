@@ -194,10 +194,6 @@ def delete(staff_number):
 
         flash('Delete unsuccessful!, check Staff Number')
         return redirect(url_for('get_employees'))
-    return render_template('delete.html')
-
-    return render_template('delete.html')
-
 
 
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
