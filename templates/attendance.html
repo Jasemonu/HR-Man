@@ -114,8 +114,8 @@
                 <tbody>
                   {% for row in rows %}
                     <tr>
-                      <td style="text-align:center">{{ row.staff.user }}</td>
-		      <td style="text-align:center">{{ row.staff.user }} {{ row.staff.last_name }}</td>
+                      <td style="text-align:center">{{ row.staff.staff_number }}</td>
+		      <td style="text-align:center">{{ row.staff.first_name }} {{ row.staff.last_name }}</td>
 		      <td style="text-align:center">{{ row.date.strftime('%Y %m %d') }}</td>
                       <td style="text-align:center">{{ row.entry_time }}</td>
                       <td style="text-align:center">{{ row.exit_time }}</td>	

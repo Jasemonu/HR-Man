@@ -60,10 +60,6 @@ objects3 = {
 
 storage.connect()
 
-#User.drop_collection()
-Leave.drop_collection()
-
-
 Leave.drop_collection()
 User.drop_collection()
 

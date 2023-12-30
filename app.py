@@ -218,7 +218,6 @@ def update(staff_number):
         return render_template('updateemployee.html', employee=employee)
 
     except Exception as e:
-        print(e)
         return
 
 @app.route('/viewpayroll', defaults={'name': None}, strict_slashes=False)
