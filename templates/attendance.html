@@ -114,8 +114,8 @@
                 <tbody>
                   {% for row in rows %}
                     <tr>
-                      <td style="text-align:center">{{ row.staff.staff_number }}</td>
-		      <td style="text-align:center">{{ row.staff.first_name }} {{ row.staff.last_name }}</td>
+                      <td style="text-align:center">{{ row.staff.user }}</td>
+		      <td style="text-align:center">{{ row.staff.user }} {{ row.staff.last_name }}</td>
 		      <td style="text-align:center">{{ row.date.strftime('%Y %m %d') }}</td>
                       <td style="text-align:center">{{ row.entry_time }}</td>
                       <td style="text-align:center">{{ row.exit_time }}</td>	
@@ -137,7 +137,7 @@
                 <div class="modal-body">					
                   <div class="form-group">
                     <label>ID</label>
-		    <input type="text" class="form-control" readonly placeholder='{{ current_user.staff_number }}' name="ID" id="e_id" value='{{ current_user.staff_number }}'>
+		    <input type="text" class="form-control" readonly placeholder='{{ current_user.user }}' name="ID" id="e_id" value='{{ current_user.user }}'>
                   </div>
                   <div class="form-group">
                     <label>Entry Date</label>
@@ -167,7 +167,7 @@
                 <div class="modal-body">					
                   <div class="form-group">
                     <label>ID</label>
-                    <input type="text" class="form-control" readonly placeholder='{{ current_user.staff_number }}' name="ID" id="e_id" value='{{ current_user.staff_number }}'>
+                    <input type="text" class="form-control" readonly placeholder='{{ current_user.user }}' name="ID" id="e_id" value='{{ current_user.user }}'>
                   </div>
                   <div class="form-group">
                     <label>Exit time</label>

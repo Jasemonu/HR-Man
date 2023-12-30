@@ -22,27 +22,27 @@ class Storage:
         data = cls.objects(email=email).first()
         return data
 
-	def find_staff(self, cls, number):
-		data = cls.objects(staff_number=number).first()
-		return data
-   
-	def all(self, cls=None):
-		if cls:
-			data = cls.objects()
-			return list(data)
-		return None
+    def find_staff(self, cls, number):
+        data = cls.objects(staff_number=number).first()
+        return data
+
+    def all(self, cls=None):
+        if cls:
+            data = cls.objects()
+            return list(data)
+        return None
 
     def get(self, cls, id):
         data = cls.objects(id=id).first()
         return data
 
-   def all(self, cls=None):
+    def all(self, cls=None):
         if cls:
             data = cls.objects()
             return list(data) 
         return None
 
-   def delete_staff(self, cls, staff_number):
+    def delete_staff(self, cls, staff_number):
         try:
             obj = cls.objects(staff_number=staff_number).first()
             if obj:
