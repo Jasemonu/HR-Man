@@ -400,7 +400,7 @@ def attendance(period):
     time = datetime.now().strftime('%H:%M')
     obj = Attendance.objects()
     if not current_user.Superuser:
-        name = current_user.user + today.strftime('%a')
+        name = current_user.staff_number + today.strftime('%a')
         obj = Attendance.objects(name=name)
     if request.method == 'POST':
         name = name=request.form.get('ID') + today.strftime('%a')
