@@ -882,7 +882,7 @@ section {
 }
 
 .counts .image {
-  background: url("../img/pngwing.com\ \(1\).png") center center no-repeat;
+  background: url("../img/count.png") center center no-repeat;
   background-size: cover;
   min-height: 400px;
 }
