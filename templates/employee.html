@@ -4,9 +4,46 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Employee Form</title>
-    <link rel="stylesheet" href="/static/css/employee.css">
+     <!-- Favicons -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/assets/img/favicon-16x16.png ">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+<!-- Vendor CSS Files  -->
+<link href="/static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+<link href="/static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="/static/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="/static/assets/vendor/venobox/venobox.css" rel="stylesheet">
+<link href="/static/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="/static/assets/vendor/aos/aos.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="/static/assets/css/style.css" rel="stylesheet">
+
+<link rel="stylesheet" href="/static/css/employee.css">
   </head>
   <body>
+    <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top ">
+    <div class="container d-flex align-items-center justify-content-between">
+      <img src="/static/assets/img/HR_logo.png" class="testimonial-img" alt="" height="85" width="85">
+      <h1 class="logo"><a href="">HR_MAN<span>.</span></a></h1>
+      
+      <nav class="nav-menu d-none d-lg-block">
+        <ul>
+          <li class=""><a href="./home.html">Home</a></li>
+          <li><a href="./dashboard.html">Dashboard</a></li>
+          <li><a href="./leave.html">Leave</a></li>
+          <li><a href="./attendance.html">Attendance</a></li>
+          <li><a href="./leave.html">Leave</a></li>
+          <li><a href="./login.html">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- End Header -->
   	<!-- Flash messages section -->
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -61,5 +98,23 @@
       <a href="/templates/home.html"><input class="button blueButton" type="submit" value="Add" /></a>  
       <br />
     </form>
+    <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/static/assets/vendor/jquery/jquery.min.js"></script>
+  <script src="/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="/static/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/static/assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="/static/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="/static/assets/vendor/venobox/venobox.min.js"></script>
+  <script src="/static/assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="/static/assets/vendor/counterup/counterup.min.js"></script>
+  <script src="/static/assets/vendor/aos/aos.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="/static/assets/js/main.js"></script>
+
   </body>
 </html>
