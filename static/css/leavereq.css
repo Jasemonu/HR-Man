@@ -45,7 +45,7 @@ body {
   content: "";
   position: absolute;
   height: 3.5px;
-  width: 30px;
+  width: 58px;
   background: linear-gradient(135deg, var(--main-blue), var(--main-purple));
   left: 0;
   bottom: 0;
@@ -109,12 +109,14 @@ form .gender__details .gender__title {
 /* submit button */
 form .button {
   height: 45px;
-  margin: 45px 0;
+  margin: 45px 12px;
+
+ 
 }
 
 form .button input {
   height: 100%;
-  width: 100%;
+  width: 45%;
   outline: none;
   color: #fff;
   border: none;
