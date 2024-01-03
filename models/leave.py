@@ -5,7 +5,7 @@ from models.user import User
 
 class Leave(Document):
 	staff = ReferenceField('User', reverse_delete_rule=2, required=True)
-	#staff_name = StringField(max_length=255)
+	staff_name = StringField(max_length=255)
 	remaining = IntField(required=True, default=30)
 	start_date = DateTimeField(null=True)
 	end_date = DateTimeField(null=True)
