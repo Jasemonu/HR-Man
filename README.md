@@ -12,11 +12,15 @@ This enhances transparency and empowers employees by giving them instant access 
 
 ## Demo
 
-<img src = "/static/assets/img/screenshot/home.jpg" width="650" height="350">
+![home](https://github.com/Jasemonu/HR-Man/assets/100478698/061588b2-b9ab-42de-996a-98a0926deb43)
+
+![login](https://github.com/Jasemonu/HR-Man/assets/100478698/47cfd1a4-2a4f-4f17-8b48-9a99ec37130e)
+
+
+
 
 
 ## Tech Stack
-
 **Client:** HTML, CSS, JAVASCRIPT, BOOTSTRAP, JINJA
 
 **Server:** PYTHON, FLASK
