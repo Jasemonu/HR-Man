@@ -1,10 +1,10 @@
 from mongoengine import Document, StringField, DateTimeField, ReferenceField
-from mongoengine import ObjectIdField, IntField
+from mongoengine import ObjectIdField, IntField, ReferenceField
 from datetime import date
 from models.user import User
 
 class Leave(Document):
-	staff_number = StringField(required=True)
+	staff = ReferenceField('User', reverse_delete_rule=2, required=True)
 	staff_name = StringField(max_length=255)
 	remaining = IntField(required=True, default=30)
 	start_date = DateTimeField(null=True)

@@ -12,8 +12,18 @@ storage.connect()
 #Deduction.drop_collection()
 #Earning.drop_collection()
 
-def earning(data):
-    earn = Earning(**data)
+def earning(data, user, period):
+    obj = {
+            'staff': user,
+            'period': period,
+            'basic': data.get('basic'),
+            'overtime': data.get('overtime'),
+            'allawance': data.get('allawance'),
+            'bonus': data.get('bonus'),
+            'gross': data.get('gross')
+            }
+
+    earn = Earning(**obj)
     try:
         earn.save()
     except Exception as e:
@@ -29,7 +39,8 @@ def deduction(earn):
     tier_two = earn.basic * (5 / 100)
     tier_three = earn.basic * (5 / 100)
     obj = {
-            'staff_number': earn.staff_number,
+            'staff': earn.staff,
+            'period': earn.period,
             'SSNIT': SSNIT,
             'tax': tax,
             'tier_two': tier_two,
@@ -44,8 +55,8 @@ def deduction(earn):
     return deduct
 
 def create_payroll(salary, user):
-    name = date.today().strftime('%B_%y')
-    earn = earning(salary)
+    period = date.today().strftime('%B_%Y')
+    earn = earning(salary, user, period)
     if earn is None:
         return None
     deduct = deduction(earn)
@@ -58,7 +69,7 @@ def create_payroll(salary, user):
             'deductions': deduct.total,
             'net': earn.gross - deduct.total
             }
-    payroll = Payroll.objects(name=name).first()
+    payroll = Payroll.objects(name=period).first()
     if payroll:
         items = payroll.items
         for item in items:
@@ -71,7 +82,7 @@ def create_payroll(salary, user):
         except NotUniqueError:
             return 'exists'
     else:
-        payroll = Payroll(name=name, items=[obj])
+        payroll = Payroll(name=period, items=[obj])
         payroll.save()
     return payroll.id
 

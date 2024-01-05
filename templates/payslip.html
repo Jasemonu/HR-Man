@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  
+
 
   <!-- Template Main CSS File -->
   <link href="/static/assets/css/style.css" rel="stylesheet">
@@ -42,13 +42,13 @@
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center justify-content-between">
-     
+
 
       <h1 class="logo"><a href="">HR-MAN<span>.</span></a></h1>
-      
+
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-	  <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
           <li><a href="">Services</a></li>
           <li><a href="">Staistics</a></li>
           <li><a href="">Testimonials</a></li>
@@ -57,12 +57,27 @@
         </ul>
       </nav><!-- .nav-menu -->
 
-      <a href="#about" class="get-started-btn scrollto">Log Out</a>        <!--change to login page-->
+      <a href="/logout" class="get-started-btn scrollto">Log Out</a>        <!--change to login page-->
 
     </div>
   </header><!-- End Header -->
 
   <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Payslip</h2>
+          <ol>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li>Payslip</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <h3>{{ messages[0] }}</h3>
@@ -81,22 +96,22 @@
                 </div>
               </div>
               <form class="addEmployee" method='POST' action='/createpayslip'>
-                <label>Staff Number</label>    
+                <label>Staff Number</label>
                 <input type="text" name="staff_number" required />
                 <br/>
                 <label>Period</label>
                 <input type="date" name="period" required />
-		<br />
-                <a href=""><input class="button blueButton" type="submit" value="submit" /></a>  
+                <br />
+                <a href=""><input class="button blueButton" type="submit" value="submit" /></a>
       <br />
             </div>
-          </div>        
+          </div>
         </div>
       </div>
     </section>
 
   </main><!-- End #main -->
-  
+
 
   <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
   <div id="preloader"></div>
