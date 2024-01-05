@@ -106,7 +106,7 @@ Below is the code for add employee page; the form to search the orders
 	border-radius: 5px;
 	background-color: #f8f8f8;
 	padding: 40px;
-	width: 40%;
+	width: 50%;
 	margin: 0 auto;
 	margin-top: 20px;
 	box-shadow: 1px 1px 5px #888888;
@@ -127,28 +127,19 @@ select {
 }
 
 
-@media only screen and (min-width: 375px)  {
+
+@media (min-width: 320px) and (max-width: 479px) {
     body {
         font-size: 14px;
+		background-color: #0088BB;
     }
-
-    #header {
-        padding: 5px 0;
-    }
-
-    .addEmployee {
-        padding: 10px;
-		background-color: #c62d1f;
-		width: 100%;
+	.addEmployee {
+		border-radius: 5px;
+		background-color: #f8f8f8;
+		padding: 40px;
+		width: 90%;
 		margin: 0 auto;
-	margin-top: 20px;
-	box-shadow: 1px 1px 5px #888888;
-    }
-
-	label {
-		display: inline-block;
+		margin-top: 20px;
+		box-shadow: 1px 1px 5px #888888;
 	}
-
-    /* You can add more styles specific for smaller screens here */
 }
-
