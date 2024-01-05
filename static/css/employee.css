@@ -125,3 +125,39 @@ select {
 	text-align: left;
 	font-size: 16px;
 }
+
+
+@media only screen and (max-width: 767px) {
+    body {
+        font-size: 14px;
+    }
+
+    #header {
+        padding: 5px 0;
+    }
+
+    .addEmployee {
+        padding: 10px;
+		width: 80%;
+		margin: 0 auto;
+	margin-top: 20px;
+	box-shadow: 1px 1px 5px #888888;
+    }
+
+	label {
+		display: inline-block;
+	}
+
+    /* You can add more styles specific for smaller screens here */
+}
+
+/* Media query for screens between 768 and 991 pixels */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    /* Adjust styles for tablets here */
+
+}
+
+/* Media query for screens larger than 992 pixels */
+@media only screen and (min-width: 992px) {
+    /* Adjust styles for desktops here */
+}
