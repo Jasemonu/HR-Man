@@ -8,7 +8,10 @@
 
 }
 body{
-    background: #6a62d2;
+    background-image: url(/static/assets/img/jeshoots.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     
 }
 
@@ -22,8 +25,8 @@ body{
 
 .form {
   position: relative;
-  filter:drop-shadow(0 0 2px #000000);
-  border-radius: 5px;
+  filter:drop-shadow(0 0 2px #1b1a1a);
+  border-radius: 15px;
   width: 360px;
   height: 420px;
   background-color: #ffffff;
@@ -60,6 +63,8 @@ span {
 }
 
 .form button {
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
     outline: 0;
     background: #6a62d2;
     width: 100%;
