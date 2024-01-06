@@ -518,7 +518,9 @@ def leave_approval():
                 leave_status = dictionary['leave_status']
                 if staff_number == current_user.staff_number:
                         leave_list.remove(dictionary)
-                if leave_status == 'Accepted' or leave_status == 'Declined':
+                if leave_status == 'Accepted':
+                        leave_list.remove(dictionary)
+                if leave_status == 'Declined':
                         leave_list.remove(dictionary)
         return render_template('leave.html', rows=leave_list)
 
