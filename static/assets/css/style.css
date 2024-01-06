@@ -7,7 +7,7 @@ body {
 }
 
 a {
-  color: #ffc451;
+  color: #ebe975;
 }
 
 a:hover {
@@ -1109,7 +1109,7 @@ section {
 }
 
 #footer .footer-top .footer-info h3 span {
-  color: #ffc451;
+  color: #ebe975;
 }
 
 #footer .footer-top .footer-info p {
@@ -1161,7 +1161,7 @@ section {
 
 #footer .footer-top .footer-links ul i {
   padding-right: 2px;
-  color: #ffc451;
+  color: #ebe975;
   font-size: 18px;
   line-height: 1;
 }
@@ -1319,13 +1319,13 @@ table.table td a {
 	outline: none !important;
 }
 table.table td a:hover {
-	color: #ffc451;
+	color: #ebe975;
 }
 table.table td a.edit {
-	color: #ffc451;
+	color: #ebe975;
 }
 table.table td a.delete {
-	color: #ffc451;
+	color: #ebe975;
 }
 table.table td i {
 	font-size: 19px;
@@ -1489,8 +1489,6 @@ table.table .avatar {
   justify-content: center;
   align-items: center;
   height: 100%;
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e0e0e0; */
   padding: 20px;
   border-radius: 8px;
   margin-top: 140px;

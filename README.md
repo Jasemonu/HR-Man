@@ -12,15 +12,11 @@ This enhances transparency and empowers employees by giving them instant access 
 
 ## Demo
 
-![home](https://github.com/Jasemonu/HR-Man/assets/100478698/061588b2-b9ab-42de-996a-98a0926deb43)
-
-![login](https://github.com/Jasemonu/HR-Man/assets/100478698/47cfd1a4-2a4f-4f17-8b48-9a99ec37130e)
-
-
-
+<img src ="static/assets/img/screenshots/home.png" width="650" height="350">
 
 
 ## Tech Stack
+
 **Client:** HTML, CSS, JAVASCRIPT, BOOTSTRAP, JINJA
 
 **Server:** PYTHON, FLASK
@@ -48,14 +44,12 @@ To run this project, you will need to add the following environment variables to
 
 ## Authors
 
-- [@Dannie55](https://www.github.com/dannie55)
+- [@RosemaryEfebe247](https://www.github.com/RosemaryEfebe247)
+
+- [@SamZec](https://www.github.com/SamZec)
+
+- [@Jasemonu](https://www.github.com/Jasemonu)
 
 - [@Dannie55](https://www.github.com/dannie55)
 
-- [@Dannie55](https://www.github.com/dannie55)
 
-- [@Dannie55](https://www.github.com/dannie55)
-
-## Screenshots
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
