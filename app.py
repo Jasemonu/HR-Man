@@ -194,10 +194,6 @@ def delete(staff_number):
 
         flash('Delete unsuccessful!, check Staff Number')
         return redirect(url_for('get_employees'))
-    return render_template('delete.html')
-
-    return render_template('delete.html')
-
 
 
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
@@ -400,7 +396,7 @@ def attendance(period):
     time = datetime.now().strftime('%H:%M')
     obj = Attendance.objects()
     if not current_user.Superuser:
-        name = current_user.user + today.strftime('%a')
+        name = current_user.staff_number + today.strftime('%a')
         obj = Attendance.objects(name=name)
     if request.method == 'POST':
         name = name=request.form.get('ID') + today.strftime('%a')
@@ -458,113 +454,111 @@ def resetpwd():
 
 @app.route('/leave', methods=['POST', 'GET'], strict_slashes=False)
 def leave():
-	if request.method == 'POST':
-		data = request.form
+    if request.method == 'POST':
+        data = request.form
+        # Extract data from the form
+        staffNumber = data.get('staff_number')
+        staffName = data.get('staff_name')
+        startDate = datetime.strptime(data.get('start_date'), '%Y-%m-%d')
+        endDate = datetime.strptime(data.get('end_date'), '%Y-%m-%d')
+        leaveType = data.get('leave_type')
 
-		# Extract data from the form
-		staffNumber = data.get('staff_number')
-		staffName = data.get('staff_name')
-		startDate = datetime.strptime(data.get('start_date'), '%Y-%m-%d')
-		endDate = datetime.strptime(data.get('end_date'), '%Y-%m-%d')
-		leaveType = data.get('leave_type')
-
-		if startDate < datetime.now():
-			flash("Start date cannot be lower than current date")
-			return render_template('leavereq.html')
-		if endDate <= startDate:
-			flash("End date should be higher than start date")
-			return render_template('leavereq.html')
-		leave_days = (endDate - startDate).days + 1
-		user = storage.find_staff(Leave, staffNumber)
-		if not user:
-			if leave_days >= 0:
-				leave_data = {
-					'staff_number': staffNumber,
-					'staff_name': staffName,
-					'start_date': startDate,
-					'end_date': endDate,
-					'leave_type': leaveType,
-					'requested_days': leave_days
-
-				}
-				leave_req = Leave(**leave_data)
-				leave_req.save()
-			else:
-				flash(f"You have 30 days leave limit")
-				return render_template('leavereq.html')
-
-		if user:
-			if user.remaining < leave_days:
-				flash(f"You have only {user.remaining} days left")
-				return render_template('leavereq.html')
-			leave_data = {
-				'start_date': startDate,
-        		'end_date': endDate,
-        		'leave_type': leaveType,
-				'requested_days': leave_days,
-				'leave_status': 'pending',
-				'comment': 'No comments'
-				}
-			for key, value in leave_data.items():
-				setattr(user, key, value)
-			user.save()
-		flash("Leave application successful and pending approval")
-		return redirect(url_for('leave_history'))
-
-	return render_template('leavereq.html')
+        if startDate < datetime.now():
+            flash("Start date cannot be lower than current date")
+            return render_template('leavereq.html')
+        if endDate <= startDate:
+            flash("End date should be higher than start date")
+            return render_template('leavereq.html')
+        leave_days = (endDate - startDate).days + 1
+        user = storage.find_staff(User, staffNumber)
+        leave = Leave.objects(staff=user).first()
+        if not leave:
+            if leave_days >= 0:
+                leave_data = {
+                        'staff': user,
+                        'staff_name': staffName,
+                        'start_date': startDate,
+                        'end_date': endDate,
+                        'leave_type': leaveType,
+                        'requested_days': leave_days
+                        }
+                leave_req = Leave(**leave_data)
+                leave_req.save()
+            else:
+                flash(f"You have 30 days leave limit")
+                return render_template('leavereq.html')
+        if leave:
+            if leave.remaining < leave_days:
+                flash(f"You have only {user.remaining} days left")
+                return render_template('leavereq.html')
+            leave_data = {
+                    'start_date': startDate,
+                    'end_date': endDate,
+                    'leave_type': leaveType,
+                    'requested_days': leave_days,
+                    'leave_status': 'pending',
+                    'comment': 'No comments'
+                    }
+            for key, value in leave_data.items():
+                setattr(leave, key, value)
+            leave.save()
+            flash("Leave application successful and pending approval")
+            return redirect(url_for('leave_history'))
+    return render_template('leavereq.html')
 
 @app.route('/pending_leave', methods=['POST', 'GET'], strict_slashes=False)
 def leave_approval():
-	leave_list = storage.all(Leave)
-	for dictionary in leave_list:
-		staff_number = dictionary['staff_number']
-		leave_status = dictionary['leave_status']
-		if staff_number == current_user.staff_number:
-			leave_list.remove(dictionary)
-		if leave_status == 'Accepted':
-			leave_list.remove(dictionary)
-		if leave_status == 'Declined':
-			leave_list.remove(dictionary) 
-	return render_template('leave.html', rows=leave_list)
+    leave_list = storage.all(Leave)
+    for dictionary in leave_list:
+        staff_number = dictionary.staff.staff_number
+        leave_status = dictionary['leave_status']
+        if staff_number == current_user.staff_number:
+            leave_list.remove(dictionary)
+        if leave_status == 'Accepted':
+            leave_list.remove(dictionary)
+        if leave_status == 'Declined':
+            leave_list.remove(dictionary)
+    return render_template('leave.html', rows=leave_list)
 
 @app.route('/process_form', methods=['POST'], strict_slashes=False)
 def accept_reject():
-	decision = request.form.get('decision')
-	comment = request.form.get('comment')
-	staff_number = request.form.get('staff_number')
-	user =  storage.find_staff(Leave, staff_number)
-	if user is None:
-		abort(404)
-	if len(comment) == 0:
-	 	user.comment = 'No comments'
-	else:
-		user.comment = comment
-	if decision == 'accept':
-		user.leave_status = 'Accepted'
-		user.remaining -= user.requested_days
-		flash(f"You have successfully approved {user.staff_name}'s leave")
-	elif decision == 'reject':
-		user.leave_status = 'Declined'
-		flash(f"You declined {user.staff_name}'s leave")
-	else:
-		flash("You can either approve or decline")
-	user.save()
-	return redirect(url_for('leave_approval'))
+    decision = request.form.get('decision')
+    comment = request.form.get('comment')
+    staff_number = request.form.get('staff_number')
+    user =  storage.find_staff(User, staff_number)
+    leave = Leave.objetcs(staff=user).first()
+    if leave is None:
+        abort(404)
+    if len(comment) == 0:
+        user.comment = 'No comments'
+    else:
+        user.comment = comment
+    if decision == 'accept':
+        user.leave_status = 'Accepted'
+        user.remaining -= user.requested_days
+        flash(f"You have successfully approved {user.staff_name}'s leave")
+    elif decision == 'reject':
+        user.leave_status = 'Declined'
+        flash(f"You declined {user.staff_name}'s leave")
+    else:
+        flash("You can either approve or decline")
+        user.save()
+    return redirect(url_for('leave_approval'))
 
 @app.route('/leave_history', methods=['GET'], strict_slashes=False)
 def leave_history():
-	staffNumber = current_user.staff_number
-	user = storage.find_staff(Leave, staffNumber)
-	return render_template('Lhis.html', row=user)
+    staff = current_user
+    leave = Leave.objects(staff=staff).first()
+    return render_template('Lhis.html', row=leave)
 
 
 @app.errorhandler(404)
 def page_not_found(e):
-	message ={
-		'Error': 404,
-        'message': 'NOT FOUND return and try again'
-         } 
-	return jsonify(message), 404
+    message ={
+            'Error': 404,
+            'message': 'NOT FOUND return and try again'
+            }
+    return jsonify(message), 404
 
 @app.errorhandler(401)
 def notallowed(e):
@@ -573,7 +567,7 @@ def notallowed(e):
 
 @app.errorhandler(403)
 def forbidden_error(error):
-	return render_template('403.html'), 403
+    return render_template('403.html'), 403
 
 
 

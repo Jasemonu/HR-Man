@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Employee Leave Application</title>
+    
     <link rel="stylesheet" href="/static/css/leavereq.css">
 </head>
 <body>
- 
-    <div class="container">
-      
+    <div class="container">    
         <div class="title">Employee Leave Application</div>
 
         <form action="/leave" method="POST">
@@ -43,15 +42,8 @@
                   <option value="Sick">Others</option>
                   </select>
               </div>
-              <!-- <div class="input__box">
-                <span class="details">Leave Status</span>
-                <select name="status">
-                  <option value="Pending">Pending</option>
-                  <option value="Accept">Accepted</option>
-                  <option value="Reject">Rejected</option>
-                  </select>
-              </div>
-			  -->
+          
+
 		{% with messages = get_flashed_messages() %}
 			{% if messages %}
 				{{ messages }}
@@ -61,6 +53,7 @@
           </div>
           <div class="button">
          <input type="submit" value="Submit"> 
+         <a href="./home.html"><input type="submit" value="Cancel"></a> 
          
           </div>
          

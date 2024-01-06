@@ -44,7 +44,7 @@
 
       <h1 class="logo"><a href="">HR-MAN<span>.</span></a></h1>
 
-      <nav class="nav-menu d-none d-lg-block">
+      <nav class="nav__menu d-none d-lg-block">
         <ul>
           <li><a href="{{ url_for('home') }}">Home</a></li>
           <li><a href="#services">Services</a></li>
@@ -55,62 +55,45 @@
         </ul>
       </nav><!-- .nav-menu -->
 
-      <a href="/logout" class="get-started-btn scrollto">Log Out</a>        
+      <a href="#about" class="get-started-btn scrollto">Log Out</a>        
 
     </div>
   </header><!-- End Header -->
 
   <main id="main">
-
-    <!-- ======= Breadcrumbs ======= -->
-    <section class="breadcrumbs">
-      <div class="container">
-
-        <div class="d-flex justify-content-between align-items-center">
-          <h2>Leaves</h2>
-          <ol>
-            <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li>Leaves</li>
-          </ol>
-        </div>
-
-      </div>
-    </section><!-- End Breadcrumbs -->
-
-    <div id="Details">
-        <h3>Leave Approval</h3>
-        <table style="width:100%">
+    <div id="Details"></br>
+        <h3>Leave Approval</h3> 
+        <table style="width:100%" class = "hhhh" >
           <tr>
             <th>S/N</th>
             <th>Staff Name</th>
             <th>Start Date</th>
             <th>End Date</th>
 			<th>Leave Type</th>
-            <th>Requested</th>
-			<th>Outstanding</th>
+            <th>Requested Days</th>
+			<th>Remaining Leave Days</th>
             <th>Current Status</th>
-			<th>Comments</th>
 			<th>Decision</th>
+			<th>Comments</th>
 
           </tr>
           {% for row in rows %}
           <tr>
           <td>{{row["S/N"]}}</td>
 		  <td>{{row["staff_name"]}}</td>
-		  <td>{{row.start_date.strftime('%Y-%m-%d') }}</td>
-		  <td>{{row.end_date.strftime('%Y-%m-%d') }}</td>
+		  <td>{{row["start_date"]}}</td>
+		  <td>{{row["end_date"]}}</td>
           <td>{{row["leave_type"]}}</td>
           <td>{{row["requested_days"]}}</td>
 		  <td>{{row["remaining"]}}</td>
 		  <td>{{row["leave_status"]}}</td>
  
-         <form id="myForm" action="/process_form" method="POST">
-
+         <form id="myForm" action="/process_form" method="POST"> 
+        <td><button class="xxxx" type="button" onclick="submitForm('accept')">Accept</button>
+        <button class="xxxx" type="button" onclick="submitForm('reject')">Decline</button></td>
+	
 		<td><label for="comment"</label>
-		<textarea id="comment" name="comment" placeholder="write your comments and update" rows="1" cols="30"></textarea></td>
-
-        <td><button type="button" onclick="submitForm('accept', '{{ row["staff_number"] }}')">Accept</button>
-        <button type="button" onclick="submitForm('reject', '{{ row["staff_number"] }}')">Decline</button></td>
+		<textarea id="comment" name="comment" placeholder="write your comments and update" rows="1" cols="50"></textarea></td>
     </form>    
            <!-- <td><select>
               <option value="Pending">Pending</option>
@@ -132,34 +115,23 @@
 		{% endwith %}
       
 	<script>
-        function submitForm(decision, staffNumber) {
-			 var form = document.getElementById('myForm');
+        function submitForm(decision) {
 			 var existingDecisionInput = document.getElementById('decisionInput');
     		 if (existingDecisionInput) {
-				 existingDecisionInput.remove();
+				existingDecisionInput.remove();
     }
             // Set the selected decision in the hidden input field
             var hiddenInput = document.createElement('input');
             hiddenInput.type = 'hidden';
 			hiddenInput.id = 'decisionInput';
             hiddenInput.name = 'decision';
-            hiddenInput.value = decision || 'pending';
+            hiddenInput.value = decision;
 
-		    var hiddenStaffNumberInput = document.createElement('input');
-        	hiddenStaffNumberInput.type = 'hidden';
-        	hiddenStaffNumberInput.name = 'staff_number';
-        	hiddenStaffNumberInput.value = staffNumber;
+            // Append the hidden input to the form
+            document.getElementById('myForm').appendChild(hiddenInput);
 
-			var commentInput = document.createElement('input');
-    		commentInput.type = 'hidden';
-    		commentInput.name = 'comment';
-    		commentInput.value = document.getElementById('comment').value;
-
-			//form.appendChild(decisionInput);
-			form.appendChild(hiddenInput);
-			form.appendChild(hiddenStaffNumberInput);
-    		form.appendChild(commentInput);
-            form.submit();
+            // Submit the form
+            document.getElementById('myForm').submit();
         }
     </script>
 	
