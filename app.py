@@ -526,23 +526,24 @@ def accept_reject():
     comment = request.form.get('comment')
     staff_number = request.form.get('staff_number')
     user =  storage.find_staff(User, staff_number)
-    leave = Leave.objetcs(staff=user).first()
+    leave = Leave.objects(staff=user).first()
     if leave is None:
         abort(404)
     if len(comment) == 0:
-        user.comment = 'No comments'
+        leave.comment = 'No comments'
     else:
-        user.comment = comment
+        leave.comment = comment
     if decision == 'accept':
-        user.leave_status = 'Accepted'
-        user.remaining -= user.requested_days
-        flash(f"You have successfully approved {user.staff_name}'s leave")
+        leave.leave_status = 'Accepted'
+        leave.remaining -= leave.requested_days
+        flash(f"You have successfully approved {leave.staff_name}'s leave")
     elif decision == 'reject':
-        user.leave_status = 'Declined'
-        flash(f"You declined {user.staff_name}'s leave")
+        leave.leave_status = 'Declined'
+        flash(f"You declined {leave.staff_name}'s leave")
     else:
         flash("You can either approve or decline")
-        user.save()
+        return redirect(url_for('leave_approval'))
+    leave.save()
     return redirect(url_for('leave_approval'))
 
 @app.route('/leave_history', methods=['GET'], strict_slashes=False)
