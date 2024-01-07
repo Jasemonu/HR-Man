@@ -15,4 +15,3 @@ class Leave(Document):
 	comment = StringField(max_length=255, default='No comments')
 	created_at = DateTimeField(default=date.today().isoformat())
 	updated_at = DateTimeField(default=date.today().isoformat())
-	user = ReferenceField(User)
