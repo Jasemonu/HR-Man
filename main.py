@@ -60,7 +60,15 @@ objects3 = {
 
 storage.connect()
 
+
 Leave.drop_collection()
+
+#User.drop_collection()
+Leave.drop_collection()
+
+
+Leave.drop_collection()
+
 User.drop_collection()
 
 user = User(**objects1)
