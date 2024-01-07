@@ -189,7 +189,7 @@ def delete(staff_number):
         # search and delete employee by staff_number
         result = storage.delete_staff(User, staff_number)
         if result:
-            flash('Deleted successful!', 'success')
+            flash('Deleted Successfully!', 'success')
             return redirect(url_for('get_employees'))
 
         # if no result return to the lisemployees page 
