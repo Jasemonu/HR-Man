@@ -15,7 +15,10 @@
     <!----css3---->
     <link rel="stylesheet" href="/static/css/custom.css" />
 
-    
+    <!-- SLIDER REVOLUTION 4.x CSS SETTINGS -->
+
+
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
@@ -39,7 +42,7 @@
                     <a href="#" class="dashboard"><i class="material-icons">dashboard</i><span>Dashboard</span></a>
                 </li>
                 <div class="small-screen navbar-display">
-		    {% if current_user.Superuser %}
+                    {% if current_user.Superuser %}
                     <li class="dropdown d-lg-none d-md-block d-xl-none d-sm-block">
                         <a href="#homeSubmenu0" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                             <i class="material-icons">notifications</i><span> 4 notification</span></a>
@@ -66,17 +69,19 @@
                     <li class="d-lg-none d-md-block d-xl-none d-sm-block">
                         <a href="#"><i class="material-icons">person</i><span>user</span></a>
                     </li>
-		    {% endif %}
-                
+                    {% endif %}
+
                 </div>
-		{% if current_user.Superuser %}
+                {% if current_user.Superuser %}
                 <li class="dropdown">
                     <a href="#homeSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="material-icons">aspect_ratio</i><span>Employees</span></a>
                     <ul class="collapse list-unstyled menu" id="homeSubmenu1">
+                                {% if current_user.Superuser %}
                         <li>
                             <a href="/register">Add employees</a>
                         </li>
+                                 {% endif %}
                         <li>
                             <a href="/employees">List employees</a>
                         </li>
@@ -85,24 +90,24 @@
                         </li>
                     </ul>
                 </li>
-		{% endif %}
+                {% endif %}
                 <li class="dropdown">
                     <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="material-icons">apps</i><span>Leave Application</span></a>
                     <ul class="collapse list-unstyled menu" id="pageSubmenu2">
-				{% if not current_user.Superuser %}
+                                {% if not current_user.Superuser %}
                         <li>
                             <a href="/leave">Leave Request</a>
                         </li>
-						<li>
-						<a href="/leave_history">Leave History</a>
-						</li>
-				{% endif %}
-				{% if current_user.Superuser %}
+                                                <li>
+                                                <a href="/leave_history">Leave History</a>
+                                                </li>
+                                {% endif %}
+                                {% if current_user.Superuser %}
                         <li>
                             <a href="/pending_leave">Pending Leave</a>
                         </li>
-				{% endif %}
+                                {% endif %}
 
                     </ul>
                 </li>
@@ -112,22 +117,22 @@
                         <i class="material-icons">equalizer</i>
                         <span>Payslip</span></a>
                     <ul class="collapse list-unstyled menu" id="pageSubmenu3">
-			{% if current_user.Superuser %}
+                        {% if current_user.Superuser %}
                         <li>
                             <a href="/createpayslip">Create</a>
                         </li>
-			{% endif %}
-			{% if not current_user.Superuser %}
+                        {% endif %}
+                        {% if not current_user.Superuser %}
                         <li>
                             <a href="/viewpayslip">View</a>
                         </li>
-			{% endif %}
+                        {% endif %}
                        <!-- <li>
                             <a href="/payslips">Delete</a>
                         </li> --!>
                     </ul>
-		</li>
-		{% if current_user.Superuser %}
+                </li>
+                {% if current_user.Superuser %}
                 <li class="dropdown">
                     <a href="#pageSubmenu4" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="material-icons">money</i>
@@ -137,24 +142,27 @@
                         <li>
                             <a href="/viewpayroll">View Payroll</a>
                         </li>
+                        {% if current_user.Superuser %}
                         <li>
                             <a href="/createpayroll">Create Payroll</a>
                         </li>
+                        {% endif %}
+
                     </ul>
-		</li>
-		 {% endif %}
+                </li>
+                 {% endif %}
                 <li class="">
-		    <a href="{{ url_for('attendance') }}"><i class="material-icons">date_range</i><span>Attendance</span></a>
+                    <a href="{{ url_for('attendance') }}"><i class="material-icons">date_range</i><span>Attendance</span></a>
                 </li>
 
-		{% if not current_user.Superuser %}
+                {% if not current_user.Superuser %}
                 <li class="">
-		    <a href="{{ url_for('profile') }}"><i class="material-icons">library_books</i><span>Profile</span></a>
+                    <a href="{{ url_for('profile') }}"><i class="material-icons">library_books</i><span>Profile</span></a>
                 </li>
-		{% endif %}
-		<li class="">
-		    <a href="/logout"><i class="material-icons">logout</i><span>Log out</span></a>
-	        </li>
+                {% endif %}
+                <li class="">
+                    <a href="/logout"><i class="material-icons">logout</i><span>Log out</span></a>
+                </li>
             </ul>
         </nav>
 
@@ -175,16 +183,16 @@
                             <span class="material-icons">more_vert</span>
                         </button>
 
-			{% with messages = get_flashed_messages() %}
-			  {% if messages %}
-			    <h3>{{ messages[0] }}</h3>
-			  {% endif %}
-			{% endwith %}
+                        {% with messages = get_flashed_messages() %}
+                          {% if messages %}
+                            <h3>{{ messages[0] }}</h3>
+                          {% endif %}
+                        {% endwith %}
 
                         <div class="collapse navbar-collapse d-lg-block d-xl-block d-sm-none d-md-none d-none"
                             id="navbarSupportedContent">
                             <ul class="nav navbar-nav ml-auto">
-				{% if current_user.Superuser %}
+                                {% if current_user.Superuser %}
                                 <li class="dropdown nav-item active">
                                     <a href="#" class="nav-link" data-toggle="dropdown">
                                         <span class="material-icons">notifications</span>
@@ -210,20 +218,20 @@
                                         <span class="material-icons">apps</span>
                                     </a>
                                 </li>
-				{% endif %}
+                                {% endif %}
                                 <li class="nav-item">
-				    <a class="nav-link" href="{{ url_for('profile') }}">
-					    <span>{{ current_user.last_name }}</span>
-					    <span class="material-icons">person</span>
+                                    <a class="nav-link" href="{{ url_for('profile') }}">
+                                            <span>{{ current_user.last_name }}</span>
+                                            <span class="material-icons">person</span>
                                     </a>
                                 </li>
-				{% if current_user.Superuser %}
+                                {% if current_user.Superuser %}
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">
                                         <span class="material-icons">settings</span>
                                     </a>
                                 </li>
-				{% endif %}
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -241,12 +249,12 @@
                             </div>
                             <div class="card-content">
                                 <p class="category"><strong>Users</strong></p>
-				<h3 class="card-title">{{ users }}</h3>
+                                <h3 class="card-title">{{ users }}</h3>
                             </div>
                             <div class="card-footer">
                                 <div class="stats">
                                     <i class="material-icons text-info">person</i>
-				    <a href="{{ url_for('get_employees') }}">See detailed report</a>
+                                    <a href="{{ url_for('get_employees') }}">See detailed report</a>
                                 </div>
                             </div>
                         </div>
@@ -260,12 +268,12 @@
                             </div>
                             <div class="card-content">
                                 <p class="category"><strong>Payslips</strong></p>
-				<h3 class="card-title">{{ payslips }}</h3>
+                                <h3 class="card-title">{{ payslips }}</h3>
                             </div>
                             <div class="card-footer">
                                 <div class="stats">
                                     <i class="material-icons">money</i>
-				    <a href="{{ url_for('viewpayslip') }}">See detailed report</a>
+                                    <a href="{{ url_for('viewpayslip') }}">See detailed report</a>
                                 </div>
                             </div>
                         </div>
