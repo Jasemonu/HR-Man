@@ -526,27 +526,29 @@ def leave_approval():
 
 @app.route('/process_form', methods=['POST'], strict_slashes=False)
 def accept_reject():
-        decision = request.form.get('decision')
-        comment = request.form.get('comment')
-        staff_number = request.form.get('staff_number')
-        user =  storage.find_staff(Leave, staff_number)
-        if user is None:
-                abort(404)
-        if len(comment) == 0:
-                user.comment = 'No comments'
-        else:
-                user.comment = comment
-        if decision == 'accept':
-                user.leave_status = 'Accepted'
-                user.remaining -= user.requested_days
-                flash(f"You have successfully approved {user.staff_name}'s leave")
-        elif decision == 'reject':
-                user.leave_status = 'Declined'
-                flash(f"You declined {user.staff_name}'s leave")
-        else:
-                flash("You can either approve or decline")
-        user.save()
+    decision = request.form.get('decision')
+    comment = request.form.get('comment')
+    staff_number = request.form.get('staff_number')
+    user =  storage.find_staff(User, staff_number)
+    leave = Leave.objects(staff=user).first()
+    if leave is None:
+        abort(404)
+    if len(comment) == 0:
+        leave.comment = 'No comments'
+    else:
+        leave.comment = comment
+    if decision == 'accept':
+        leave.leave_status = 'Accepted'
+        leave.remaining -= leave.requested_days
+        flash(f"You have successfully approved {leave.staff_name}'s leave")
+    elif decision == 'reject':
+        leave.leave_status = 'Declined'
+        flash(f"You declined {leave.staff_name}'s leave")
+    else:
+        flash("You can either approve or decline")
         return redirect(url_for('leave_approval'))
+    leave.save()
+    return redirect(url_for('leave_approval'))
 
 @app.route('/leave_history', methods=['GET'], strict_slashes=False)
 def leave_history():
