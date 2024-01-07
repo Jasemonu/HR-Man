@@ -182,11 +182,11 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<string:staff_number>', methods=['GET', 'POST'], strict_slashes=False)
+@app.route('/delete/<string:staff_number>', methods=['DELETE', 'GET'], strict_slashes=False)
 def delete(staff_number):
-    if request.method == 'POST':
+    if request.method == 'DELETE':
     #    return render_template('delete.html')
-        staff_number = request.form.get('staff_number')
+        #staff_number = request.form.get('staff_number')
         result = storage.delete_staff(User, staff_number)
         if result:
             flash('Deleted successful!', 'success')
@@ -194,7 +194,7 @@ def delete(staff_number):
 
         flash('Delete unsuccessful!, check Staff Number')
         return redirect(url_for('get_employees'))
-    return render_template('delete.html')
+    return redirect(url_for('get_employees'))
 
 
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
@@ -215,7 +215,7 @@ def update(staff_number):
         return render_template('updateemployee.html', employee=employee)
 
     except Exception as e:
-        return
+        return str(e)
 
 @app.route('/viewpayroll', defaults={'name': None}, strict_slashes=False)
 @app.route('/viewpayroll/<string:name>', methods=['GET', 'POST'])
