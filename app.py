@@ -170,7 +170,9 @@ def get_employees():
 
         return render_template('listemployees.html', rows=employee_list)
     except Exception as e:
-        return str(e), 500
+        flash('Your are not authorise', 'error')
+        return redirect(url_for('home'))
+
 
 @app.route('/logout')
 @login_required
@@ -187,14 +189,17 @@ def update_delete():
     try:
         # Check if user is a Superuser
         if not current_user.Superuser:
-            abort(403)
+            flash('Your are not authorise', 'error')
+            return redirect(url_for('home'))
 
         # Return list of employees in the database
         update_delete = storage.all(User)
 
         return render_template('update_delete.html', rows=update_delete)
     except Exception as e:
-        return str(e), 500
+        flash('Oops something went wrong', 'error')
+        return render_template('update_delete.html', rows=update_delete)
+
 
 
 # endpoit for deleting employeees
@@ -222,7 +227,6 @@ def update(staff_number):
         employee = User.objects(staff_number=staff_number).first()
 
         if request.method == 'POST':
-            
             # retrieve data from the form and update the records 
             updated_data = request.form
             for key, value in updated_data.items():
@@ -235,7 +239,8 @@ def update(staff_number):
         return render_template('updateemployee.html', employee=employee)
 
     except Exception as e:
-        return str(e)
+        flash('Oops something went wrong', 'error')
+        return redirect(url_for('update_delete'))
 
 
 @app.route('/viewpayroll', defaults={'name': None}, strict_slashes=False)
