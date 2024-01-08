@@ -102,6 +102,7 @@
           <td>{{row["end_date"]}}</td>
           <td>{{row["leave_type"]}}</td>
           <td>{{row["requested_days"]}}</td>
+<<<<<<< HEAD
           <td>{{row["remaining"]}}</td>
           <td>{{row["leave_status"]}}</td>
           <form id="myForm" action="/process_form" method="POST"> 
@@ -113,34 +114,67 @@
         </form>    
               </tr>
         {% endfor %}
+=======
+		  <td>{{row["remaining"]}}</td>
+		  <td>{{row["leave_status"]}}</td>
+ 
+         <form id="myForm" action="/process_form" method="POST">
+
+		<td><label for="comment"</label>
+		<textarea id="comment" name="comment" placeholder="write your comments and update" rows="1" cols="30"></textarea></td>
+
+        <td><button type="button" onclick="submitForm('accept', '{{ row.staff.staff_number }}')">Accept</button>
+        <button type="button" onclick="submitForm('reject', '{{ row.staff.staff_number }}')">Decline</button></td>
+    </form>    
+           <!-- <td><select>
+              <option value="Pending">Pending</option>
+              <option value="Accept">Accept</option>
+              <option value="Reject">Reject</option>
+              </select></td>
+			  <td><input type="text" id="commentsInput" placeholder="write your comments and update" class="form-control" /></td>
+            <td> 
+			<button type="button" id="getDataButton" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate" onclick='getData()'>Accept</button>
+			<button type="button" id='rejectbutton' class="btn btn-xs btn-warning" data-toggle="modal" data-target="#myModalDelete" oneclick="handleAction('reject', '{{row["staff_number"]}}')">Reject</button></td>-->
+>>>>>>> 39796b0563313b7a9da85982587feb7340bb40d7
           </tr>
         </tbody>
       </table>
     </div>
     {% with messages = get_flashed_messages() %}
 			{% if messages %}
-				{{ messages }}
+				{{ messages[0] }}
 			{% endif %}
 		{% endwith %}
       
 	<script>
-        function submitForm(decision) {
+        function submitForm(decision, staffNumber) {
+			 var form = document.getElementById('myForm');
 			 var existingDecisionInput = document.getElementById('decisionInput');
     		 if (existingDecisionInput) {
-				existingDecisionInput.remove();
+				 existingDecisionInput.remove();
     }
             // Set the selected decision in the hidden input field
             var hiddenInput = document.createElement('input');
             hiddenInput.type = 'hidden';
 			hiddenInput.id = 'decisionInput';
             hiddenInput.name = 'decision';
-            hiddenInput.value = decision;
+            hiddenInput.value = decision || 'pending';
 
-            // Append the hidden input to the form
-            document.getElementById('myForm').appendChild(hiddenInput);
+		    var hiddenStaffNumberInput = document.createElement('input');
+        	hiddenStaffNumberInput.type = 'hidden';
+        	hiddenStaffNumberInput.name = 'staff_number';
+        	hiddenStaffNumberInput.value = staffNumber;
 
-            // Submit the form
-            document.getElementById('myForm').submit();
+			var commentInput = document.createElement('input');
+    		commentInput.type = 'hidden';
+    		commentInput.name = 'comment';
+    		commentInput.value = document.getElementById('comment').value;
+
+			//form.appendChild(decisionInput);
+			form.appendChild(hiddenInput);
+			form.appendChild(hiddenStaffNumberInput);
+    		form.appendChild(commentInput);
+            form.submit();
         }
     </script>
     

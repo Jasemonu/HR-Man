@@ -52,10 +52,4 @@ class Storage:
                 return False  # Object not found
         except Exception as e:
             print(f"Error deleting object with ID {staff_number}: {e}")
-            return False
-
-
-    def find_staff(staff, cls, number):
-        data = cls.objects(staff_number=number).first()
-        return data
-   
+            return False 

@@ -46,14 +46,14 @@
 
 		{% with messages = get_flashed_messages() %}
 			{% if messages %}
-				{{ messages }}
+				{{ messages[0] }}
 			{% endif %}
 		{% endwith %}
       
           </div>
           <div class="button">
          <input type="submit" value="Submit"> 
-         <a href="./home.html"><input type="submit" value="Cancel"></a> 
+         <a href="/home"><input type="submit" value="Cancel"></a> 
          
           </div>
          

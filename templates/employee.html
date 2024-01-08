@@ -20,6 +20,7 @@
 <link href="/static/assets/vendor/aos/aos.css" rel="stylesheet">
 
 <link rel="stylesheet" href="/static/css/employee.css">
+<<<<<<< HEAD
 
 
 <!-- ======= Header ======= -->
@@ -41,6 +42,29 @@
   </div>
 </header>
 <!-- End Header -->
+=======
+  </head>
+  <body>
+    <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top ">
+    <div class="container d-flex align-items-center justify-content-between">
+      <img src="/static/assets/img/HR_logo.png" class="testimonial-img" alt="" height="85" width="85">
+      <h1 class="logo"><a href="">HR_MAN<span>.</span></a></h1>
+      
+      <nav class="nav__menu d-none d-lg-block">
+        <ul>
+          <li class=""><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="./dashboard.html">Dashboard</a></li>
+          <li><a href="./leave.html">Leave</a></li>
+          <li><a href="./attendance.html">Attendance</a></li>
+          <li><a href="./leave.html">Leave</a></li>
+          <li><a href="./login.html">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- End Header -->
+>>>>>>> 39796b0563313b7a9da85982587feb7340bb40d7
   	<!-- Flash messages section -->
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}

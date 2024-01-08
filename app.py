@@ -182,39 +182,45 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<string:staff_number>', methods=['GET', 'POST'], strict_slashes=False)
+# endpoit for deleting employeees
+@app.route('/delete/<string:staff_number>', methods=['DELETE'], strict_slashes=False)
 def delete(staff_number):
-    if request.method == 'POST':
-    #    return render_template('delete.html')
-        staff_number = request.form.get('staff_number')
+    try:
+        # search and delete employee by staff_number
         result = storage.delete_staff(User, staff_number)
         if result:
             flash('Deleted successful!', 'success')
             return redirect(url_for('get_employees'))
 
-        flash('Delete unsuccessful!, check Staff Number')
+        # if no result return to the lisemployees page 
+        flash('Delete unsuccessful!, check Staff Number', 'error')
         return redirect(url_for('get_employees'))
-
-
+    except Exception as e:
+        return str(e)
+    
+# This endpoit updates emploees records
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
 def update(staff_number):
     try:
+        # check if employee exist by the staff_number
         employee = User.objects(staff_number=staff_number).first()
 
         if request.method == 'POST':
-
+            
+            # retrieve data from the form and update the records 
             updated_data = request.form
             for key, value in updated_data.items():
                 if hasattr(employee, key):
                     setattr(employee, key, value)
             employee.save()
-            flash('Employee details updated successfully')
+            flash('Employee details updated successfully', 'success')
             return redirect(url_for('get_employees'))
 
         return render_template('updateemployee.html', employee=employee)
 
     except Exception as e:
-        return
+        return str(e)
+
 
 @app.route('/viewpayroll', defaults={'name': None}, strict_slashes=False)
 @app.route('/viewpayroll/<string:name>', methods=['GET', 'POST'])
@@ -526,23 +532,24 @@ def accept_reject():
     comment = request.form.get('comment')
     staff_number = request.form.get('staff_number')
     user =  storage.find_staff(User, staff_number)
-    leave = Leave.objetcs(staff=user).first()
+    leave = Leave.objects(staff=user).first()
     if leave is None:
         abort(404)
     if len(comment) == 0:
-        user.comment = 'No comments'
+        leave.comment = 'No comments'
     else:
-        user.comment = comment
+        leave.comment = comment
     if decision == 'accept':
-        user.leave_status = 'Accepted'
-        user.remaining -= user.requested_days
-        flash(f"You have successfully approved {user.staff_name}'s leave")
+        leave.leave_status = 'Accepted'
+        leave.remaining -= leave.requested_days
+        flash(f"You have successfully approved {leave.staff_name}'s leave")
     elif decision == 'reject':
-        user.leave_status = 'Declined'
-        flash(f"You declined {user.staff_name}'s leave")
+        leave.leave_status = 'Declined'
+        flash(f"You declined {leave.staff_name}'s leave")
     else:
         flash("You can either approve or decline")
-        user.save()
+        return redirect(url_for('leave_approval'))
+    leave.save()
     return redirect(url_for('leave_approval'))
 
 @app.route('/leave_history', methods=['GET'], strict_slashes=False)
