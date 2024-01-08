@@ -1,4 +1,5 @@
 .env
 HR-Manenv/
-__pycache__/
+*/__pycache__/
 main.py
+*.pyc
