@@ -182,40 +182,45 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<string:staff_number>', methods=['DELETE', 'GET'], strict_slashes=False)
+# endpoit for deleting employeees
+@app.route('/delete/<string:staff_number>', methods=['DELETE'], strict_slashes=False)
 def delete(staff_number):
-    if request.method == 'DELETE':
-    #    return render_template('delete.html')
-        #staff_number = request.form.get('staff_number')
+    try:
+        # search and delete employee by staff_number
         result = storage.delete_staff(User, staff_number)
         if result:
-            flash('Deleted successful!', 'success')
+            flash('Deleted Successfully!', 'success')
             return redirect(url_for('get_employees'))
 
-        flash('Delete unsuccessful!, check Staff Number')
+        # if no result return to the lisemployees page 
+        flash('Delete unsuccessful!, check Staff Number', 'error')
         return redirect(url_for('get_employees'))
-    return redirect(url_for('get_employees'))
-
-
+    except Exception as e:
+        return str(e)
+    
+# This endpoit updates emploees records
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
 def update(staff_number):
     try:
+        # check if employee exist by the staff_number
         employee = User.objects(staff_number=staff_number).first()
 
         if request.method == 'POST':
-
+            
+            # retrieve data from the form and update the records 
             updated_data = request.form
             for key, value in updated_data.items():
                 if hasattr(employee, key):
                     setattr(employee, key, value)
             employee.save()
-            flash('Employee details updated successfully')
+            flash('Employee details updated successfully', 'success')
             return redirect(url_for('get_employees'))
 
         return render_template('updateemployee.html', employee=employee)
 
     except Exception as e:
-        return
+        return str(e)
+
 
 @app.route('/viewpayroll', defaults={'name': None}, strict_slashes=False)
 @app.route('/viewpayroll/<string:name>', methods=['GET', 'POST'])

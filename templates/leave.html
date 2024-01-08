@@ -61,28 +61,45 @@
   </header><!-- End Header -->
 
   <main id="main">
-    <div id="Details"></br>
-        <h3>Leave Approval</h3> 
-        <table style="width:100%" class = "hhhh" >
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>View Leave Approval</h2>
+          <ol>
+	    <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li>Leave Approval</li>
+          </ol>
+        </div>
+
+      </div>
+    </section>
+    <!-- End Breadcrumbs -->
+
+    <div class="table__wrapper">
+      <table>
+        <thead>
           <tr>
             <th>S/N</th>
             <th>Staff Name</th>
             <th>Start Date</th>
             <th>End Date</th>
-			<th>Leave Type</th>
+            <th>Leave Type</th>
             <th>Requested Days</th>
-			<th>Remaining Leave Days</th>
+            <th>Remaining Leave Days</th>
             <th>Current Status</th>
-			<th>Decision</th>
-			<th>Comments</th>
-
+            <th>Comments</th>
+            <th>Decision</th>
           </tr>
+        </thead>
+        <tbody>
           {% for row in rows %}
           <tr>
           <td>{{row["S/N"]}}</td>
-		  <td>{{row["staff_name"]}}</td>
-		  <td>{{row["start_date"]}}</td>
-		  <td>{{row["end_date"]}}</td>
+          <td>{{row["staff_name"]}}</td>
+          <td>{{row["start_date"]}}</td>
+          <td>{{row["end_date"]}}</td>
           <td>{{row["leave_type"]}}</td>
           <td>{{row["requested_days"]}}</td>
 		  <td>{{row["remaining"]}}</td>
@@ -96,20 +113,11 @@
         <td><button type="button" onclick="submitForm('accept', '{{ row.staff.staff_number }}')">Accept</button>
         <button type="button" onclick="submitForm('reject', '{{ row.staff.staff_number }}')">Decline</button></td>
     </form>    
-           <!-- <td><select>
-              <option value="Pending">Pending</option>
-              <option value="Accept">Accept</option>
-              <option value="Reject">Reject</option>
-              </select></td>
-			  <td><input type="text" id="commentsInput" placeholder="write your comments and update" class="form-control" /></td>
-            <td> 
-			<button type="button" id="getDataButton" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate" onclick='getData()'>Accept</button>
-			<button type="button" id='rejectbutton' class="btn btn-xs btn-warning" data-toggle="modal" data-target="#myModalDelete" oneclick="handleAction('reject', '{{row["staff_number"]}}')">Reject</button></td>-->
           </tr>
-		{% endfor %}
-        </table>
-      </div>
-	 {% with messages = get_flashed_messages() %}
+        </tbody>
+      </table>
+    </div>
+    {% with messages = get_flashed_messages() %}
 			{% if messages %}
 				{{ messages[0] }}
 			{% endif %}
@@ -146,6 +154,7 @@
             form.submit();
         }
     </script>
+    
 	
 
   </main><!-- End #main -->
