@@ -89,8 +89,8 @@
             <th>Requested Days</th>
             <th>Remaining Leave Days</th>
             <th>Current Status</th>
-            <th>Decision</th>
             <th>Comments</th>
+            <th>Decision</th>
           </tr>
         </thead>
         <tbody>
@@ -102,19 +102,6 @@
           <td>{{row["end_date"]}}</td>
           <td>{{row["leave_type"]}}</td>
           <td>{{row["requested_days"]}}</td>
-<<<<<<< HEAD
-          <td>{{row["remaining"]}}</td>
-          <td>{{row["leave_status"]}}</td>
-          <form id="myForm" action="/process_form" method="POST"> 
-            <td><button class="xxxx" type="button" onclick="submitForm('accept')">Accept</button>
-            <button class="xxxx" type="button" onclick="submitForm('reject')">Decline</button></td>
-      
-        <td><label for="comment"</label>
-        <textarea id="comment" name="comment" placeholder="write your comments and update" rows="1" cols="50"></textarea></td>
-        </form>    
-              </tr>
-        {% endfor %}
-=======
 		  <td>{{row["remaining"]}}</td>
 		  <td>{{row["leave_status"]}}</td>
  
@@ -126,16 +113,6 @@
         <td><button type="button" onclick="submitForm('accept', '{{ row.staff.staff_number }}')">Accept</button>
         <button type="button" onclick="submitForm('reject', '{{ row.staff.staff_number }}')">Decline</button></td>
     </form>    
-           <!-- <td><select>
-              <option value="Pending">Pending</option>
-              <option value="Accept">Accept</option>
-              <option value="Reject">Reject</option>
-              </select></td>
-			  <td><input type="text" id="commentsInput" placeholder="write your comments and update" class="form-control" /></td>
-            <td> 
-			<button type="button" id="getDataButton" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate" onclick='getData()'>Accept</button>
-			<button type="button" id='rejectbutton' class="btn btn-xs btn-warning" data-toggle="modal" data-target="#myModalDelete" oneclick="handleAction('reject', '{{row["staff_number"]}}')">Reject</button></td>-->
->>>>>>> 39796b0563313b7a9da85982587feb7340bb40d7
           </tr>
         </tbody>
       </table>

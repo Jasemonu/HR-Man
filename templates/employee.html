@@ -19,30 +19,10 @@
 <link href="/static/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
 <link href="/static/assets/vendor/aos/aos.css" rel="stylesheet">
 
+<!-- Template Main CSS File -->
+<link href="/static/assets/css/style.css" rel="stylesheet">
+
 <link rel="stylesheet" href="/static/css/employee.css">
-<<<<<<< HEAD
-
-
-<!-- ======= Header ======= -->
-<header id="header" class="fixed-top ">
-  <div class="container d-flex align-items-center justify-content-between">
-    <img src="/static/assets/img/HR_logo.png" class="testimonial-img" alt="" height="85" width="85">
-    <h1 class="logo"><a href="">HR_MAN<span>.</span></a></h1>
-    
-    <nav class="nav__menu d-none d-lg-block">
-      <ul>
-        <li class="active"><a href="#home">Home</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#counts">Statistics</a></li>
-        <li><a href="#testimonials">Testimonials</a></li>
-        <li><a href="#team">Team</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
-<!-- End Header -->
-=======
   </head>
   <body>
     <!-- ======= Header ======= -->
@@ -64,7 +44,6 @@
     </div>
   </header>
   <!-- End Header -->
->>>>>>> 39796b0563313b7a9da85982587feb7340bb40d7
   	<!-- Flash messages section -->
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -75,10 +54,11 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
-
-
-     <form class= "" method="POST" action="/register" class="addEmployee">
+     <form method="POST" action="/register" class="addEmployee">
       <h4 class="addEmployeeHeader">Employee Information</h4>
+      <!-- <label>Employee ID</label> -->
+      <!-- <input type=text name=employeeID /> -->
+     <!-- <br/> -->
       <label>First Name</label>
       <input type="text" name="first_name" />
       <br />
@@ -88,6 +68,9 @@
       <label>Email</label>
       <input type="text" name="email" />
       <br />
+      <!-- <label>Password</label> -->
+      <!-- <input type=text name=password /> -->
+      <!-- <br /<> -->
       <label>Phone Number</label>
       <input type="text" name="phone_number" />
       <br />
@@ -115,8 +98,6 @@
       <a href="/templates/home.html"><input class="button blueButton" type="submit" value="Add" /></a>  
       <br />
     </form>
-
-    
     <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
   <div id="preloader"></div>
 
