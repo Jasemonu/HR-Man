@@ -181,6 +181,22 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/update/delete', methods=['GET'], strict_slashes=False)
+@login_required
+def update_delete():
+    try:
+        # Check if user is a Superuser
+        if not current_user.Superuser:
+            abort(403)
+
+        # Return list of employees in the database
+        update_delete = storage.all(User)
+
+        return render_template('update_delete.html', rows=update_delete)
+    except Exception as e:
+        return str(e), 500
+
+
 # endpoit for deleting employeees
 @app.route('/delete/<string:staff_number>', methods=['DELETE'], strict_slashes=False)
 def delete(staff_number):
@@ -189,13 +205,14 @@ def delete(staff_number):
         result = storage.delete_staff(User, staff_number)
         if result:
             flash('Deleted Successfully!', 'success')
-            return redirect(url_for('get_employees'))
+            return redirect(url_for('update_delete'))
 
         # if no result return to the lisemployees page 
         flash('Delete unsuccessful!, check Staff Number', 'error')
-        return redirect(url_for('get_employees'))
+        return redirect(url_for('update_delete'))
     except Exception as e:
-        return str(e)
+        flash('Oops something went wrong', 'error')
+        return redirect(url_for('update_delete'))
     
 # This endpoit updates emploees records
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
@@ -494,7 +511,7 @@ def leave():
                 return render_template('leavereq.html')
         if leave:
             if leave.remaining < leave_days:
-                flash(f"You have only {user.remaining} days left")
+                flash(f"You have only {leave.remaining} days left")
                 return render_template('leavereq.html')
             leave_data = {
                     'start_date': startDate,
