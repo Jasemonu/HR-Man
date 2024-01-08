@@ -172,7 +172,6 @@ def get_employees():
     except Exception as e:
         return str(e), 500
 
-
 @app.route('/logout')
 @login_required
 def logout():
@@ -470,10 +469,10 @@ def leave():
         leaveType = data.get('leave_type')
 
         if startDate < datetime.now():
-            flash("Start date cannot be lower than current date")
+            flash('Start date cannot be lower than current date', 'error')
             return render_template('leavereq.html')
         if endDate <= startDate:
-            flash("End date should be higher than start date")
+            flash('End date should be higher than start date', 'error')
             return render_template('leavereq.html')
         leave_days = (endDate - startDate).days + 1
         user = storage.find_staff(User, staffNumber)
@@ -491,7 +490,7 @@ def leave():
                 leave_req = Leave(**leave_data)
                 leave_req.save()
             else:
-                flash(f"You have 30 days leave limit")
+                flash(f"You have 30 days leave limit", "error")
                 return render_template('leavereq.html')
         if leave:
             if leave.remaining < leave_days:
@@ -508,7 +507,7 @@ def leave():
             for key, value in leave_data.items():
                 setattr(leave, key, value)
             leave.save()
-            flash("Leave application successful and pending approval")
+            flash("Leave application successful and pending approval", "success")
             return redirect(url_for('leave_history'))
     return render_template('leavereq.html')
 
