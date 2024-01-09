@@ -46,11 +46,12 @@
       <nav class="nav__menu d-none d-lg-block">
         <ul>
 	  <li><a href="{{ url_for('home') }}">Home</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#counts">Staistics</a></li>
-          <li><a href="#testimonials">Testimonials</a></li>
-          <li><a href="#team">Team</a></li>
-          <li><a href="#contact">Contact</a></li>
+	  {% if current_user.Superuser %}
+          <li><a href="/employees">Employees</a></li>
+	  {% else %}
+	  <li><a href="/viewpayslip">Payslips</a></li>
+	  <li><a href="/profile">Profile</a></li>
+	  {% endif %}
         </ul>
       </nav><!-- .nav-menu -->
 
