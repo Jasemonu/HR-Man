@@ -1,85 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="/static/css/employee.css">
-  <link rel="stylesheet" href="/static/css/employee.css">
-  </head>
-  <body>
-    <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top ">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Employee</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="/static/assets/img/favicon-32x32.png" rel="icon">
+  <link href="/static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="/static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="/static/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="/static/assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="/static/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/static/assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- Template Main CSS File -->
+  <link rel="stylesheet" href="/static/assets/css/style.css">
+  <link rel="stylesheet" href='/static/css/try.css'>
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center justify-content-between">
-      <img src="/static/assets/img/HR_logo.png" class="testimonial-img" alt="" height="85" width="85">
-      <h1 class="logo"><a href="">HR_MAN<span>.</span></a></h1>
-      
+
+      <h1 class="logo"><a href="">HR-MAN<span>.</span></a></h1>
+
       <nav class="nav__menu d-none d-lg-block">
         <ul>
-          <li class=""><a href="{{ url_for('home') }}">Dashboard</a></li>
-          <li><a href="/pending_leave">Leave</a></li>
-          <li><a href="/attendance">Attendance</a></li>
-          <li><a href="/logout">Logout</a></li>
+	  <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="/employees">Employees</a></li>
+          <li><a href="/update/delete">Update/Delete Employee</a></li>
         </ul>
-      </nav>
+      </nav><!-- .nav-menu -->
+
+      <a href="/logout" class="get-started-btn scrollto">Log Out</a>        
+
     </div>
-  </header>
-  <!-- End Header -->
-  	<!-- Flash messages section -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-     <form method="POST" action="/register" class="addEmployee">
-      <h4 class="addEmployeeHeader">Employee Information</h4>
-      <!-- <label>Employee ID</label> -->
-      <!-- <input type=text name=employeeID /> -->
-     <!-- <br/> -->
-      <label>First Name</label>
-      <input type="text" name="first_name" />
-      <br />
-      <label>Last Name</label>
-      <input type="text" name="last_name" />
-      <br />
-      <label>Email</label>
-      <input type="text" name="email" />
-      <br />
-      <!-- <label>Password</label> -->
-      <!-- <input type=text name=password /> -->
-      <!-- <br /<> -->
-      <label>Phone Number</label>
-      <input type="text" name="phone_number" />
-      <br />
-      <label>Date of Birth</label>
-      <input type="date" name="date_of_birth" />
-      <br />
-      <label>NID</label>
-      <input type="text" name="NID" />
-      <br />
-      <label>Date of Employment </label>
-      <input type="date" name="employment_date" />
-      <br />
-      <label>Gender</label>
-      <select required name="gender">
-        <option>Male</option>
-        <option>Female</option>
-      </select>
-      <br />
-      <label>Department</label>
-      <input type="text" name="department" />
-      <br />
-      <label>Position</label>
-      <input type="text" name="position" />
-      <br />
-      <a href="/templates/home.html"><input class="button blueButton" type="submit" value="Add" /></a>  
-      <br />
-    </form>
-    <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
+  </header><!-- End Header -->
+
+  <main id="main">
+    <section class="inner-page">
+      <div class="container">
+        <div class="container-xl">
+          <div class="table-responsive">
+            <div class="try-container">
+              <form action='/register' method='POST'>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+                <h1 class="try-title">{{ messages[0] }}</h1>
+    {% endif %}
+  {% endwith %}
+                <h1 class="try-title">Employee Details</h1>
+                <div class="try-grid">
+                  <div class="form-group a">
+                    <label for="name">First Name</label>
+                    <input id="name" type="text" name='first_name' required>
+		  </div>
+
+                  <div class="form-group b">
+                    <label for="last-name">Last Name</label>
+		    <input id="first-name" type="text" name='last_name' required>
+                  </div>
+
+                  <div class="form-group email-group">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" name='email' required>
+                  </div>
+
+                  <div class="form-group phone-group">
+                    <label for="phone">Phone Number</label>
+                    <input id="phone" type="text" name='phone' required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="Date-of-birth">Date Of Birth</label>
+                    <input id="address" type="date" name='date_of_birth'>
+                  </div>
+                  <div class="form-group">
+                    <label for="employement_date">Date Of Employement</label>
+                    <input id="address" type="date" name='employement_date' required>
+                  </div>
+                  <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select type='text' name="gender" readonly>
+                      <option value="female">Female</option>
+                      <option value="male">Male</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="position">Position</label>
+                    <input id="position" type="text" name='position' required>
+                  </div>
+                  <div class="form-group">
+                    <label for="department">Department</label>
+                    <input id="address" type="text" name='department' required>
+                  </div>
+		</div>
+		<div class="button-container">
+		  <button class="button" type='reset'>Cancel</button>
+		  <button class="button" type='Submit'>Save</button>
+		</div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
+      </div>
+   </section>
+
+  </main><!-- End #main -->
+
+ 
+  <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
   <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/static/assets/vendor/jquery/jquery.min.js"></script>
+  <script src="/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="/static/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/static/assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="/static/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="/static/assets/vendor/venobox/venobox.min.js"></script>
+  <script src="/static/assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="/static/assets/vendor/counterup/counterup.min.js"></script>
+  <script src="/static/assets/vendor/aos/aos.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="/static/assets/js/main.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
 </body>
+
 </html>

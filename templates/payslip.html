@@ -48,13 +48,14 @@
 
       <nav class="nav__menu d-none d-lg-block">
         <ul>
-          <li><a href="{{ url_for('home') }}">Home</a></li>
-          <li><a href="">Services</a></li>
+          <li><a href="/employess">Employees</a></li>
+          <li><a href="/createpayroll">Add Payroll</a></li>
+	  <!--
           <li><a href="">Staistics</a></li>
           <li><a href="">Testimonials</a></li>
           <li><a href="">Team</a></li>
           <li><a href="">Contact</a></li>
-        </ul>
+	  </ul>--!>
       </nav><!-- .nav-menu -->
 
       <a href="/logout" class="get-started-btn scrollto">Log Out</a>        <!--change to login page-->
@@ -75,8 +76,8 @@
             <li>Payslip</li>
           </ol>
         </div>
-
       </div>
+      
     </section><!-- End Breadcrumbs -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -85,10 +86,10 @@
     {% endwith %}
     <section class="inner-page">
       <div class="container">
-        <div class="container-xl">
+	<div class="container-xl">
           <div class="table-responsive">
             <div class="table-wrapper">
-              <div class="table-title">
+	    <div class="table-title">
                 <div class="row">
                   <div class="col-sm-6">
                     <h2><b>Payslip</b></h2>
