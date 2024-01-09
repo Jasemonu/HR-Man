@@ -15,6 +15,7 @@ from models.payroll import Payroll
 from models.payslip import Payslip
 from payroll import create_payroll
 from payslip import create_payslip
+from models.messages import Message
 import bcrypt
 from mongoengine.errors import NotUniqueError
 from models.user import random_password, gen_employee_id, send_email, valid_fields
@@ -155,7 +156,9 @@ def login():
 def home():
     users = User.objects.count()
     payslips = Payslip.objects.count()
-    return render_template('dashboard.html', users=users, payslips=payslips)
+    messages = Message.objects(viewed=False)
+    return render_template('dashboard.html', users=users, payslips=payslips,
+                           messages=messages, count=messages.count())
 
 @app.route('/employees', methods=['GET'], strict_slashes=False)
 @login_required
@@ -170,7 +173,8 @@ def get_employees():
 
         return render_template('listemployees.html', rows=employee_list)
     except Exception as e:
-        return str(e), 500
+        flash('Your are not authorise', 'error')
+        return redirect(url_for('home'))
 
 
 @app.route('/logout')
@@ -182,6 +186,25 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/update/delete', methods=['GET'], strict_slashes=False)
+@login_required
+def update_delete():
+    try:
+        # Check if user is a Superuser
+        if not current_user.Superuser:
+            flash('Your are not authorise', 'error')
+            return redirect(url_for('home'))
+
+        # Return list of employees in the database
+        update_delete = storage.all(User)
+
+        return render_template('update_delete.html', rows=update_delete)
+    except Exception as e:
+        flash('Oops something went wrong', 'error')
+        return render_template('update_delete.html', rows=update_delete)
+
+
+
 # endpoit for deleting employeees
 @app.route('/delete/<string:staff_number>', methods=['DELETE'], strict_slashes=False)
 def delete(staff_number):
@@ -189,14 +212,15 @@ def delete(staff_number):
         # search and delete employee by staff_number
         result = storage.delete_staff(User, staff_number)
         if result:
-            flash('Deleted successful!', 'success')
-            return redirect(url_for('get_employees'))
+            flash('Deleted Successfully!', 'success')
+            return redirect(url_for('update_delete'))
 
         # if no result return to the lisemployees page 
         flash('Delete unsuccessful!, check Staff Number', 'error')
-        return redirect(url_for('get_employees'))
+        return redirect(url_for('update_delete'))
     except Exception as e:
-        return str(e)
+        flash('Oops something went wrong', 'error')
+        return redirect(url_for('update_delete'))
     
 # This endpoit updates emploees records
 @app.route('/update/<string:staff_number>', methods=['POST', 'GET'], strict_slashes=False)
@@ -206,7 +230,6 @@ def update(staff_number):
         employee = User.objects(staff_number=staff_number).first()
 
         if request.method == 'POST':
-            
             # retrieve data from the form and update the records 
             updated_data = request.form
             for key, value in updated_data.items():
@@ -219,7 +242,8 @@ def update(staff_number):
         return render_template('updateemployee.html', employee=employee)
 
     except Exception as e:
-        return str(e)
+        flash('Oops something went wrong', 'error')
+        return redirect(url_for('update_delete'))
 
 
 @app.route('/viewpayroll', defaults={'name': None}, strict_slashes=False)
@@ -458,6 +482,22 @@ def resetpwd():
     return render_template('resetpwd.html')
 
 
+
+@app.route('/messages', methods=['POST'], defaults={'email': None})
+@app.route('/messages/<string:email>', methods=['GET'], strict_slashes=False)
+def message(email):
+    if request.method == 'POST':
+        try:
+            massage = Message(**request.form).save()
+        except Exception as e:
+            return "Message Not Sent"
+        return "Message Sent"
+    message = Message.objects(email=email).first()
+    if message:
+        return message.message
+    return 'Not found'
+
+
 @app.route('/leave', methods=['POST', 'GET'], strict_slashes=False)
 def leave():
     if request.method == 'POST':
@@ -470,10 +510,10 @@ def leave():
         leaveType = data.get('leave_type')
 
         if startDate < datetime.now():
-            flash("Start date cannot be lower than current date")
+            flash('Start date cannot be lower than current date', 'error')
             return render_template('leavereq.html')
         if endDate <= startDate:
-            flash("End date should be higher than start date")
+            flash('End date should be higher than start date', 'error')
             return render_template('leavereq.html')
         leave_days = (endDate - startDate).days + 1
         user = storage.find_staff(User, staffNumber)
@@ -491,11 +531,11 @@ def leave():
                 leave_req = Leave(**leave_data)
                 leave_req.save()
             else:
-                flash(f"You have 30 days leave limit")
+                flash(f"You have 30 days leave limit", "error")
                 return render_template('leavereq.html')
         if leave:
             if leave.remaining < leave_days:
-                flash(f"You have only {user.remaining} days left")
+                flash(f"You have only {leave.remaining} days left")
                 return render_template('leavereq.html')
             leave_data = {
                     'start_date': startDate,
@@ -508,7 +548,7 @@ def leave():
             for key, value in leave_data.items():
                 setattr(leave, key, value)
             leave.save()
-            flash("Leave application successful and pending approval")
+            flash("Leave application successful and pending approval", "success")
             return redirect(url_for('leave_history'))
     return render_template('leavereq.html')
 
