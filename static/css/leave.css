@@ -13,30 +13,3 @@ table{
   left: 100px;
 }
 
-tbody tr:nth-child(odd){
-  background: #eee;
-}
-
-td, th {
-   border: 1px solid #777;
-}
-
-td{
-  text-align: right;
-}
-
-tbody tr:nth-child(odd){
-  background: #b9c4cf;
-}
-
-tbody{
-  color: white;
-}
-
-th{
-  height: 60px;
-}
-
-.xxxx{
-  background: #b9c4cf;
-}
