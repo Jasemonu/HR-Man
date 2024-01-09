@@ -59,7 +59,7 @@ def send_email(email, password):
 def valid_fields(data):
     required_fields = [
     'first_name', 'last_name', 'email', 'date_of_birth',
-    'phone_number', 'employment_date', 'NID', 'gender',
+    'phone', 'employment_date', 'gender',
     'department', 'position'
     ]
     for field in required_fields:

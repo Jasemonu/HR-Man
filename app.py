@@ -67,9 +67,8 @@ def register_user():
     last_name = data.get('last_name')
     email = data.get('email')
     dob = data.get('date_of_birth')
-    contact_number = data.get('phone_number')
+    contact_number = data.get('phone')
     employment_date = data.get('employment_date')
-    NID = data.get('NID')
     gender = data.get('gender')
     department = data.get('department')
     position = data.get('position')
@@ -95,7 +94,6 @@ def register_user():
         'password': hashed_password.decode('utf-8'),
         'date_of_birth': dob,
         'phone': contact_number,
-        'NID': NID,
         'employment_date': employment_date,
         'gender': gender,
         'department': department,
@@ -106,7 +104,11 @@ def register_user():
     user.save()
 
     # Send the password to the user's email
-    send_email(email, password)
+    try:
+        send_email(email, password)
+    except Exception:
+        flash("Couldn't send password to employee's email")
+        return redirect(url_for('register_user'))
 
     flash('Created successful!', 'success')
     return render_template('employee.html')
