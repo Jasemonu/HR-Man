@@ -15,7 +15,7 @@ class User(Document, UserMixin):
     password = StringField(required=True, max_length=70)
     phone = StringField(required=True, max_length=70)
     date_of_birth = DateTimeField(default=date(1670, 12,20).isoformat())
-    NID = StringField(required=True, max_length=70)
+    NID = StringField(required=True, max_length=70, default='1234')
     SSNIT = StringField(required=True, unique=False, default='1234')
     employment_date = DateTimeField(default=date(200, 12,20).isoformat())
     gender = StringField(required=True, max_length=20)
