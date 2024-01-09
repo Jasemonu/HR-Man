@@ -730,6 +730,7 @@ section {
   border-radius: 50%;
   border: 6px solid rgba(255, 255, 255, 0.15);
   margin: 0 auto;
+  left: 100px;
 }
 
 .testimonials .testimonial-item h3 {
