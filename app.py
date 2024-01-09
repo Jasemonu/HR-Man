@@ -15,6 +15,7 @@ from models.payroll import Payroll
 from models.payslip import Payslip
 from payroll import create_payroll
 from payslip import create_payslip
+from models.messages import Message
 import bcrypt
 from mongoengine.errors import NotUniqueError
 from models.user import random_password, gen_employee_id, send_email, valid_fields
@@ -155,7 +156,9 @@ def login():
 def home():
     users = User.objects.count()
     payslips = Payslip.objects.count()
-    return render_template('dashboard.html', users=users, payslips=payslips)
+    messages = Message.objects(viewed=False)
+    return render_template('dashboard.html', users=users, payslips=payslips,
+                           messages=messages, count=messages.count())
 
 @app.route('/employees', methods=['GET'], strict_slashes=False)
 @login_required
@@ -477,6 +480,22 @@ def resetpwd():
         flash(f"Staff doesn't exist")
         return redirect(url_for('resetpwd'))
     return render_template('resetpwd.html')
+
+
+
+@app.route('/messages', methods=['POST'], defaults={'email': None})
+@app.route('/messages/<string:email>', methods=['GET'], strict_slashes=False)
+def message(email):
+    if request.method == 'POST':
+        try:
+            massage = Message(**request.form).save()
+        except Exception as e:
+            return "Message Not Sent"
+        return "Message Sent"
+    message = Message.objects(email=email).first()
+    if message:
+        return message.message
+    return 'Not found'
 
 
 @app.route('/leave', methods=['POST', 'GET'], strict_slashes=False)
