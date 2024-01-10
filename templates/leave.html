@@ -116,7 +116,7 @@
       <table>
         <thead>
           <tr>
-            <th>S/N</th>
+	    <th>Staff Number</th>
             <th>Staff Name</th>
             <th>Start Date</th>
             <th>End Date</th>
@@ -125,13 +125,13 @@
             <th>Remaining Leave Days</th>
             <th>Current Status</th>
             <th>Comments</th>
-            <th>Decision</th>
+            <th style='width: 200px;'>Decision</th>
           </tr>
         </thead>
         <tbody>
           {% for row in rows %}
           <tr>
-          <td>{{row["S/N"]}}</td>
+          <td>{{row.staff.staff_number}}</td>
           <td>{{row["staff_name"]}}</td>
           <td>{{row["start_date"]}}</td>
           <td>{{row["end_date"]}}</td>
@@ -145,7 +145,7 @@
 		<td><label for="comment"></label>
 		<textarea id="comment" name="comment" placeholder="write your comments and update" rows="1" cols="30"></textarea></td>
 
-        <td><button type="button" onclick="submitForm('accept', '{{ row.staff.staff_number }}')">Accept</button>
+        <td><button style='margin-right: 5px;' type="button" onclick="submitForm('accept', '{{ row.staff.staff_number }}')">Accept</button>
         <button type="button" onclick="submitForm('reject', '{{ row.staff.staff_number }}')">Decline</button></td>
     </form>    
           </tr>

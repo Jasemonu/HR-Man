@@ -15,7 +15,7 @@ from models.payroll import Payroll
 from models.payslip import Payslip
 from payroll import create_payroll
 from payslip import create_payslip
-from models.messages import Message
+from models.messages import Message, reply_email
 import bcrypt
 from mongoengine.errors import NotUniqueError
 from models.user import random_password, gen_employee_id, send_email, valid_fields
@@ -494,10 +494,35 @@ def message(email):
         except Exception as e:
             return "Message Not Sent"
         return "Message Sent"
-    message = Message.objects(email=email).first()
-    if message:
-        return message.message
-    return 'Not found'
+    message = Message.objects(email=email, viewed=False).first()
+    if not message:
+        flash("Message can't be opened")
+        return redirect(url_for('home'))
+    message.update(viewed=True)
+    message.save()
+    return render_template('viewmessage.html', message=message)
+
+
+@app.route('/reply', methods=['POST', 'GET'], defaults={'email': None})
+@app.route('/reply/<email>', methods=['GET'], strict_slashes=False)
+def reply_message(email):
+    if request.method == 'POST':
+        email = request.form.get('email')
+        try:
+            subject = request.form.get('subject')
+            message = request.form.get('message')
+            reply_email(email, subject, message)
+        except Exception as e:
+            flash("Reply not sent, Try again")
+            return redirect(url_for('reply_message'))
+        message = Message.objects(email=email, reply=False).first()
+        message.update(reply=True)
+        message.save()
+        flash('Message sent successful')
+        return render_template('replymessage.html', message=message)
+
+    message = Message.objects(email=email, reply=False).first()
+    return render_template('replymessage.html', message=message)
 
 
 @app.route('/leave', methods=['POST', 'GET'], strict_slashes=False)
