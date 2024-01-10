@@ -196,7 +196,7 @@
                                     <ul class="dropdown-menu">
 				      {% for message in messages %}
                                         <li>
-					    <a href="#">{{ message.subject }}</a>
+					    <a href="/messages/{{ message.email }}">{{ message.subject }}</a>
                                         </li>
 				      {% endfor %}
                                     </ul>
