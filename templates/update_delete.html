@@ -41,8 +41,10 @@
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center justify-content-between">
-
-      <h1 class="logo"><a href="/static/assets/img/HR_logo.png">HR-MAN<span>.</span></a></h1>
+      <a class="logo" href="/home"><img src="/static/assets/img/HR_logo.png" class="testimonial-img" alt="" height="60" width="60">
+      HR-MAN
+      </a>
+      <!-- <h1 class="logo"><a href="/home">HR-MAN<span>.</span></a></h1> -->
       
       <nav class="nav__menu d-none d-lg-block">
         <ul>
@@ -138,7 +140,7 @@
                       <td>{{row["department"]}}</td>
                       <td> {{row["position"]}}</td>
 		      <td><a href="/update/{{ row.staff_number }}"> <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate">Update</button></a>
-			      <td><a href="/update/delete"> <button hx-delete="/delete/{{ row.staff_number }}" hx-trigger="click" hx-confirm="Are you sure you want to delete this user?" type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#myModalUpdate">Delete</button></a>
+			      <td><a href="/update/delete"> <button hx-delete="/delete/{{ row.staff_number }}" hx-trigger="click" hx-confirm="Are you sure you want to delete {{ row.first_name }}!?" type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#myModalUpdate">Delete</button></a>
             <!-- <td><button hx-delete="/delete/{{ row.staff_number }}" hx-trigger="click" hx-confirm="Are you sure you want to delete this user?" type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModalUpdate">Delete</button> -->
                     </tr>
                   {% endfor %}    
