@@ -47,8 +47,7 @@
       <nav class="nav__menu d-none d-lg-block">
         <ul>
 	  <li><a href="/home">Home</a></li>
-          <li><a href="/employees">Employees</a></li>
-          <li><a href="/update/delete">Update/Delete Employee</a></li>
+          <li><a href="/messages">Messages</a></li>
         </ul>
       </nav><!-- .nav-menu -->
 
@@ -83,8 +82,9 @@
                 <label for="message">Mssage</label>
 		<textarea id="message" name="message" placeholder="{{ message.message }}" style="height:200px" readonly></textarea>
 
-		<a href='/reply/{{ message.email }}'><input class='button' type="button" value="Reply"></a>
-              </form>  
+		<a href='/reply/{{ message.email }}'><input class="btn btn-xs btn-success" type="button" value="Reply"></a>
+		<input class="btn btn-xs btn-danger" type="button" value="Delete" hx-delete='/messages/{{ message.id }}' hx-confirm='Delete {{ message.subject }}'>
+	      </form>  
 	    </div>
 	  </div>
 	</div>
@@ -98,6 +98,7 @@
   <div id="preloader"></div>
 
   <!-- Vendor JS Files -->
+  <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
   <script src="/static/assets/vendor/jquery/jquery.min.js"></script>
   <script src="/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="/static/assets/vendor/jquery.easing/jquery.easing.min.js"></script>

@@ -19,6 +19,7 @@ input[type=button] {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-right: 15px;
 }
 
 input[type=submit] {
@@ -30,6 +31,9 @@ input[type=submit] {
   cursor: pointer;
 }
 
+a {
+  margin-right: 20px;
+  }
 input[type=submit]:hover {
   background-color: #45a049;
 }

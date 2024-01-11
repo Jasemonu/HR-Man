@@ -145,6 +145,9 @@
 
                     </ul>
                 </li>
+		<li class="">
+		    <a href="/messages"><i class="material-icons">message</i><span>Messages</span></a>
+	        </li>
                  {% endif %}
                 <li class="">
                     <a href="{{ url_for('attendance') }}"><i class="material-icons">date_range</i><span>Attendance</span></a>
@@ -190,13 +193,13 @@
                                 {% if current_user.Superuser %}
                                 <li class="dropdown nav-item active">
                                     <a href="#" class="nav-link" data-toggle="dropdown">
-                                        <span class="material-icons">messages</span>
+                                        <span class="material-icons">message</span>
 					<span class="notification">{{ count }}</span>
                                     </a>
                                     <ul class="dropdown-menu">
 				      {% for message in messages %}
                                         <li>
-					    <a href="/messages/{{ message.email }}">{{ message.subject }}</a>
+					    <a href="/messages/{{ message.id }}">{{ message.subject }}</a>
                                         </li>
 				      {% endfor %}
                                     </ul>
