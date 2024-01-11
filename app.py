@@ -3,7 +3,7 @@
 
 import os
 from flask import Flask, render_template, request, jsonify, session, redirect
-from flask import send_file, url_for, flash, abort
+from flask import send_file, url_for, flash, abort, make_response
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from datetime import datetime, date
 from models import storage
@@ -485,22 +485,37 @@ def resetpwd():
 
 
 
-@app.route('/messages', methods=['POST'], defaults={'email': None})
-@app.route('/messages/<string:email>', methods=['GET'], strict_slashes=False)
-def message(email):
+@app.route('/messages', methods=['POST', 'GET'], defaults={'id': None})
+@app.route('/messages/<string:id>', methods=['GET', 'DELETE'], strict_slashes=False)
+def message(id):
+    if request.method == 'DELETE' and id:
+        message = storage.get(Message, id)
+        if not message:
+            message.delete()
+            res = make_response('Message Delete Successful')
+            res.headers['HX-Refresh'] = 'true'
+            flash('Message Delete Successful', 'success')
+            return res
+        res = make_response('Message Delete Unsuccessful')
+        res.headers['HX-Redirect'] = f'/messages/{id}'
+        flash('Message Delete Unsuccessful', 'error')
+        return res
     if request.method == 'POST':
         try:
             massage = Message(**request.form).save()
         except Exception as e:
             return "Message Not Sent"
         return "Message Sent"
-    message = Message.objects(email=email, viewed=False).first()
-    if not message:
-        flash("Message can't be opened")
-        return redirect(url_for('home'))
-    message.update(viewed=True)
-    message.save()
-    return render_template('viewmessage.html', message=message)
+    if id:
+        message = storage.get(Message, id)
+        if not message:
+            flash("Message can't be opened")
+            return redirect(url_for('message'))
+        message.update(viewed=True)
+        message.save()
+        return render_template('viewmessage.html', message=message)
+    messages = storage.all(Message)
+    return render_template('messages.html', messages=messages)
 
 
 @app.route('/reply', methods=['POST', 'GET'], defaults={'email': None})
