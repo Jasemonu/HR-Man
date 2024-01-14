@@ -312,7 +312,7 @@
                         <div class="card" style="min-height: 485px">
                             <div class="card-header card-header-text">
                                 <h4 class="card-title">Employees Stats</h4>
-                                <p class="category">New employees on 15th December, 2023</p>
+                                <p class="category">Recent employees on our team</p>
                             </div>
 
                             <div class="card-content table-responsive">
@@ -321,53 +321,19 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
-                                            <th>Salary</th>
-                                            <th>Country</th>
+                                            <th>Position</th>
+                                            <th>Department</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+				    {% for employee in employees %}
                                         <tr>
-                                            <td>1</td>
-                                            <td>Bob Williams</td>
-                                            <td>$23,566</td>
-                                            <td>Nigeria</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Mike Tyson</td>
-                                            <td>$10,200</td>
-                                            <td>Ghana</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Timothy Sebastian</td>
-                                            <td>$32,190</td>
-                                            <td>Rwanda</td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Philip Sylvester</td>
-                                            <td>$31,123</td>
-                                            <td>Korea, South</td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Minerva Hooper</td>
-                                            <td>$23,789</td>
-                                            <td>South Africa</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>Hulk Hogan</td>
-                                            <td>$43,120</td>
-                                            <td>Netherlands</td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Angelina Jolie</td>
-                                            <td>$12,140</td>
-                                            <td>Australia</td>
-                                        </tr>
+				          <td>{{ employee.staff_number }}</td>
+					  <td>{{ employee.first_name}} {{ employee.last_name }}</td>
+					  <td>{{ employee.position }}</td>
+					  <td>{{ employee.department }}</td>
+                                        </tr> 
+				    {% endfor %}
                                     </tbody>
                                 </table>
                             </div>

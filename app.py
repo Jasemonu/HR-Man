@@ -141,9 +141,9 @@ def login():
                 if employee.Superuser:
                     flash('Login successful!', 'success')
                     session['user_id'] = str(employee.id)
-                    return render_template('dashboard.html')
+                    return redirect(url_for('home'))
                 flash('Login successful!', 'success')
-                return render_template('dashboard.html')
+                return redirect(url_for('home'))
             flash('Invalid username or password', 'error')
             return render_template('login.html')
         except Exception as e:
@@ -156,11 +156,12 @@ def login():
 @app.route('/home', strict_slashes=False)
 @login_required
 def home():
-    users = User.objects.count()
+    users = User.objects.order_by('-created_at')
     payslips = Payslip.objects.count()
     messages = Message.objects(viewed=False)
-    return render_template('dashboard.html', users=users, payslips=payslips,
-                           messages=messages, count=messages.count())
+    employees = users[:5]
+    return render_template('dashboard.html', users=users.count(), payslips=payslips,
+                           messages=messages, count=messages.count(), employees=employees)
 
 @app.route('/employees', methods=['GET'], strict_slashes=False)
 @login_required
